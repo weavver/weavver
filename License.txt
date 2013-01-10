@@ -1,0 +1,3 @@
+The Weavver application stack is provided under multiple licenses.
+
+Integration with 3rd party code is done so in compliance with their licenses. GPL code is integrated via open APIs and is not directly linked to.

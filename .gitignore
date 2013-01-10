@@ -1,0 +1,8 @@
+bin
+obj
+app.config
+*.suo
+WeavverLib.snk
+*.snk
+build
+web.config

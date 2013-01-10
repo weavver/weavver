@@ -1,0 +1,23 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="DynamicData_UserAgents_Polycom_MasterPage" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="Head" Runat="Server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="NavigationHolder" Runat="Server">
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="Banner" Runat="Server">
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
+     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+     <html xmlns="http://www.w3.org/1999/xhtml">
+     <head id="Head1" runat="server">
+         <title>Weavver<br /><asp:LoginName id="LoginName1" runat="server"></asp:LoginName></title>
+     </head>
+     <body>
+          <asp:ContentPlaceHolder id="Content" runat="server">
+          
+          </asp:ContentPlaceHolder>
+          Powered by Weavver, All Rights Reserved
+     </body>
+     </html>
+</asp:Content>
+

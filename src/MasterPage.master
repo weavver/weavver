@@ -1,0 +1,109 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true"  CodeFile="MasterPage.master.cs" Inherits="WeavverMasterPage" %>
+<%@ Register src="~/Controls/WebMenu.ascx" tagname="WebMenu" tagprefix="wvvr" %>
+<%@ Register src="~/Controls/MasterHeader.ascx" tagname="MasterHeader" tagprefix="wvvr" %>
+<%@ Register src="~/Controls/Comments.ascx" tagname="Comments" tagprefix="wvvr" %>
+<%@ Register src="~/Controls/QRCode.ascx" tagname="QRCode" tagprefix="wvvr" %>
+<%@ Register TagPrefix="wvvr" Namespace="Weavver.Web" %>
+<%@ Register TagPrefix="wvvr" Namespace="Weavver.Web" Assembly="WeavverLib" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+     <title>Weavver&reg; :: Abre Los Ojos.&#0153;</title>
+     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+     <link rel="icon" href="/images/favicon64x64.png" sizes="64x64" type="image/png" />
+     <link rel="apple-touch-icon-precomposed" href="/images/favicon64x64.png" />
+     <link rel="stylesheet" type="text/css" href="/Styles/Master.css" id="Style" runat="server" />
+     <link media="only screen and (max-device-width: 480px) and (min-device-width: 320px)" href="/Styles/Mobile.css" type="text/css" rel="stylesheet" />
+     <link rel="stylesheet" type="text/css" href="/Vendors/jQuery/jquery-ui-1.9.2.custom.min.css" />
+     <link rel="stylesheet" type="text/css" href="/Vendors/jQuery/jquery-ui-1.9.1.flick.css" />
+     <link rel="stylesheet" type="text/css" href="/Vendors/jQuery/jquery.lightbox-0.5.css" media="screen" />
+     <link rel='stylesheet' type='text/css' href='/Vendors/Adam Shaw/fullcalendar/fullcalendar.css' />
+     <script type="text/javascript" src="/Scripts/jstz.min.js"></script>
+     <script type="text/javascript" src="/Scripts/FixFocus.js"></script>
+     <script type="text/javascript" src="/Vendors/slideshowpro/swfobject.js"></script>
+     <script type="text/javascript" src="~/Vendors/ajaxorg-ace/ace.js" charset="utf-8"></script>
+     <script type="text/javascript" src="~/Vendors/ajaxorg-ace/mode-csharp.js"charset="utf-8"></script>
+     <script type="text/javascript" src="/Vendors/jQuery/jquery-1.8.3.min.js"></script>
+     <script type="text/javascript" src="/Vendors/jQuery/jquery-ui-1.9.2.custom.min.js"></script>
+     <script type="text/javascript" src="/Scripts/Weavver.js"></script>
+     <script type="text/javascript">
+          var weavverPhoneOptions = {
+               rtmp_url: 'rtmp://205.134.225.23/phone'
+          };
+     </script>
+     <script type="text/javascript" src="/Vendors/FreeSwitch/FlexClient/WeavverPhone.js"></script>
+     <script type="text/javascript" src="/Vendors/JSJaC/WeavverChat.js"></script>
+     <script type="text/javascript" src="/Vendors/Adam Shaw/fullcalendar/fullcalendar.min.js"></script>
+     <asp:ContentPlaceHolder id="Head" runat="server">
+     </asp:ContentPlaceHolder>
+     <asp:PlaceHolder id="GoogleAnalytics" runat="server">
+          <script type="text/javascript">
+               var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+               document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+               try {
+                    var pageTracker = _gat._getTracker("UA-384297-5");
+                    pageTracker._trackPageview();
+               } catch (err) { }
+          </script>
+     </asp:PlaceHolder>
+</head>
+<body id="Body" runat="server">
+     <wvvr:WeavverForm id="form1" runat="server">
+     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true"></asp:ScriptManager>
+     <div class="header">
+          <wvvr:WebMenu ID="Toolbar" runat="server" />
+          <wvvr:MasterHeader ID="MasterHeader1" runat="server" />
+          <div style="clear:both; height: 3px;">&nbsp;</div>
+     </div>
+     <div id="ErrorLayer" runat="server" visible="false" style="background-color: #f3eaea; margin: auto; border: solid 1px lightgrey; padding: 5px; width: 900px; margin: auto; margin-bottom: 10px; display: none;">
+          <asp:Literal ID="ErrorMessage" runat="server"></asp:Literal>
+     </div>
+     <div id="ContentTable" runat="server">
+          <div id="modalBox" style="">
+          </div>
+          <div id="CustomerChat" runat="server" visible="false" style="margin-bottom: 10px; float:right; clear: right;">
+               <a class="xmpplink" href="xmpp://chat?topic=Sales Inquiry">
+                    <div id="saleschat" style="float:right; border: 1px solid black; border: 1px solid gray; background-color: #fffd41; margin-bottom: 0px; padding: 5px;">
+                         <span style="display:inline-block; vertical-align:middle">WEAVVER SALES CHAT - </span>
+                         <img src="/vendors/jsjac/WeavverGreenBall.png"style="vertical-align:middle" alt="Click here to start the Chat" />
+                         <span style="display:inline-block; vertical-align:middle">ONLINE</span>
+                    </div>
+               </a>
+          </div>
+          <div id="TitleDiv" runat="server" visible="false" style="float:left; padding: 8px; color:Black; background-color: #FFFFFF;-moz-border-radius: 6px;-webkit-border-radius:6px;border-radius: 6px; margin-bottom: 10px;">
+               <h2><asp:Literal ID="Title" runat="server"></asp:Literal></h2>
+          </div>
+          <div id="DescriptionDiv" class="banner" runat="server" visible="false" style="text-align: left; float: right; clear: right; max-width: 350px; padding:8px; margin-bottom: 10px; -moz-border-radius: 6px;-webkit-border-radius:6px; border-radius: 6px;">
+               <asp:Label ID="Description" runat="server"></asp:Label>
+          </div>
+          <div id="ContentDIV" runat="server" class="content">
+               <div style="float:left;">
+                    <asp:PlaceHolder ID="Attachments" runat="server"></asp:PlaceHolder>
+               </div>
+               <asp:ContentPlaceHolder id="NavigationHolder" runat="server" Visible="false"></asp:ContentPlaceHolder>
+               <asp:ContentPlaceHolder id="Banner" runat="server" Visible="false"></asp:ContentPlaceHolder>
+               <asp:ContentPlaceHolder id="Content" runat="server"></asp:ContentPlaceHolder>
+               <div style="clear:both;"></div>
+          </div>
+     </div>
+     <div id="footer" runat="server" class="footer">
+          <div style="padding-left: 25px; padding-right: 15px; text-decoration: none; float:left;">
+               &copy;Weavver&reg;, Inc. 2009-2013 |
+               <a href="~/company/legal/privacy">Privacy</a> |
+               <a href="~/company/legal/termsofservice">Terms of Service</a> |
+               <a href="~/company/legal/trademarks">Trademarks</a> |
+               &nbsp;<asp:Literal ID="Source" runat="server">Source</asp:Literal>
+          </div>
+          <div style="float:right; padding-right: 25px; text-decoration: none;">
+               <wvvr:QRCode ID="QRGenerator" runat="server" /> |
+               <a class="footer-links" href="~/Sales_Leads/Insert.aspx?Source=Website%20Inquiry">Send Feedback</a>&nbsp;|
+               &nbsp;<asp:Literal id="Version" runat="server" Text="Alpha"></asp:Literal>
+          </div>
+          <div style="clear: both;" />
+     </div>
+     </wvvr:WeavverForm>
+</body>
+</html>

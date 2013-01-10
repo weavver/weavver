@@ -1,0 +1,2 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="HR_TimeLogs.ascx.cs" Inherits="DynamicData_Projections_HR_TimeLogs" %>
+Total Time: <asp:Label ID="HourTotal" runat="server" Text="Not Implemented"></asp:Label>

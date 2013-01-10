@@ -1,0 +1,153 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Ledger.aspx.cs" Inherits="Company_Accounting_Ledger" Title="Accounting : Ledger" %>
+<%@ MasterType VirtualPath="~/MasterPage.master" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
+<%@ Register src="~/Company/Accounting/Navigation.ascx" tagname="Navigation" tagprefix="wvvr" %>
+<%@ Register src="~/Controls/WebMenu.ascx" tagname="WebMenu" tagprefix="wvvr" %>
+<%@ Register Assembly="WeavverLib" Namespace="Weavver.Web" TagPrefix="wvvr" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="NavigationHolder" Runat="Server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="Banner" Runat="Server">
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="Content" Runat="Server">
+     <wvvr:Navigation ID="Nav" runat="server" />
+     <asp:UpdatePanel ID="Update1" runat="server">
+     <ContentTemplate>
+          <asp:Panel ID="LedgerItemPanel" runat="server" style="margin-bottom: 5px;">
+               <asp:HiddenField ID="LedgerItemUpdateId" runat="server" />
+               <table cellpadding="2" cellspacing="2" style="width:100%; background-color: lightyellow; border: solid 1px gray; margin-bottom: 0px; padding-left: 0px;">
+               <tr>
+                    <td>Post At:
+                         <asp:TextBox ID="LedgerItemPostAt" runat="server" Width="100px"></asp:TextBox>
+                         <cc1:CalendarExtender ID="PostAtExtender" runat="server" TargetControlID="LedgerItemPostAt"></cc1:CalendarExtender>
+                    </td>
+                    <td>Code:
+                         <asp:DropDownList ID="CodeTypeList" runat="server"></asp:DropDownList>
+                    </td>
+                    <td>Memo:
+                         <asp:TextBox ID="LedgerItemName" runat="server" Width="250px"></asp:TextBox>
+                    </td>
+                    <td>
+                         Amount:
+                         <asp:TextBox ID="LedgerItemAmount" runat="server"></asp:TextBox>
+                         <asp:DropDownList ID="EntryTypeList" runat="server"></asp:DropDownList>
+                    </td>
+                    <td style="text-align: right;">
+                         <asp:Button ID="LedgerItemAdd" runat="server" Text="Post" Height="30px" Width="100px" OnClick="LedgerItemAdd_Click" />
+                         <asp:LinkButton ID="LedgerItemCancel" runat="server" Text="[cancel]" ForeColor="Blue" Visible="false" OnClick="LedgerItemCancel_Click"></asp:LinkButton>
+                    </td>
+               </tr>
+               </table>
+          </asp:Panel>
+          <wvvr:WeavverDataGrid ID="List" runat="server" AutoGenerateColumns="false" Width="100%" HeaderStyle-BackColor="BurlyWood" ItemStyle-Height="15px">
+          <Columns>
+               <asp:BoundColumn DataField="Id" Visible="false"></asp:BoundColumn>
+               <asp:BoundColumn DataField="Id" Visible="false"></asp:BoundColumn>
+               <asp:TemplateColumn HeaderText="Posted"  ItemStyle-Width="85px" ItemStyle-HorizontalAlign="Center">
+                    <ItemTemplate>
+                         <asp:Label id="PostAt" runat="server" Text='<%# ((DateTime)DataBinder.Eval(Container.DataItem, "PostAt")).ToLocalTime().ToString("MM/dd/yyyy") %>'></asp:Label>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                         <asp:TextBox ID="PostAtEditor" runat="server" Width="100px"></asp:TextBox>
+                         <cc1:CalendarExtender ID="PostAtExtender" runat="server" TargetControlID="PostAtEditor"></cc1:CalendarExtender>
+                    </EditItemTemplate>
+               </asp:TemplateColumn>
+               <asp:TemplateColumn HeaderText="Account"  ItemStyle-Width="180px">
+                    <ItemTemplate>
+                         <a href="~/company/logistics/organization?id=<%# DataBinder.Eval(Container.DataItem, "AccountId")%>">
+                              <%# Accounting.GetAccountName(LoggedInUser.OrganizationId, (Guid) DataBinder.Eval(Container.DataItem, "AccountId")) %>
+                         </a>
+                    </ItemTemplate>
+               </asp:TemplateColumn>
+               <asp:TemplateColumn HeaderText="LedgerType"  ItemStyle-Width="50px">
+                    <ItemTemplate>
+                         <%# DataBinder.Eval(Container.DataItem, "LedgerType") %>
+                    </ItemTemplate>
+               </asp:TemplateColumn>
+               <asp:TemplateColumn HeaderText="Code" ItemStyle-Width="100px">
+                    <ItemTemplate>
+                         <%# DataBinder.Eval(Container.DataItem, "Code") %>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                         <asp:DropDownList ID="CodeEditor" runat="server"></asp:DropDownList>
+                    </EditItemTemplate>
+               </asp:TemplateColumn>
+               <asp:TemplateColumn HeaderText="Memo">
+                    <ItemTemplate>
+                         <a href="/company/accounting/ledgeritem?id=<%# DataBinder.Eval(Container.DataItem, "Id") %>"><%# DataBinder.Eval(Container.DataItem, "Memo") %></a>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                         <asp:TextBox id="NameEditor" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "Memo") %>' Width="250px"></asp:TextBox>
+                         <%--<asp:DropDownList id=cmbStatuses runat="server" datavaluefield="StatusCode" datatextfield="Name" DataSource="<%#DropDownDataView%>"></asp:DropDownList>--%>
+                    </EditItemTemplate>
+               </asp:TemplateColumn>
+               <asp:TemplateColumn HeaderText="Amount" ItemStyle-Width="85px" ItemStyle-HorizontalAlign="Right">
+                    <ItemTemplate>
+                         <%# String.Format("{0,10:C}", DataBinder.Eval(Container.DataItem, "Amount")) %>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                         <asp:TextBox id="AmountEditor" runat="server" Text='<%# String.Format("{0:0.00}", (decimal) DataBinder.Eval(Container.DataItem, "Amount")) %>' Width="120px"></asp:TextBox>
+                         <%--<asp:DropDownList id=cmbStatuses runat="server" datavaluefield="StatusCode" datatextfield="Name" DataSource="<%#DropDownDataView%>"></asp:DropDownList>--%>
+                    </EditItemTemplate>
+               </asp:TemplateColumn>
+               <asp:TemplateColumn HeaderText="EntryType" ItemStyle-Width="70px" ItemStyle-Wrap="false" ItemStyle-HorizontalAlign="Center">
+                    <ItemTemplate>
+                         <%# DataBinder.Eval(Container.DataItem, "EntryType") %>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                         <asp:DropDownList ID="EntryTypeEditor" runat="server">
+                         <asp:ListItem>Credit</asp:ListItem>
+                         <asp:ListItem>Debit</asp:ListItem>
+                         </asp:DropDownList>
+                    </EditItemTemplate>
+               </asp:TemplateColumn>
+               <asp:TemplateColumn HeaderText="Entered By" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="150px">
+                    <ItemTemplate>
+                         <%# DataBinder.Eval(Container.DataItem, "CreatedBy") %>
+                    </ItemTemplate>
+                    <ItemStyle Width="150px" />
+               </asp:TemplateColumn>
+               <asp:BoundColumn DataField="CreatedAt" ReadOnly="true" HeaderText="Entered" ItemStyle-Width="160px" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+               <asp:EditCommandColumn Visible="true" ButtonType="LinkButton" EditText="Edit" CancelText="Cancel" UpdateText="Update" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="60px"></asp:EditCommandColumn>
+               <asp:ButtonColumn Text="Delete" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" CommandName="Delete"></asp:ButtonColumn>
+          </Columns>
+          </wvvr:WeavverDataGrid>
+          <div id="Summary" runat="server" style="float:right; margin-top: 10px;">
+               
+          </div>
+          <br />
+          <asp:Panel ID="FilterPanel" runat="server" Visible="true">
+               Filter:<br />
+               <table>
+               <tr>
+                    <td>
+                         Start<br /><asp:TextBox id="DateStart" runat="server" Width="75"></asp:TextBox>
+                         <cc1:CalendarExtender ID="FilterDateStart" runat="server" TargetControlID="DateStart"></cc1:CalendarExtender>
+                    </td>
+                    <td>
+                         End<br /><asp:TextBox id="DateEnd" runat="server" Width="75"></asp:TextBox>
+                         <cc1:CalendarExtender ID="FilterDateEnd" runat="server" TargetControlID="DateEnd"></cc1:CalendarExtender>
+                    </td>
+                    <td>
+                         Ledger<br /><asp:DropDownList id="LedgerTypeFilter" runat="server"></asp:DropDownList>
+                    </td>
+                    <td>
+                         Code<br /><asp:DropDownList id="CodeTypeFilter" runat="server" Width="75px"></asp:DropDownList>
+                    </td>
+                    <td>
+                         Entry Type<br /><asp:DropDownList id="EntryTypeFilter" runat="server" Width="75px"></asp:DropDownList>
+                    </td>
+                    <td>
+                         <br />
+                         <asp:Button ID="FilterApply" runat="server" Text="Apply" OnClick="FilterApply_Click" />
+                    </td>
+               </tr>
+               </table>
+          </asp:Panel>
+          <br />
+          <div style="float: right;">
+                Total Ledger Items: <asp:Label ID="Count" runat="server"></asp:Label>
+          </div>
+     </ContentTemplate>
+     </asp:UpdatePanel>
+     <div style="height: 30px;">&nbsp;</div>
+</asp:Content>

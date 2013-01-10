@@ -1,0 +1,1 @@
+This folder is reserved for user uploads. Make sure permissions are set correctly.

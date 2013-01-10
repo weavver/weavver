@@ -1,0 +1,393 @@
+﻿using System;
+using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Xml.Linq;
+
+using Weavver.Data;
+using Weavver.Company.Accounting;
+
+using Weavver.Web;
+
+using NHibernate;
+using NHibernate.Criterion;
+using NHibernate.Hql;
+using NHibernate.Linq;
+
+public partial class Company_Accounting_Ledger : SkeletonPage
+{
+     Guid accountId;
+//-------------------------------------------------------------------------------------------
+     protected void Page_Init(object sender, EventArgs e)
+     {
+          Master.FormTitle = "General Ledger";
+          Master.FixedWidth = false;
+          Master.Width = "100%";
+
+          WeavverMenuItem wImport = new WeavverMenuItem("Import", "~/company/accounting/import/");
+          Master.ToolBarMenuAdd(wImport);
+
+          WeavverMenuItem wBillPay = new WeavverMenuItem("Bill Pay", "~/company/accounting/billpay?id=" + Request["id"]);
+          Master.ToolBarMenuAdd(wBillPay);
+
+          List.ItemCommand += new DataGridCommandEventHandler(List_ItemCommand);
+          List.ItemDataBound += new DataGridItemEventHandler(List_ItemDataBound);
+          List.UpdateCommand += new DataGridCommandEventHandler(List_UpdateCommand);
+          List.EditCommand += new DataGridCommandEventHandler(List_EditCommand);
+          List.PageIndexChanged += new DataGridPageChangedEventHandler(List_PageIndexChanged);
+          List.AllowSorting = true;
+          List.HeaderStyle.BackColor = System.Drawing.Color.BurlyWood;
+          List.AllowPaging = true;
+          List.AllowCustomPaging = true;
+          List.PageSize = 30;
+          List.PagerStyle.HorizontalAlign = HorizontalAlign.Right;
+          List.PagerStyle.Position = PagerPosition.TopAndBottom;
+          List.PagerStyle.Mode = PagerMode.NumericPages;
+          List.PagerStyle.BorderStyle = BorderStyle.None;
+          if (!IsPostBack)
+          {
+               LedgerItemPostAt.Text = DateTime.UtcNow.ToString("MM/dd/yyyy");
+
+               EntryTypeList.DataSource = Enum.GetNames(typeof(EntryType));
+               EntryTypeList.DataBind();
+
+
+
+               DateStart.Text = Request["startat"];
+               DateEnd.Text = Request["endat"];
+               CodeTypeFilter.SelectedValue = Request["code"];
+               LedgerTypeFilter.SelectedValue = Request["ledger"];
+          }
+
+          if (LoggedInUser == null ||
+              LoggedInUser.OrganizationId != SelectedOrganization.Id)
+          {
+               LedgerItemPanel.Visible = false;
+          }
+     }
+//-------------------------------------------------------------------------------------------
+     protected void Page_Load(object sender, EventArgs e)
+     {
+          IsPublic = false;
+
+          if (!IsPostBack)
+          {
+               UpdatePage();
+          }
+     }
+//-------------------------------------------------------------------------------------------
+     private void UpdatePage()
+     {
+          Organization org1 = DatabaseHelper.Session.Get<Organization>(LoggedInUser.OrganizationId);
+          Guid accountId = (Request["id"] == null) ? Guid.Empty : new Guid(Request["id"]);
+
+          
+          //FundingLink.Visible = false;
+          //PaymentLink.Visible = false;
+
+          LedgerType? ledgerTypeFilter = null;
+          if (Request["ledgertype"] != null || LedgerTypeFilter.SelectedItem.Text != "All")
+          {
+               string ltFilter = (Request["ledgertype"] == null) ? LedgerTypeFilter.Text : Request["ledgertype"];
+               ledgerTypeFilter = (LedgerType) Enum.Parse(typeof(LedgerType), ltFilter, true);
+               string ledgertype = "Unknown";
+               CodeTypeList.Items.Clear();
+               switch (ledgerTypeFilter)
+               {
+                    case LedgerType.Payable:
+                         ledgertype = "Payables";
+                         CodeTypeList.Items.Add("Purchase");
+                         CodeTypeList.Items.Add("Payment");
+                         Master.AddAttachmentLink("Org Details", "~/company/logistics/organization?id=" + accountId.ToString(), "");
+                         Master.AddAttachmentLink("Make Payment", "~/company/accounting/check?accountid=" + accountId.ToString(), "");
+                         break;
+
+                    case LedgerType.Receivable:
+                         ledgertype = "Receivables";
+                         CodeTypeList.Items.Add("Sale");
+                         CodeTypeList.Items.Add("Payment");
+                         if (Request["accounttype"] != "WebOrder")
+                         {
+                              Master.AddAttachmentLink("Org Details", "~/company/logistics/organization?id=" + accountId.ToString(), "");
+                         }
+                         break;
+
+                    case LedgerType.Savings:
+                         ledgertype = "Savings";
+                         CodeTypeList.Items.Add("Deposit");
+                         CodeTypeList.Items.Add("Withdrawl");
+                         CodeTypeList.Items.Add("Reserve");
+                         break;
+
+                    case LedgerType.Checking:
+                         ledgertype = "Checking";
+                         CodeTypeList.Items.Add("Deposit");
+                         CodeTypeList.Items.Add("Withdrawl");
+                         CodeTypeList.Items.Add("Reserve");
+                         break;
+
+                    case LedgerType.CreditCard:
+                         ledgertype = "Credit Card";
+                         CodeTypeList.Items.Add("Deposit");
+                         CodeTypeList.Items.Add("Withdrawl");
+                         CodeTypeList.Items.Add("Reserve");
+                         break;
+
+                    case LedgerType.Holding:
+                         ledgertype = "Holding Account";
+                         CodeTypeList.Items.Add("Deposit");
+                         CodeTypeList.Items.Add("Withdrawl");
+                         CodeTypeList.Items.Add("Reserve");
+                         break;
+               }
+               if (LoggedInUser.OrganizationId == accountId &&
+                    ledgerTypeFilter == LedgerType.Payable)
+                    ledgertype = "My Receivables";
+               else if (LoggedInUser.OrganizationId == accountId &&
+                    ledgerTypeFilter == LedgerType.Receivable)
+                    ledgertype = "My Payables";
+               Master.FormTitle = accountName + ": " + ledgertype;
+               Master.FormDescription = "The ledger for this account.";
+          }
+
+          if (accountId == Guid.Empty)
+          {
+               Master.FormTitle = "General Ledger";
+               LedgerItemPanel.Visible = false;
+               List.Columns[11].Visible = false;
+               List.Columns[12].Visible = false;
+               Summary.Visible = false;
+          }
+          else
+          {
+               List.Columns[3].Visible = false;
+               List.Columns[4].Visible = false;
+          }
+
+          List.DataKeyField = "Id";
+
+          ICriteria criteria = DatabaseHelper.Session.CreateCriteria(typeof(LedgerItem))
+                              .Add(Restrictions.Eq("OrganizationId", LoggedInUser.OrganizationId))
+                              .AddOrder(Order.Desc("PostAt"))
+                              .SetFirstResult(List.CurrentPageIndex * 30)
+                              .SetMaxResults(30);
+
+          ICriteria projection = DatabaseHelper.Session.CreateCriteria(typeof(LedgerItem))
+                         .Add(Restrictions.Eq("OrganizationId", LoggedInUser.OrganizationId))
+                         .SetProjection(Projections.RowCount());
+
+          if (accountId != Guid.Empty)
+          {
+               criteria = criteria.Add(Restrictions.Eq("AccountId", accountId));
+               projection = projection.Add(Restrictions.Eq("AccountId", accountId));
+          }
+
+          if (ledgerTypeFilter.HasValue)
+          {
+               criteria = criteria.Add(Restrictions.Eq("LedgerType", ledgerTypeFilter));
+               projection = projection.Add(Restrictions.Eq("LedgerType", ledgerTypeFilter.Value));
+          }
+
+          if (CodeTypeFilter.Text != "All")
+          {
+               CodeType ctFilter = (CodeType) Enum.Parse(typeof(CodeType), CodeTypeFilter.Text, true);
+               criteria = criteria.Add(Restrictions.Eq("Code", ctFilter));
+               projection = projection.Add(Restrictions.Eq("Code", ctFilter));
+          }
+
+          if (EntryTypeFilter.Text != "All")
+          {
+               EntryType etFilter = (EntryType)Enum.Parse(typeof(EntryType), EntryTypeFilter.Text, true);
+               criteria = criteria.Add(Restrictions.Eq("EntryType", etFilter));
+               projection = projection.Add(Restrictions.Eq("EntryType", etFilter));
+          }
+
+          DateTime startDate;
+          if (DateTime.TryParse(DateStart.Text, out startDate))
+          {
+               criteria.Add(Restrictions.Ge("PostAt", startDate.ToUniversalTime()));
+               projection.Add(Restrictions.Ge("PostAt", startDate.ToUniversalTime()));
+          }
+
+          DateTime endDate;
+          if (DateTime.TryParse(DateEnd.Text, out endDate))
+          {
+               criteria.Add(Restrictions.Le("PostAt", endDate.ToUniversalTime()));
+               projection.Add(Restrictions.Le("PostAt", endDate.ToUniversalTime()));
+          }
+
+          IMultiCriteria multiCriteria = DatabaseHelper.Session.CreateMultiCriteria();
+          multiCriteria.Add(criteria);
+          multiCriteria.Add(projection);
+
+          IList results = multiCriteria.List();
+          Count.Text = ((IList)results[1])[0].ToString();
+          List.VirtualItemCount = (int)((IList)results[1])[0];
+          List.DataSource = (IList)results[0];
+          List.DataBind();
+
+     }
+//-------------------------------------------------------------------------------------------
+     void List_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
+     {
+          List.CurrentPageIndex = e.NewPageIndex;
+
+          UpdatePage();
+     }
+//-------------------------------------------------------------------------------------------
+     void List_ItemDataBound(object sender, DataGridItemEventArgs e)
+     {
+          if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.EditItem)
+          {
+               LedgerItem item = (LedgerItem)e.Item.DataItem;
+               if (item.Code == CodeType.Gift)
+                    e.Item.Style["background-color"] = "#C2DFFF";
+               else if (item.EntryType == EntryType.Debit)
+                    e.Item.Style["background-color"] = "#FFE9E8";
+               else if (item.EntryType == EntryType.Credit)
+                    e.Item.Style["background-color"] = "#C1FFC1";
+
+               e.Item.Cells[9].Text = DatabaseHelper.GetName(item.CreatedBy);
+               e.Item.Cells[9].ToolTip = item.CreatedBy.ToString();
+               e.Item.Cells[10].Text = Weavver.Common.Common.GetFriendlyDateString(item.CreatedAt.Value.ToLocalTime()); // .ToString("MM/dd/yyyy hh:mm tt")
+               e.Item.Cells[10].ToolTip = item.CreatedAt.Value.ToLocalTime().ToString("MM/dd/yyyy hh:mm tt");
+
+               if (e.Item.ItemType == ListItemType.EditItem)
+               {
+                    e.Item.Style["background-color"] = "lightyellow";
+
+                    TextBox postAtEditor = (TextBox) e.Item.FindControl("PostAtEditor");
+                    postAtEditor.Text = item.PostAt.ToLocalTime().ToString("MM/dd/yyyy");
+                    DropDownList codeEditor = (DropDownList)e.Item.FindControl("CodeEditor");
+                    codeEditor.DataSource = Enum.GetNames(typeof(CodeType));
+                    codeEditor.DataBind();
+                    codeEditor.Text = item.Code.ToString();
+
+                    DropDownList entryTypeEditor = (DropDownList)e.Item.FindControl("EntryTypeEditor");
+                    entryTypeEditor.Text = item.EntryType.ToString();
+               }
+          }
+
+     }
+//-------------------------------------------------------------------------------------------
+     void List_EditCommand(object source, DataGridCommandEventArgs e)
+     {
+          //ShowError(List.Items[e.Item.ItemIndex].Cells[2].Controls[1].ID);
+     }
+//-------------------------------------------------------------------------------------------
+     protected void LedgerItemAdd_Click(object sender, EventArgs e)
+     {
+          //List.ShowFooter = true;
+          //List.EditItemIndex = List.Items.Count;
+          LedgerType ledgerType = (LedgerType)Enum.Parse(typeof(LedgerType), Request["ledgertype"], true);
+
+          LedgerItem item = new LedgerItem();
+          item.DatabaseHelper = DatabaseHelper;
+          item.Id = Guid.NewGuid();
+          item.OrganizationId = SelectedOrganization.Id;
+          item.LedgerType = ledgerType;
+          item.EntryType = (EntryType)Enum.Parse(typeof(EntryType), EntryTypeList.SelectedValue, true);
+          item.Code = (CodeType)Enum.Parse(typeof(CodeType), CodeTypeList.SelectedValue, true);
+          item.AccountId = new Guid(Request["id"]);
+          item.Memo = LedgerItemName.Text;
+          item.Amount = Decimal.Parse(LedgerItemAmount.Text);
+          item.PostAt = DateTime.Parse(LedgerItemPostAt.Text).ToUniversalTime();
+          item.CreatedAt = DateTime.UtcNow;
+          item.CreatedBy = LoggedInUser.Id;
+          item.UpdatedAt = DateTime.UtcNow;
+          item.UpdatedBy = LoggedInUser.Id;
+          item.Commit();
+
+          UpdatePage();
+     }
+//--------------------------------------------------------------------------------------------
+     void List_ItemCommand(object source, DataGridCommandEventArgs e)
+     {
+          switch (e.CommandName)
+          {
+               case "View":
+                    Guid vId = (Guid)List.DataKeys[e.Item.ItemIndex];
+                    Response.Redirect("ledgeritem?id=" + vId.ToString());
+                    break;
+
+               case "Edit":
+                    //Guid id = (Guid) List.DataKeys[e.Item.ItemIndex];
+                    //LedgerItem item = DatabaseHelper.Session.Get<LedgerItem>(id);
+                    //EntryTypeList.Text = item.EntryType.ToString();
+                    //CodeTypeList.Text = item.Code.ToString();
+                    //LedgerItemPostAt.Text = item.PostAt.ToString("MM/dd/yyyy");
+                    //LedgerItemName.Text = item.Memo;
+                    //LedgerItemAmount.Text = item.Amount.ToString();
+                    //LedgerItemUpdateId.Value = item.Id.ToString();
+                    //LedgerItemCancel.Visible = true;
+                    List.EditItemIndex = e.Item.ItemIndex;
+                    UpdatePage();
+                    break;
+
+               case "Cancel":
+                    List.EditItemIndex = -1;
+                    UpdatePage();
+                    break;
+
+               case "Delete":
+                    Guid dId = (Guid)List.DataKeys[e.Item.ItemIndex];
+                    LedgerItem item = DatabaseHelper.Session.Get<LedgerItem>(dId);
+                    if (item != null)
+                    {
+                         item.DatabaseHelper = DatabaseHelper;
+                         item.Delete();
+                    }
+                    UpdatePage();
+                    break;
+          }
+     }
+//-------------------------------------------------------------------------------------------
+     protected void FilterApply_Click(object sender, EventArgs e)
+     {
+          List.CurrentPageIndex = 0;
+          UpdatePage();
+     }
+//-------------------------------------------------------------------------------------------
+     void List_UpdateCommand(object source, DataGridCommandEventArgs e)
+     {
+          TextBox postAtEditor = (TextBox) e.Item.FindControl("PostAtEditor");
+          DropDownList entryTypeEditor = (DropDownList) e.Item.FindControl("EntryTypeEditor");
+          DropDownList codeEditor = (DropDownList) e.Item.FindControl("CodeEditor");
+          TextBox nameEditor = (TextBox) e.Item.FindControl("NameEditor");
+          TextBox amountEditor = (TextBox) e.Item.FindControl("AmountEditor");
+          CodeType code = (CodeType) Enum.Parse(typeof(CodeType), codeEditor.Text, true);
+          EntryType entryType = (EntryType) Enum.Parse(typeof(EntryType), entryTypeEditor.Text, true);
+          Guid id = (Guid) List.DataKeys[e.Item.ItemIndex];
+          LedgerItem item = DatabaseHelper.Session.Get<LedgerItem>(id);
+          item.DatabaseHelper = DatabaseHelper;
+          item.EntryType = entryType;
+          item.Code = code;
+          item.PostAt = DateTime.Parse(postAtEditor.Text).ToUniversalTime();
+          item.Memo = nameEditor.Text;
+          item.Amount = Decimal.Parse(amountEditor.Text);
+          item.UpdatedAt = DateTime.UtcNow;
+          item.UpdatedBy = LoggedInUser.Id; // we are updating only, so we don't set createdat/by
+          item.Commit();
+
+          //Weavver.Common.Common.LogToXMPP("output", );
+          List.EditItemIndex = -1;
+          UpdatePage();
+     }
+//-------------------------------------------------------------------------------------------
+     public void LedgerItemCancel_Click(object sender, EventArgs e)
+     {
+          LedgerItemCancel.Visible = false;
+          LedgerItemName.Text = "";
+          LedgerItemAmount.Text = "";
+          CodeTypeList.SelectedIndex = 0;
+          EntryTypeList.SelectedIndex = 0;
+     }
+//-------------------------------------------------------------------------------------------
+}

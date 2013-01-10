@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SilentPost.aspx.cs" Inherits="Vendors_AuthorizeNet_SilentPost" %>

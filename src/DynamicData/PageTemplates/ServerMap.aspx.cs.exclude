@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Xml.Linq;
+
+using Weavver.Data;
+
+public partial class Company_Services_Chat_Server_Map : SkeletonPage
+{
+     protected void Page_Load(object sender, EventArgs e)
+     {
+          Master.FormTitle = "Server Map";
+          Master.FormDescription = "This Google Map plots the location of known XMPP servers in our database.";
+          Master.InitializeMap = true;
+          IsPublic = true;
+
+
+          string markerA = @"<script type='text/javascript'>
+                         function setMarkers(map) { ";
+
+          string markerB = @"
+                         var marker{0} = new google.maps.Marker({
+                              position: new google.maps.LatLng({1}, {2}),
+                              map: map,
+                              title:'{3}'
+                            });
+                         ";
+
+          string markerC = @"
+                    }
+                    </script>";
+
+          output.Text = markerA;
+          int index = 0;
+
+
+          ICriteria criteria = DatabaseHelper.Session.CreateCriteria(typeof(XMPPServer))
+                         .Add(NHibernate.Criterion.Restrictions.Eq("OrganizationId", SelectedOrganization.Id));
+          var docs = criteria.List<XMPPServer>();
+          foreach (var doc in docs)
+          {
+               if (doc.Latitude == "" || doc.Longitude == "")
+                    continue;
+
+               string markup = markerB.Replace("{0}", index.ToString());
+               markup = markup.Replace("{1}", doc.Latitude);
+               markup = markup.Replace("{2}", doc.Longitude);
+               markup = markup.Replace("{3}", doc.Domain);
+
+               output.Text += markup;
+               index++;
+          }
+          output.Text += markerC;
+     }
+}

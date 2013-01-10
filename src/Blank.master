@@ -1,0 +1,34 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Blank.master.cs" Inherits="Blank" %>
+<%@ Register src="~/Controls/WebMenu.ascx" tagname="WebMenu" tagprefix="wvvr" %>
+<%@ Register src="~/Controls/MasterHeader.ascx" tagname="MasterHeader" tagprefix="wvvr" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+     <title>Weavver&reg; :: Abre Los Ojos.&#0153;</title>
+     <link id="Style" runat="server" href="/Styles/Master.css" rel="stylesheet" type="text/css" />
+     <link rel="stylesheet" type="text/css" href="/Vendors/Dynamic Drive/ddsmoothmenu.css" />
+     <link rel="stylesheet" type="text/css" href="/Vendors/Dynamic Drive/ddsmoothmenu-v.css" />
+     <script type="text/javascript" src="/Vendors/Dynamic Drive/ddsmoothmenu.js">
+          /***********************************************
+          * Smooth Navigational Menu- (c) Dynamic Drive DHTML code library (www.dynamicdrive.com)
+          * This notice MUST stay intact for legal use
+          * Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+          ***********************************************/
+     </script>
+     <asp:ContentPlaceHolder id="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+     <form id="form1" runat="server">
+          <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true"></asp:ScriptManager>
+          <wvvr:WebMenu ID="Toolbar" runat="server" />
+          <wvvr:MasterHeader ID="MasterHeader1" runat="server" />
+          <div style="margin-top: 50px;">
+               <div id="ContentDIV" runat="server" style="min-width: 940px; border: solid 1px lightgrey; margin: auto; padding-bottom: 10px; clear:both;">
+                    <asp:ContentPlaceHolder id="Content" runat="server"></asp:ContentPlaceHolder>
+               </div>
+          </div>
+     </form>
+</body>
+</html>
