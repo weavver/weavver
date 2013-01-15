@@ -17,7 +17,7 @@ public partial class System_Tests_Report : System.Web.UI.Page
          if (!IsPostBack)
          {
               WeavverEntityContainer data = new WeavverEntityContainer();
-              var orders = from x in data.Sales_Orders
+              var orders = from x in data.Sales_Order
                            select x;
               ReportViewer1.ProcessingMode = ProcessingMode.Local;
               ReportViewer1.LocalReport.EnableHyperlinks = true;
@@ -44,7 +44,7 @@ public partial class System_Tests_Report : System.Web.UI.Page
 
          using (WeavverEntityContainer data = new WeavverEntityContainer())
          {
-              var orders = from x in data.Sales_Orders
+              var orders = from x in data.Sales_Order
                           select x;
 
               // Setup the report viewer object and get the array of bytes

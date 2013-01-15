@@ -20,6 +20,7 @@ namespace DynamicData
      public partial class Showcase : SkeletonPage
      {
           protected MetaTable table;
+          Guid orgId;
 //-------------------------------------------------------------------------------------------
           protected void Page_Init(object sender, EventArgs e)
           {
@@ -36,11 +37,13 @@ namespace DynamicData
                // HACKED TOGETHER FOR NOW
                if (User.Identity.IsAuthenticated)
                {
-                    GridDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, SelectedOrganization.Id.ToString()));
+                    orgId = SelectedOrganization.Id;
+                    GridDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, orgId.ToString()));
                }
                else
                {
-                    GridDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, "0baae579-dbd8-488d-9e51-dd4dd6079e95"));
+                    orgId = new Guid("0baae579-dbd8-488d-9e51-dd4dd6079e95");
+                    GridDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, orgId.ToString()));
                }
                
                if (table.EntityType.FullName.Contains("Logistics_Products"))
@@ -114,10 +117,10 @@ namespace DynamicData
 //-------------------------------------------------------------------------------------------
           public string GetLogo(Guid id)
           {
-               string logopath = Server.MapPath("~/images/services/" + id.ToString() + ".png");
+               string logopath = Server.MapPath("~/uploads/" + orgId.ToString() + "/products/" + id.ToString() + ".png");
                if (File.Exists(logopath))
                {
-                    return "<img border='0' src='~/images/services/" + id.ToString() + ".png' />";
+                    return "<img border='0' src='~/uploads/" + orgId.ToString() + "/products/" + id.ToString() + ".png' />";
                }
                return "";
           }

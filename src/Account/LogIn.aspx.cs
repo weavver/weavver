@@ -6,7 +6,6 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Security;
 
-using Divan;
 using Weavver.Sys;
 
 public partial class Account_LogIn : SkeletonPage
@@ -23,7 +22,6 @@ public partial class Account_LogIn : SkeletonPage
           {
                Response.Redirect("~/account/");
           }
-
 
           //AuthenticationProvider item = DatabaseHelper.Session.CreateCriteria(typeof(AuthenticationProvider))
           //              .Add(NHibernate.Criterion.Restrictions.Eq("Url", Request.Url.Host.ToLower()))
