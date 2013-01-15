@@ -15,8 +15,6 @@ using Weavver.Sys;
 using Weavver.Vendors.ProcessOne;
 using Weavver.Web;
 
-using log4net;
-
 using System.Linq;
 using Weavver.Utilities;
 using System.Reflection;
