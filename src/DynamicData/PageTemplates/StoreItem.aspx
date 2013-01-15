@@ -7,48 +7,43 @@
           If you need help or would like to discuss your project please call us at +1-714-872-5920 or
           <a id="ItemInquire" runat="server" href="#" style="color: #FFFFFF; text-decoration: underline;">inquire online</a>.
      </div>
-     <div style="clear: both; min-height: 63px; background-color: #228ae3; position: relative;background-image: url('~/products/snap/images/barfiller.jpg');">
-          <div style="float: left; background-image: url('~/products/snap/images/barleftWeavver.png'); height: 64px; width: 13px; font-weight: bold;">
+     <div style="clear: both; min-height: 63px; background-color: #228ae3; position: relative;background-image: url('~/images/storeitem/barfiller.jpg');">
+          <div style="float: left; background-image: url('~/images/storeitem/barleftWeavver.png'); height: 64px; width: 13px; font-weight: bold;">
                &nbsp;
           </div>
                <div style="float:right;">
-                    <img src="~/products/snap/images/barright.jpg" />
+                    <img src="~/images/storeitem/barright.jpg" />
                </div>
           <div style="float:left; height: 33px; vertical-align: bottom; position: absolute; bottom: 0px; left: 7px;">
-               <img style="float:left; height: 34px;" src="~/products/snap/images/pageNameLeft.png" />
-               <div style="background-repeat: repeat-x; background-position: bottom; float: left; padding-top: 0px; font: Bold 11pt Verdana;height: 34px; text-align: center;background-image: url('~/products/snap/images/pageNameFiller.png');">
+               <img style="float:left; height: 34px;" src="~/images/storeitem/pageNameLeft.png" />
+               <div style="background-repeat: repeat-x; background-position: bottom; float: left; padding-top: 0px; font: Bold 11pt Verdana;height: 34px; text-align: center;background-image: url('~/images/storeitem/pageNameFiller.png');">
                     <div style="padding-top: 8px; height: 34px;">
                          <asp:Label ID="PageName" runat="server" Text="General Information"></asp:Label>
                     </div>
                </div>
                <div style="display: inline-block;background-position: bottom; vertical-align: bottom; height: 34px;">
-                    <img style="float:left; height: 34px;" src="~/products/snap/images/pageNameRight.png" border="0" />
+                    <img style="float:left; height: 34px;" src="~/images/storeitem/pageNameRight.png" border="0" />
                </div>
           </div>
-
-          <%--<img src="/Products/Snap/images/pageNameLeft.png" />  background-color: #228ae3;
-          <img src="/Products/Snap/images/pageNameFiller.png" />
-          <img src="/Products/Snap/images/pageNameRight.png" />
---%>
      </div>
      
      <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FFFFFF">
      <tr>
           <td width="20" align="left" valign="top">
-               <img src="~/products/snap/images/left_corn_up.gif" width="24" height="21">
+               <img src="~/images/storeitem/left_corn_up.gif" width="24" height="21">
           </td>
           <td bgcolor="ffffff">
                &nbsp;
           </td>
           <td width="10" align="right" valign="top">
-               <img src="~/products/snap/images/right_corn_up.gif" width="24" height="21">
+               <img src="~/images/storeitem/right_corn_up.gif" width="24" height="21">
           </td>
      </tr>
      </table>
 
      <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
      <tr>
-          <td style="background-image: url('~/products/snap/images/left_shad.gif'); background-repeat: repeat-y;width: 24px;">
+          <td style="background-image: url('~/images/storeitem/left_shad.gif'); background-repeat: repeat-y;width: 24px;">
                &nbsp;
           </td>
           <td style="padding-right: 10px; background-color: #FFFFFF;">
@@ -103,19 +98,19 @@
                     </EmptyDataTemplate>
                </asp:FormView>
           </td>
-          <td style="background-image: url('~/products/snap/images/right_shad.gif'); background-repeat: repeat-y;width: 24px;">
+          <td style="background-image: url('~/images/storeitem/right_shad.gif'); background-repeat: repeat-y;width: 24px;">
                &nbsp;
           </td>
      </tr>
      <tr>
           <td align="right" valign="bottom">
-               <img src="~/products/snap/images/left_corn_bot.gif" width="24" height="21">
+               <img src="~/images/storeitem/left_corn_bot.gif" width="24" height="21">
           </td>
-          <td background="~/products/snap/images/bot_bg.gif">
+          <td background="~/images/storeitem/bot_bg.gif">
                &nbsp;
           </td>
           <td align="left" valign="bottom">
-               <img src="~/products/snap/images/right_corn_bot.gif" width="24" height="21">
+               <img src="~/images/storeitem/right_corn_bot.gif" width="24" height="21">
           </td>
      </tr>
      </table>
