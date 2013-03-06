@@ -1,6 +1,0 @@
-[submodule "vendors/weavver/data"]
-	path = vendors/weavver/data
-	url = https://github.com/weavver/data.git
-[submodule "vendors/weavver/vendors"]
-	path = vendors/weavver/vendors
-	url = https://github.com/weavver/vendors.git

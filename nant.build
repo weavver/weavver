@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<project name="Weavver" default="rebuild">
+     <property name="nant.settings.currentframework" value="net-4.0" />
+	<property name="build.dir" value="${directory::get-current-directory()}/build/www/Bin" unless="${property::exists('build.dir')}" />
+     <property name="debug" value="true"/>
+     <target name="clean" description="remove all generated files">
+		<delete dir="${directory::get-current-directory()}/build" />
+          <delete dir="src\bin" />
+          <delete dir="src\obj" />
+     </target>
+     <target name="weavver.net">
+          <nant target="${target::get-current-target()}" buildfile="../net/nant.build">
+               <properties>
+                    <property name="build.dir" value="${build.dir}" overwrite="false" readonly="true" />
+               </properties>
+          </nant>
+     </target>
+     <target name="weavver.vendors">
+          <nant target="${target::get-current-target()}" buildfile="../vendors/nant.build">
+               <properties>
+                    <property name="build.dir" value="${build.dir}" overwrite="false" readonly="true" />
+               </properties>
+          </nant>
+     </target>
+     <target name="weavver.data">
+          <nant target="${target::get-current-target()}" buildfile="../data/nant.build">
+               <properties>
+                    <property name="build.dir" value="${build.dir}" overwrite="false" readonly="true" />
+               </properties>
+          </nant>
+     </target>
+     <target name="weavver.moksha">
+          <nant target="${target::get-current-target()}" buildfile="../moksha/nant.build">
+               <properties>
+                    <property name="build.dir" value="${build.dir}" overwrite="false" readonly="true" />
+               </properties>
+          </nant>
+     </target>
+     <target name="build" depends="weavver.net, weavver.vendors, weavver.data">
+		<mkdir dir="${build.dir}" />
+          <exec program="Build.bat" />
+          <!--<csc target="exe" output="${build.dir}/moksha.exe" debug="${debug}">
+               <references>
+                    <include name="vendors/selenium/WebDriver.dll" />
+                    <include name="vendors/selenium/WebDriver.Support.dll" />
+                    <include name="${build.dir}/Weavver.Data.dll" />
+                    <include name="System.Data.Entity.dll" />
+               </references>
+               <sources>
+                    <include name="src/**.cs" />
+                    <include name="src/Attributes/*.cs" />
+               </sources>
+          </csc>-->
+	</target>
+     <target name="rebuild" depends="clean, build" />
+     <target name="run" depends="build">
+          <!--<exec program="${build.dir}/Weavver.Data.dll" />-->
+     </target>
+     <target name="test">
+          <nant target="build" buildfile="../moksha/nant.build"></nant>
+          <exec program="../moksha/build/moksha.exe">
+               <arg line="/test ${build.dir}/www/Bin/Weavver.Data.dll" />
+          </exec>
+     </target>
+</project>
