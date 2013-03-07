@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Selenium;
-using NUnit.Framework;
 using OpenQA.Selenium;
 
 namespace Weavver.Testing.Sys
 {
-     [TestFixture]
+     [StagingTest]
      public class LogInFromSysError :  WeavverTest
      {
 //-------------------------------------------------------------------------------------------
-          [Test]
+          [ManualTest]
           public void SysError()
           {
                webDriver.Navigate().GoToUrl(BaseURL + "/system/error");
@@ -28,7 +26,7 @@ namespace Weavver.Testing.Sys
                WaitForPageLoad();
 
                Assert.AreEqual("Weavver Account :: Welcome Home!", webDriver.Title);
-               Assert.IsTrue(webDriver.PageSource.Contains("WeavverTest"));
+               Assert.IsTrue(webDriver.PageSource.Contains("WeavverTest"), "weavvertest username is not in the page source");
 
                LogOut();
           }

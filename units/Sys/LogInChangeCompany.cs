@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
-using Selenium;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
+using Weavver.Testing;
+
 namespace Weavver.Testing.Sys
 {
-     [TestFixture]
+     [StagingTest]
      public class LogInChangeCompany : WeavverTest
      {
 //-------------------------------------------------------------------------------------------
-          [Test]
+          [ManualTest]
           public void ChangeCompany()
           {
                webDriver.Navigate().GoToUrl(BaseURL + "/");
@@ -21,7 +21,7 @@ namespace Weavver.Testing.Sys
                Assert.AreEqual("Weavver :: Abre Los Ojos.", webDriver.Title);
                SelectDDLOption(By.Id("ctl00_OrganizationsList"), "WeavverTest");
                Assert.AreEqual("Weavver :: Abre Los Ojos.", webDriver.Title);
-               Assert.IsTrue(webDriver.PageSource.Contains("weavvertest"));
+               Assert.IsTrue(webDriver.PageSource.Contains("weavvertest"), "\"weavvertest\" username is missing from the page source!");
                Assert.AreEqual("Weavver :: Abre Los Ojos.", webDriver.Title);
 
                LogOut();

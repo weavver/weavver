@@ -6,3 +6,5 @@ WeavverLib.snk
 *.snk
 build
 web.config
+*.user
+chromedriver.log

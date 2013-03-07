@@ -2,7 +2,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using System.IO;
@@ -10,13 +9,14 @@ using System.Configuration;
 
 namespace Weavver.Testing.Accounting
 {
-     [TestFixture]
+     [StagingTest]
      public class Import : WeavverTest
      {
 //-------------------------------------------------------------------------------------------
-          [Test]
+          [ManualTest]
           public void ImportData()
           {
+               IJavaScriptExecutor js = ((IJavaScriptExecutor)webDriver);
                webDriver.Navigate().GoToUrl(BaseURL);
                LogIn();
                SelectDDLOption(By.Id("ctl00_OrganizationsList"), "WeavverTest");
