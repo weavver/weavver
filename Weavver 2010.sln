@@ -7,14 +7,14 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "www.weavver.local", "http:/
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0.1"
 		ProjectReferences = "{01490A61-F803-41A3-89D4-D6CAC7A97DA6}|Weavver.Vendors.dll;{0D3C5390-5651-4B71-B165-E5C72A55281C}|Weavver.Net.dll;{4D558303-3DB5-4004-91BA-9DB658199B7B}|Weavver.Data.dll;{8E71554E-8184-40C7-8CBC-8955C7627A04}|Weavver.MokshaInterface.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/weavverwebsite"
-		Debug.AspNetCompiler.PhysicalPath = "src\"
+		Debug.AspNetCompiler.PhysicalPath = "www\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\weavverwebsite\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "true"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/weavverwebsite"
-		Release.AspNetCompiler.PhysicalPath = "src\"
+		Release.AspNetCompiler.PhysicalPath = "www\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\weavverwebsite\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
@@ -25,6 +25,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "www.weavver.local", "http:/
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06D29C82-BFA5-470F-A0F5-059087AD90F9}"
 	ProjectSection(SolutionItems) = preProject
+		BuildReleaseZip.bat = BuildReleaseZip.bat
+		BuildReleaseZip.exclude = BuildReleaseZip.exclude
+		License.txt = License.txt
 		nant.build = nant.build
 	EndProjectSection
 EndProject

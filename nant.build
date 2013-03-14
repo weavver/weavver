@@ -19,7 +19,7 @@
      <target name="test">
           <!--<nant target="build" buildfile="../moksha/nant.build"></nant>-->
           <exec program="../moksha/build/moksha.exe">
-               <arg line="${directory::get-current-directory()}\build\tests\Weavver.Units.dll" />
+               <arg line="/testlib=${directory::get-current-directory()}\build\tests\Weavver.Units.dll" />
           </exec>
      </target>
 </project>

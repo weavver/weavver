@@ -1,0 +1,157 @@
+﻿
+html, body
+{
+     height: 100%;
+     margin: 0;
+     padding: 0;
+     width: 100%;
+     background-color: #3b3b3b;
+}
+     
+#container
+{
+     width: 100%;
+     height: 100%;
+}
+     
+#topBar
+{
+     height: 40px;
+     color: #FFFFFF;
+     font-size: 23px;
+     padding-left: 10px;
+}
+     
+#topPanel
+{
+     position: absolute;
+     top: 32px;
+     bottom: 90px;
+     width: 100%;
+}
+     
+#bottomPanel
+{
+     position: absolute;
+     bottom: 0;
+     height: 65px;
+     width: 100%;
+}
+
+#chatBox
+{
+     background-color: #FFFFFF;
+          
+     -moz-border-radius: 6px;
+     -webkit-border-radius:6px;
+     border-radius: 6px;
+
+     color: Black;
+     height: 100%;
+     margin: 10px;
+     padding: 5px;
+     overflow: auto;
+}
+
+#messageBox
+{
+     background-color: #FFFFFF;
+     -moz-border-radius: 6px;
+     -webkit-border-radius:6px;
+     margin: 10px;
+     padding: 5px;
+}
+
+#preflight
+{
+     position: absolute;
+     left: 0;
+     top: 0;
+     bottom: 0;
+     right: 0;
+     background-color: #3b3b3b;
+     z-index: 10000;
+}
+
+#intaketitle
+{
+     color: #FFFFFF;
+     font-size: 15pt;
+     margin-left: 10px;
+     margin-top: 10px;
+}
+
+#intakeform
+{
+     -moz-border-radius: 6px;
+     -webkit-border-radius:6px;
+     background-color: #FFFFFF;
+     min-height: 200px;
+     margin: 10px;
+     padding: 15px;
+     font-size: 11pt;
+}
+
+input[type="button"]
+{
+     -webkit-appearance: button;
+}
+
+#preflight input[type="button"]
+{
+     float: right;
+     height: 30px;
+     width: 100px;
+     margin-right: 15px;
+     margin-bottom: 5px;
+     -webkit-appearance: button;
+}
+
+#status
+{
+     background-color: #FFFFFF;
+     height: 20px;
+     padding: 3px 3px 3px 10px;
+     clear: both;
+}
+
+#wrapup
+{
+     position: absolute;
+     left: 0;
+     top: 0;
+     bottom: 0;
+     right: 0;
+     background-color: #3b3b3b;
+     z-index: 10000;
+     display: none;
+}
+
+#thankyou
+{
+     color: White;
+     font-size: 24px;
+     margin-left: 35px;
+     margin-right: 35px;
+     margin-top: 35px;
+}
+
+#thankyoustartover
+{
+     color: #FFFFFF;
+     font-size: 18px;
+}
+
+.intakeFieldLabel
+{
+     clear:left;
+     float:left;
+     min-width: 120px;
+}
+
+.intakeFieldData
+{
+     float:left;
+     max-width: 200px;
+     margin-bottom: 10px;
+}
