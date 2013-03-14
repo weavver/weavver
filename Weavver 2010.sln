@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weavver Units", "units\Weav
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weavver Moksha Interface", "..\moksha\interface\Weavver Moksha Interface.csproj", "{8E71554E-8184-40C7-8CBC-8955C7627A04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weavver Moksha", "..\moksha\src\Weavver Moksha.csproj", "{63ED51CC-7639-4665-8B56-4097D9AF7052}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Database|Any CPU = Database|Any CPU
@@ -208,6 +210,31 @@ Global
 		{8E71554E-8184-40C7-8CBC-8955C7627A04}.Website|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8E71554E-8184-40C7-8CBC-8955C7627A04}.Website|Mixed Platforms.Build.0 = Release|Any CPU
 		{8E71554E-8184-40C7-8CBC-8955C7627A04}.Website|x86.ActiveCfg = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Database|Any CPU.ActiveCfg = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Database|Any CPU.Build.0 = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Database|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Database|Mixed Platforms.Build.0 = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Database|x86.ActiveCfg = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Release|x86.ActiveCfg = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Testing|Any CPU.ActiveCfg = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Testing|Any CPU.Build.0 = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Testing|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Testing|Mixed Platforms.Build.0 = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Testing|x86.ActiveCfg = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Website|Any CPU.ActiveCfg = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Website|Any CPU.Build.0 = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Website|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Website|Mixed Platforms.Build.0 = Release|Any CPU
+		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Website|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

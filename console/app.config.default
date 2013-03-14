@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<configuration>
+     <configSections>
+          <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler,log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821"/>
+          <section name="hibernate-configuration" type="NHibernate.Cfg.ConfigurationSectionHandler, NHibernate"/>
+     </configSections>
+     <startup>
+          <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0"/>
+     </startup>
+     <appSettings>
+          <add key="smtp_server" value="192.168.10.11"/>
+          <add key="smtp_port" value="25"/>
+          <add key="admin_address" value="bounce@weavver.com"/>
+     </appSettings>
+     <connectionStrings>
+          <add name="weavver" connectionString="server=localhost;user=sa;password=;database=weavverstaging"/>
+     </connectionStrings>
+     <hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+          <session-factory>
+               <property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
+               <property name="dialect">NHibernate.Dialect.MsSql2005Dialect</property>
+               <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
+               <property name="connection.connection_string">server=localhost;user=sa;password=;initial catalog=weavverstaging</property>
+               <property name="show_sql">true</property>
+               <property name="use_proxy_validator">false</property>
+               <property name="cache.use_query_cache">false</property>
+               <property name="cache.use_second_level_cache">false</property>
+               <property name="command_timeout">5000</property>
+               <!--<mapping resource="Weavver.Company.Accounting.hbm.xml" assembly="nhibernatetest" />-->
+          </session-factory>
+     </hibernate-configuration>
+     <log4net>
+          <appender name="ConsoleAppender" type="log4net.Appender.ConsoleAppender, log4net">
+               <layout type="log4net.Layout.PatternLayout, log4net">
+                    <param name="ConversionPattern" value="%m"/>
+               </layout>
+          </appender>
+          <root>
+               <priority value="WARN"/>
+               <appender-ref ref="ConsoleAppender"/>
+          </root>
+     </log4net>
+</configuration>
