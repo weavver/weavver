@@ -52,7 +52,7 @@ namespace Weavver.Testing.Sales
 //-------------------------------------------------------------------------------------------
      }
 //-------------------------------------------------------------------------------------------
-     //public class CustomShoppingCartItem : Weavver.Company.Sales.ShoppingCartItem
+     //public class CustomShoppingCartItem : Weavver.Data.Sales_ShoppingCartItems
      //{
      //}
 //-------------------------------------------------------------------------------------------

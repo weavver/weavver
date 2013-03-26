@@ -58,8 +58,8 @@
           <wvvr:MasterHeader ID="MasterHeader1" runat="server" />
           <div style="clear:both; height: 3px;">&nbsp;</div>
      </div>
-     <div id="ErrorLayer" runat="server" visible="false" style="background-color: #f3eaea; margin: auto; border: solid 1px lightgrey; padding: 5px; width: 900px; margin: auto; margin-bottom: 10px; display: none;">
-          <asp:Literal ID="ErrorMessage" runat="server"></asp:Literal>
+     <div id="ErrorLayer" runat="server" visible="false" style="background-color: #f3eaea; margin: auto; border: solid 1px lightgrey; padding: 5px; width: 900px; margin: auto; margin-bottom: 10px;">
+          <asp:Literal ID="ErrorMessage" runat="server" ViewStateMode="Disabled"></asp:Literal>
      </div>
      <div id="ContentTable" runat="server">
           <div id="modalBox" style="">

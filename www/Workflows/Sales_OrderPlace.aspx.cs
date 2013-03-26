@@ -245,13 +245,14 @@ public partial class Sales_Order_Place : SkeletonPage
                          MailMessage msg = new MailMessage("Weavver Sales <sales@weavver.com>", PrimaryContact.EmailAddress.Text);
                          msg.Subject = orderPlacedTemplate.Subject;
                          msg.Body = msgBody;
-                         SmtpClient sClient = new SmtpClient(ConfigurationManager.AppSettings["smtp_address"]);
+                         SmtpClient sClient = new SmtpClient(ConfigurationManager.AppSettings["smtp_server"]);
                          try
                          {
                               sClient.Send(msg);
                               
                               var type = typeof(IOrderEvents);
                               var types = AppDomain.CurrentDomain.GetAssemblies().ToList()
+                                   .Where(y => y.FullName.Contains("WeavverExtension"))
                                    .SelectMany(s => s.GetTypes())
                                    .Where(p => type.IsAssignableFrom(p) && p.IsClass);
 

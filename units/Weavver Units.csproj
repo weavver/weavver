@@ -44,10 +44,19 @@
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>..\build\tests\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Accounting\Accounting_RecurringBillables.cs" />
     <Compile Include="Accounting\Import.cs" />
     <Compile Include="Build\Compile.cs" />
+    <Compile Include="Build\DatabaseCreate.cs" />
     <Compile Include="Build\DeployProduction.cs" />
     <Compile Include="Build\MakeReleaseZip.cs" />
     <Compile Include="Build\PostBuild.cs" />
@@ -57,9 +66,9 @@
     <Compile Include="Sales\CustomShoppingCartItem.cs" />
     <Compile Include="Sales\LicenseKeyActivationService.cs" />
     <Compile Include="Sales\PlaceOnlineOrder.cs" />
-    <Compile Include="Sales\WeavverApp.cs" />
     <Compile Include="Sys\LogInChangeCompany.cs" />
     <Compile Include="Sys\LogInFromSysError.cs" />
+    <Compile Include="Vendors\FreeSwitch\Directory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Accounting\Credit Card Statement.qif" />
@@ -82,14 +91,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\vendors\ionic\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="LibGit2Sharp">
+      <HintPath>..\vendors\libgit2sharp\LibGit2Sharp.dll</HintPath>
+    </Reference>
     <Reference Include="OpenPop">
       <HintPath>..\vendors\openpop\OpenPop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.XML" />
     <Reference Include="WebDriver">
       <HintPath>..\vendors\selenium\WebDriver.dll</HintPath>

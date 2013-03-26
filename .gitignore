@@ -7,3 +7,5 @@ build
 web.config
 *.user
 chromedriver.log
+units/bin
+units/obj

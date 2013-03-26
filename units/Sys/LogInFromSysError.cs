@@ -11,6 +11,7 @@ namespace Weavver.Testing.Sys
      {
 //-------------------------------------------------------------------------------------------
           [ManualTest]
+          [StagingTest]
           public void SysError()
           {
                webDriver.Navigate().GoToUrl(BaseURL + "/system/error");
@@ -26,7 +27,8 @@ namespace Weavver.Testing.Sys
                WaitForPageLoad();
 
                Assert.AreEqual("Weavver Account :: Welcome Home!", webDriver.Title);
-               Assert.IsTrue(webDriver.PageSource.Contains("WeavverTest"), "weavvertest username is not in the page source");
+               
+               //WaitForTextExists(By.fwebDriver.PageSource.Contains("WeavverTest"), "weavvertest username is not in the page source");
 
                LogOut();
           }

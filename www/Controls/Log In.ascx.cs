@@ -21,8 +21,7 @@ public partial class Controls_Log_In : WeavverUserControl
 //-------------------------------------------------------------------------------------------
      protected void Login1_LoggedIn(object sender, EventArgs e)
      {
-          if (BasePage.LoggedInUser != null)
-               FormsAuthentication.RedirectFromLoginPage(BasePage.LoggedInUser.Username, Login1.RememberMeSet);
+          Response.Redirect("/");
      }
 //-------------------------------------------------------------------------------------------
      public void Show()
