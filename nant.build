@@ -5,8 +5,12 @@
      <property name="debug" value="true"/>
      <target name="clean" description="remove all generated files">
 		<delete dir="${directory::get-current-directory()}/build" />
+          <delete dir="console\bin" />
+          <delete dir="console\obj" />
           <delete dir="src\bin" />
           <delete dir="src\obj" />
+          <delete dir="units\bin" />
+          <delete dir="units\obj" />
      </target>
      <target name="build">
 		<mkdir dir="${build.dir}" />

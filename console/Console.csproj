@@ -40,7 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MiscUtil, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d3c42c4bfacf7596, processorArchitecture=MSIL">
-      <HintPath>..\3rd Party\MiscUtil.dll</HintPath>
+      <HintPath>..\vendors\micutil\MiscUtil.dll</HintPath>
     </Reference>
     <Reference Include="OpenPop">
       <HintPath>..\3rd Party\OpenPop.dll</HintPath>
@@ -73,17 +73,17 @@
     <Compile Include="Vendors\ejabberdAuth.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
+    <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="app.config.default" />
+    <None Include="App.default.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WeavverLib\Weavver.Data.csproj">
+    <ProjectReference Include="..\..\data\src\Weavver.Data.csproj">
       <Project>{4D558303-3DB5-4004-91BA-9DB658199B7B}</Project>
       <Name>Weavver.Data</Name>
     </ProjectReference>

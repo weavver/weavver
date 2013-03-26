@@ -9,3 +9,4 @@ web.config
 chromedriver.log
 units/bin
 units/obj
+dist

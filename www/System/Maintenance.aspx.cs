@@ -15,6 +15,7 @@ public partial class System_Maintenance : SkeletonPage
 {
      protected void Page_Load(object sender, EventArgs e)
      {
+          IsPublic = true;
           Master.SetToolbarVisibility(false);
           Master.FormTitle = "System Maintenance";
      }

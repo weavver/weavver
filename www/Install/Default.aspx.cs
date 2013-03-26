@@ -19,6 +19,8 @@ public partial class Install_Default : SkeletonPage
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)
      {
+          IsPublic = true;
+
           if (Request.UserHostAddress != "127.0.0.1")
           {
                Response.Write("This page is unavailable to the general internet. Please visit from the server machine.");
@@ -26,7 +28,7 @@ public partial class Install_Default : SkeletonPage
           }
 
           WeavverMaster.SetToolbarVisibility(false);
-          WeavverMaster.FormTitle = "Install";
+          WeavverMaster.FormTitle = "Weavver First-Time Set-Up";
           WeavverMaster.FormDescription = "This wizard will help you configure Weavver for your first use.";
           //IsPublic = true;
           // extra security

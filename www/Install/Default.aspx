@@ -50,7 +50,7 @@
           </td>
      </tr>
      </table><br />
-     Create employee:
+     Create admin account:
      <table>
      <tr>
           <td width="150px">Username:</td>
@@ -73,7 +73,9 @@
      <asp:Label ID="lblError" runat="server" Text="" ForeColor="Red"></asp:Label>
      <br />
      <br />
-     Recommendation: After you install Weavver may wish to delete this /install/ folder to improve security.
+     Notes: Once the schema is deployed change "install_mode" to false in your web.config file.
+     <br />
+     You may also wish to delete this /install/ folder to improve security.
      <br />
      <asp:TextBox ID="Log" runat="server" TextMode="MultiLine" Height="400px" Width="800" Visible=false></asp:TextBox>
 </asp:Content>

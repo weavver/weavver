@@ -191,11 +191,14 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                     vanityurl = vanityurl.Replace("default,default", "default");
                     using (WeavverEntityContainer data = new WeavverEntityContainer())
                     {
-                         SelectedOrganization = (from x in data.Logistics_Organizations
+                         var orgs = (from x in data.Logistics_Organizations
                                                   where x.VanityURL == vanityurl
-                                                  select x).First();
-
-                         data.Logistics_Organizations.Detach(_selectedOrganization);
+                                                  select x);
+                         if (orgs.Count() > 0)
+                         {
+                              SelectedOrganization = orgs.First();
+                              data.Logistics_Organizations.Detach(_selectedOrganization);
+                         }
                     }
                }
                else
