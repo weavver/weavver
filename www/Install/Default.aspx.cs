@@ -13,6 +13,7 @@ using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 
 using Weavver.Data;
+using System.Data.SqlClient;
 
 public partial class Install_Default : SkeletonPage
 {
@@ -21,7 +22,7 @@ public partial class Install_Default : SkeletonPage
      {
           IsPublic = true;
 
-          if (Request.UserHostAddress != "127.0.0.1")
+          if (Request.UserHostAddress != "127.0.0.1" || ConfigurationManager.AppSettings["install_mode"] == "false")
           {
                Response.Write("This page is unavailable to the general internet. Please visit from the server machine.");
                Response.End();
@@ -30,12 +31,8 @@ public partial class Install_Default : SkeletonPage
           WeavverMaster.SetToolbarVisibility(false);
           WeavverMaster.FormTitle = "Weavver First-Time Set-Up";
           WeavverMaster.FormDescription = "This wizard will help you configure Weavver for your first use.";
-          //IsPublic = true;
-          // extra security
-          DatabaseHost.Text = GetConnectionStringValue("server");
-          DatabaseUsername.Text = GetConnectionStringValue("user");
-          DatabaseName.Text = GetConnectionStringValue("initial catalog");
 
+          //"Notice: To deploy the schema you need to change your web.config setting 'install_mode' from false to true to install Weavver.";
 
           //NHibernate.Cfg.ConfigurationSchema.HibernateConfiguration cfg = (NHibernate.Cfg.ConfigurationSchema.HibernateConfiguration)ConfigurationManager.GetSection("hibernate-configuration");
           //string con1 = ConfigurationManager.ConnectionStrings["weavver"].ConnectionString;
@@ -44,98 +41,133 @@ public partial class Install_Default : SkeletonPage
           //{
           //     ShowError("Your connection strings are out of sync. Please fix this in the web.config file.");
           //}
+
+
+          string connectionString = ConfigurationManager.ConnectionStrings["WeavverEntityContainer"].ConnectionString;
+          var entityBuilder = new System.Data.EntityClient.EntityConnectionStringBuilder(connectionString);
+          var sqlBuilder = new System.Data.SqlClient.SqlConnectionStringBuilder(entityBuilder.ProviderConnectionString);
+          DatabaseHost.Text = sqlBuilder.DataSource;
+          DatabaseUsername.Text = sqlBuilder.UserID;
+          DatabaseName.Text = sqlBuilder.InitialCatalog;
      }
 //-------------------------------------------------------------------------------------------
-     private string GetConnectionStringValue(string valuename)
-     {
-          string connString = ConfigurationManager.ConnectionStrings["weavver"].ConnectionString;
-          string[] parts = Regex.Split(connString, ";");
-          foreach (string part in parts)
-          {
-               if (part.StartsWith(valuename))
-               {
-                    return part.Substring(part.IndexOf("=") + 1);
-               }
-          }
-          return "";
-     }
+     //Deprecated:
+     //private string GetConnectionStringValue(string valuename)
+     //{
+     //     // extra security
+     //     //DatabaseHost.Text = GetConnectionStringValue("server");
+     //     //DatabaseUsername.Text = GetConnectionStringValue("user");
+     //     //DatabaseName.Text = GetConnectionStringValue("initial catalog");
+     //     string connString = ConfigurationManager.ConnectionStrings["weavver"].ConnectionString;
+     //     string[] parts = Regex.Split(connString, ";");
+     //     foreach (string part in parts)
+     //     {
+     //          if (part.StartsWith(valuename))
+     //          {
+     //               return part.Substring(part.IndexOf("=") + 1);
+     //          }
+     //     }
+     //     return "";
+     //}
 //-------------------------------------------------------------------------------------------
      protected void Create_Click(object sender, EventArgs e)
      {
-          ////Weavver.Sys.Views v = new Weavver.Sys.Views();
-          ////string log = v.DeployAll(db);
+          try
+          {
+               ConfigureDatabase();
+          }
+          catch (Exception ex)
+          {
+               lblError.Text = ex.ToString().Replace("\r\n", "<br />\r\n");
+          }
+     }
+//-------------------------------------------------------------------------------------------
+     private void ConfigureDatabase()
+     {
+          using (WeavverEntityContainer data = new WeavverEntityContainer())
+          {
+               string script = System.IO.File.ReadAllText(Server.MapPath(@"\bin\Database.sql")); //data.CreateDatabaseScript();
+               script = script.Replace("%dalpath%", Server.MapPath(@"\bin\Weavver.DAL.dll"));
+               string connectionString = ConfigurationManager.ConnectionStrings["WeavverEntityContainer"].ConnectionString;
+               var entityBuilder = new System.Data.EntityClient.EntityConnectionStringBuilder(connectionString);
+               SqlConnection connection = new SqlConnection(entityBuilder.ProviderConnectionString);
+               connection.Open();
 
-          //if (System.Configuration.ConfigurationManager.AppSettings["install_mode"] == "true")
-          //{
-          //     lblError.Text = "";
+               string[] blocks = System.Text.RegularExpressions.Regex.Split(script, "\nGO");
+               foreach (string block in blocks)
+               {
+                    if (block.Trim() != String.Empty)
+                    {
+                         SqlCommand createDb = new SqlCommand(block, connection);
+                         createDb.ExecuteNonQuery();
+                    }
+               }
 
-          //     DatabaseHelper.InitializeSession();
-          //     DatabaseHelper.DeploySchema();
+               // Run pre-assembly-deploy script
 
-          //     // deploy first org
-          //     Weavver.Company.Logistics.Organization org = new Weavver.Company.Logistics.Organization();
-          //     org.DatabaseHelper = DatabaseHelper;
-          //     org.Id = Guid.NewGuid();
-          //     org.OrganizationType = Weavver.Company.Logistics.OrganizationTypes.Personal;
-          //     org.Name = "Sample Organization";
-          //     org.VanityURL = "default";
-          //     org.EIN = "";
-          //     org.Founded = DateTime.UtcNow;
-          //     org.Bio = "This is a sample organization.";
-          //     org.CreatedAt = DateTime.UtcNow;
-          //     org.CreatedBy = Guid.Empty;
-          //     org.UpdatedAt = DateTime.UtcNow;
-          //     org.UpdatedBy = Guid.Empty;
-          //     org.Commit();
+               //// deploy first org
+               //Weavver.Data.Logistics_Organizations org = new Weavver.Data.Logistics_Organizations();
+               //org.Id = Guid.NewGuid();
+               //org.OrganizationType = "Personal";
+               //org.Name = Organization.Text;
+               //org.VanityURL = "default";
+               //org.EIN = "";
+               //org.Founded = DateTime.UtcNow;
+               //org.Bio = "This is a sample organization.";
+               //org.CreatedAt = DateTime.UtcNow;
+               //org.CreatedBy = Guid.Empty;
+               //org.UpdatedAt = DateTime.UtcNow;
+               //org.UpdatedBy = Guid.Empty;
+               //data.Logistics_Organizations.AddObject(org);
 
-          //     Response.Write(org.Id.ToString());
+               //Weavver.Data.System_User user = new Weavver.Data.System_User();
+               //user.Id = Guid.NewGuid();
+               //user.OrganizationId = org.Id;
+               //user.FirstName = "Super";
+               //user.LastName = "User";
+               //user.Activated = true;
+               //user.Locked = false;
+               //user.Username = Username.Text;
+               //user.Password = Password.Text;
+               //user.CreatedAt = DateTime.UtcNow;
+               //user.CreatedBy = Guid.Empty;
+               //user.UpdatedAt = DateTime.UtcNow;
+               //user.UpdatedBy = Guid.Empty;
+               //data.System_Users.AddObject(user);
 
-          //     Weavver.Sys.User user = new Weavver.Sys.User();
-          //     user.DatabaseHelper = DatabaseHelper;
-          //     user.Id = Guid.NewGuid();
-          //     user.OrganizationId = org.Id;
-          //     user.Name = "Administrator";
-          //     user.FirstName = "Super";
-          //     user.LastName = "User";
-          //     user.Activated = true;
-          //     user.Locked = false;
-          //     user.Username = Username.Text;
-          //     user.Password = "t3mp1234";
-          //     user.CreatedAt = DateTime.UtcNow;
-          //     user.CreatedBy = Guid.Empty;
-          //     user.UpdatedAt = DateTime.UtcNow;
-          //     user.UpdatedBy = Guid.Empty;
-          //     user.Commit();
-
-          //     // Response.Redirect("~/company/logistics/organization");
-          //     Response.Redirect("~/install/step2");
-          //}
-          //else
-          //{
-          //     lblError.Text = "Notice: To deploy the schema you need to change your web.config setting 'install_mode' from false to true to install Weavver.";
-          //}
+               //if (data.SaveChanges() > 0)
+               //     Response.Redirect("~/install/step2");
+          }
      }
 //-------------------------------------------------------------------------------------------
      protected void TestConnection_Click(object sender, EventArgs e)
      {
-          //try
-          //{
-          //     DatabaseHelper.InitializeSession();
-          //}
-          //catch (Exception ex)
-          //{
-          //     ClearError();
-          //     ShowError("The connection failed with this message:<br /><br />" + ex.Message + "<br /><br />");
-          //}
-          //if (DatabaseHelper.IsConnected)
-          //{
-          //     ShowError("The connection works.");
-          //     DatabaseHelper.Session.Disconnect();
-          //}
-          //else
-          //{
-          //     ShowError("Weavver can not connect to your DB. Please check the database settings again.");
-          //}
+          try
+          {
+               string connectionString = ConfigurationManager.ConnectionStrings["WeavverEntityContainer"].ConnectionString;
+               var entityBuilder = new System.Data.EntityClient.EntityConnectionStringBuilder(connectionString);
+               SqlConnection data = new SqlConnection(entityBuilder.ProviderConnectionString);
+               data.Open();
+
+               if (data.State == ConnectionState.Open)
+               {
+                    DBStatus.Text = "The connection works.";
+                    data.Close();
+
+                    TestConnection.BackColor = System.Drawing.Color.LightGreen;
+               }
+               else
+               {
+                    DBStatus.Text = "Weavver can not connect to your DB. Please check the database settings again.";
+
+                    TestConnection.BackColor = System.Drawing.Color.Coral;
+               }
+          }
+          catch (Exception ex)
+          {
+               DBStatus.Text = "The connection failed with this message:<br /><br />" + ex.Message;
+               TestConnection.BackColor = System.Drawing.Color.Coral;
+          }
      }
 //-------------------------------------------------------------------------------------------
 }

@@ -8,13 +8,13 @@ using System.IO;
 
 namespace Weavver.Testing.Sys
 {
-     public class TestInstallMode :  WeavverTestingContext
+     public class TestInstallMode :  WeavverTest
      {
 //-------------------------------------------------------------------------------------------
           [StagingTest]
           public void RunTest()
           {
-               string config = Path.Combine(RepoPath, @"www\web.config");
+               string config = Path.Combine(WeavverUnitContext.RepoPath, @"www\web.config");
                Weavver.Utilities.Common.SetConfigSetting(config, "install_mode", "true");
 
                webDriver.Navigate().GoToUrl(BaseURL + "/");

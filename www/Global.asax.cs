@@ -142,22 +142,25 @@ public partial class Global : System.Web.HttpApplication
 //-------------------------------------------------------------------------------------------
      void Session_End(object sender, EventArgs e)
      {
+          if (ConfigurationManager.AppSettings["install_mode"] == "false")
+          {
           // Code that runs when a session ends. 
           // Note: The Session_End event is raised only when the sessionstate mode
           // is set to InProc in the Web.config file. If session mode is set to StateServer 
           // or SQLServer, the event is not raised.
 
-          using (WeavverEntityContainer data = new WeavverEntityContainer())
-          {
-               var cartItems = from item in data.Sales_ShoppingCartItems
-                               where item.SessionId == Session.SessionID
-                               select item;
-
-               foreach (Sales_ShoppingCartItems item in cartItems)
+               using (WeavverEntityContainer data = new WeavverEntityContainer())
                {
-                    data.Sales_ShoppingCartItems.DeleteObject(item);
+                    var cartItems = from item in data.Sales_ShoppingCartItems
+                                    where item.SessionId == Session.SessionID
+                                    select item;
+
+                    foreach (Sales_ShoppingCartItems item in cartItems)
+                    {
+                         data.Sales_ShoppingCartItems.DeleteObject(item);
+                    }
+                    data.SaveChanges();
                }
-               data.SaveChanges();
           }
      }
 //-------------------------------------------------------------------------------------------

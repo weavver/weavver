@@ -183,7 +183,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
 //-------------------------------------------------------------------------------------------
      protected override void OnPreInit(EventArgs e)
      {
-          if (SelectedOrganization == null)
+          if (SelectedOrganization == null && ConfigurationManager.AppSettings["install_mode"] == "false")
           {
                if (Session["SelectedOrganizationId"] == null)
                {

@@ -57,18 +57,20 @@ namespace Weavver.Web
                {
                     query += HttpUtility.UrlDecode(HttpContext.Current.Request.QueryString.ToString());
                }
-
-               using (WeavverEntityContainer data = new WeavverEntityContainer())
+               if (ConfigurationManager.AppSettings["install_mode"] == "false")
                {
-                    var dynamicUrl = (from x in data.System_URLs
-                                      where x.Path == path
-                                      select x).FirstOrDefault();
-
-                    if (dynamicUrl != null)
+                    using (WeavverEntityContainer data = new WeavverEntityContainer())
                     {
-                         query = "Id=" + dynamicUrl.ObjectId.ToString();
-                         HttpContext.Current.RewritePath("/" + dynamicUrl.TableName + "/" + dynamicUrl.PageTemplate + ".aspx", null, query, false);
-                         return;
+                         var dynamicUrl = (from x in data.System_URLs
+                                           where x.Path == path
+                                           select x).FirstOrDefault();
+
+                         if (dynamicUrl != null)
+                         {
+                              query = "Id=" + dynamicUrl.ObjectId.ToString();
+                              HttpContext.Current.RewritePath("/" + dynamicUrl.TableName + "/" + dynamicUrl.PageTemplate + ".aspx", null, query, false);
+                              return;
+                         }
                     }
                }
 

@@ -7,7 +7,7 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="Banner" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
-     <h3>Congratulations</h3>
+     <h3>Congratulations!</h3>
      <br />
-     The database schema was deployed and you can now use Weavver.<br />
+     The database schema was deployed and you can now use Weavver! Change "install_mode" to false in your web.config and delete this "/install/" folder.<br />
 </asp:Content>
