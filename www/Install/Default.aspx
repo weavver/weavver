@@ -6,7 +6,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="Banner" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Content" Runat="Server">
-     <div style="float:right; width: 300px; border: 2px solid #dcdcdc; padding: 10px; margin: 5px;">
+     <div id="ConnectionInformation" style="float:right; width: 300px; border: 2px solid #dcdcdc; padding: 10px; margin: 5px;">
           <h3>Connection Information</h3><br />
           To update these settings please modify your Web.config file.
           <br />

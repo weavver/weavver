@@ -150,6 +150,13 @@ public partial class Install_Default : SkeletonPage
                data.System_Users.AddObject(user);
                data.SaveChanges();
 
+               Roles.ApplicationName = orgId.ToString();
+               string adminuser = user.Username;
+               Roles.CreateRole("Administrators");
+               Roles.AddUsersToRoles(new string[] { adminuser }, new string[] { "Administrators" });
+               Roles.CreateRole("Accountants");
+               Roles.AddUsersToRoles(new string[] { adminuser }, new string[] { "Accountants" });
+
                if (data.SaveChanges() > 0)
                     Response.Redirect("~/install/step2");
           }

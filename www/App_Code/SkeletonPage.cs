@@ -128,6 +128,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                _selectedOrganization = value;
                Session["SelectedOrganizationId"] = value.Id;
                Roles.ApplicationName = value.Id.ToString();
+               Membership.ApplicationName = value.Id.ToString();
           }
      }
 //-------------------------------------------------------------------------------------------
