@@ -20,7 +20,6 @@
      </ContentTemplate>
      </asp:UpdatePanel>
      <asp:DropDownList ID="OrganizationsList" runat="server" AutoPostBack="true" Width="150px" Visible="false">
-          <asp:ListItem Value="0baae579-dbd8-488d-9e51-dd4dd6079e95">Weavver, Inc.</asp:ListItem>
      </asp:DropDownList>
 </div>
 <div style="float:right; height:10px;width: auto; color: Black; padding-bottom: 5px;">

@@ -83,23 +83,28 @@ public partial class Controls_MasterHeader : WeavverUserControl
                     // && BasePage.LoggedInUser.Id == new Guid("6bb552e9-debb-40d3-a5a9-60329aedeaac")
                     && !Request.Path.ToLower().EndsWith("/account/logout.aspx"))
                {
+                    Guid masterOrganizationId = BasePage.SelectedOrganization.OrganizationId;
+                    AddOrganizationListChoice(masterOrganizationId);
 
-                    OrganizationsList.Visible = true;
-
-                    if (!IsPostBack && BasePage.LoggedInUser.OrganizationId != new Guid("0baae579-dbd8-488d-9e51-dd4dd6079e95"))
+                    if (!IsPostBack && BasePage.LoggedInUser.OrganizationId != BasePage.SelectedOrganization.OrganizationId)
                     {
-                         using (WeavverEntityContainer data = new WeavverEntityContainer())
-                         {
-                              var org = (from x in data.Logistics_Organizations
-                                             where x.Id == BasePage.LoggedInUser.OrganizationId
-                                             select x).First();
-
-                              OrganizationsList.Items.Add(new ListItem(org.Name, org.Id.ToString()));
-
-                              OrganizationsList.SelectedValue = BasePage.SelectedOrganization.Id.ToString();
-                         }
+                         AddOrganizationListChoice(BasePage.SelectedOrganization.Id);
+                         OrganizationsList.SelectedValue = BasePage.SelectedOrganization.Id.ToString();
                     }
                }
+          }
+     }
+//-------------------------------------------------------------------------------------------
+     private void AddOrganizationListChoice(Guid orgId)
+     {
+          using (WeavverEntityContainer data = new WeavverEntityContainer())
+          {
+               var org = (from x in data.Logistics_Organizations
+                          where x.Id == orgId
+                          select x).First();
+
+               OrganizationsList.Items.Add(new ListItem(org.Name, org.Id.ToString()));
+
           }
      }
 //-------------------------------------------------------------------------------------------

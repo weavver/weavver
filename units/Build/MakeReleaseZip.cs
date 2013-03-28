@@ -8,6 +8,7 @@ using LibGit2Sharp;
 using Weavver.Data;
 using Weavver.Units;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Weavver.Testing.Staging
 {
@@ -30,9 +31,12 @@ namespace Weavver.Testing.Staging
 
                Weavver.Utilities.Common.CopyFolder(Path.Combine(RepoPath, "www"), Path.Combine(tempFolder, "www"));
                
-               string config = Path.Combine(tempFolder, @"www\web-default.config");
-               Weavver.Utilities.Common.SetConfigSetting(config, "version", buildLabel);
-               Weavver.Utilities.Common.SetConfigSetting(config, "install_mode", "true");
+               string releaseConfig = Path.Combine(tempFolder, @"www\web-default.config");
+               Weavver.Utilities.Common.SetConfigSetting(releaseConfig, "version", buildLabel);
+               Weavver.Utilities.Common.SetConfigSetting(releaseConfig, "install_mode", "true");
+
+               string repoConfig = Path.Combine(RepoPath, @"www\web.config");
+               Weavver.Utilities.Common.SetConfigSetting(repoConfig, "version", buildLabel);
 
                string webconfigPath = Path.Combine(tempFolder, "www/web.config");
                if (File.Exists(webconfigPath))
@@ -68,13 +72,36 @@ namespace Weavver.Testing.Staging
                     Path.Combine(tempFolder, @"www\bin\Weavver.DAL.dll"),
                     true
                     );
+               // Copy it again for running IIS straight off of the github repo folder "www"
+               File.Copy(
+                    Path.Combine(dataPath, @"database\bin\Release\Weavver.DAL.dll"),
+                    Path.Combine(RepoPath, @"www\bin\Weavver.DAL.dll"),
+                    true
+                    );
                using (WeavverEntityContainer db = new WeavverEntityContainer())
                {
                     string createScript = db.CreateDatabaseScript() + "\r\n";
+                    createScript += File.ReadAllText(Path.Combine(dataPath, @"database\aspnet_regsql.sql")) + "\r\n";
                     createScript += File.ReadAllText(Path.Combine(dataPath, @"database\Database.sql")) + "\r\n";
+                    DirectoryInfo fkScripts = new DirectoryInfo(Path.Combine(dataPath, @"database\ForeignKeys\"));
+                    foreach (FileInfo file in fkScripts.GetFiles("*.sql"))
+                    {
+                         string fkScript = File.ReadAllText(file.FullName);
+                         string[] x = Regex.Split(fkScript, "\n");
+                         foreach (string y in x)
+                         {
+                              if (y.Contains("NOCHECK CONSTRAINT"))
+                              {
+                                   createScript += y + "\r\n";
+                              }
+                         }
+                    }
 
                     string databaseSqlPath = Path.Combine(tempFolder, @"www\bin\Database.sql");
                     File.WriteAllText(databaseSqlPath, createScript);
+
+                    // Write it again for running IIS straight off of the github repo folder "www"
+                    File.WriteAllText(Path.Combine(RepoPath, @"www\bin\Database.sql"), createScript);
                }
                #endregion
 
@@ -94,6 +121,8 @@ namespace Weavver.Testing.Staging
                p.StartInfo.Arguments = "a " + zipPath + " " + tempFolder + "\\*";
                p.Start();
                p.WaitForExit();
+
+               Assert.Equals(p.ExitCode, 0);
 
                //Ionic.Zip.ZipFile weavverZip = new ZipFile();
                //weavverZip.AddDirectory(tempFolder);

@@ -42,7 +42,6 @@ public partial class Install_Default : SkeletonPage
           //     ShowError("Your connection strings are out of sync. Please fix this in the web.config file.");
           //}
 
-
           string connectionString = ConfigurationManager.ConnectionStrings["WeavverEntityContainer"].ConnectionString;
           var entityBuilder = new System.Data.EntityClient.EntityConnectionStringBuilder(connectionString);
           var sqlBuilder = new System.Data.SqlClient.SqlConnectionStringBuilder(entityBuilder.ProviderConnectionString);
@@ -86,57 +85,73 @@ public partial class Install_Default : SkeletonPage
      {
           using (WeavverEntityContainer data = new WeavverEntityContainer())
           {
-               string script = System.IO.File.ReadAllText(Server.MapPath(@"\bin\Database.sql")); //data.CreateDatabaseScript();
-               script = script.Replace("%dalpath%", Server.MapPath(@"\bin\Weavver.DAL.dll"));
+               // Run SQL Deploy script
                string connectionString = ConfigurationManager.ConnectionStrings["WeavverEntityContainer"].ConnectionString;
                var entityBuilder = new System.Data.EntityClient.EntityConnectionStringBuilder(connectionString);
                SqlConnection connection = new SqlConnection(entityBuilder.ProviderConnectionString);
                connection.Open();
 
+               string script = System.IO.File.ReadAllText(Server.MapPath(@"\bin\Database.sql")); //data.CreateDatabaseScript();
+               script = script.Replace("%dalpath%", Server.MapPath(@"\bin\Weavver.DAL.dll"));
+               script = script.Replace("%databasename%", connection.Database);
                string[] blocks = System.Text.RegularExpressions.Regex.Split(script, "\nGO");
                foreach (string block in blocks)
                {
                     if (block.Trim() != String.Empty)
                     {
                          SqlCommand createDb = new SqlCommand(block, connection);
-                         createDb.ExecuteNonQuery();
+                         try
+                         {
+                              createDb.ExecuteNonQuery();
+                         }
+                         catch (Exception ex)
+                         {
+                              throw new Exception("Block: " + block, ex);
+                         }
+
+
                     }
                }
 
-               // Run pre-assembly-deploy script
+               // CREATE INITIAL DATA
+               Guid orgId = Guid.NewGuid();
+               Session["SelectedOrganizationId"] = orgId;
 
-               //// deploy first org
-               //Weavver.Data.Logistics_Organizations org = new Weavver.Data.Logistics_Organizations();
-               //org.Id = Guid.NewGuid();
-               //org.OrganizationType = "Personal";
-               //org.Name = Organization.Text;
-               //org.VanityURL = "default";
-               //org.EIN = "";
-               //org.Founded = DateTime.UtcNow;
-               //org.Bio = "This is a sample organization.";
-               //org.CreatedAt = DateTime.UtcNow;
-               //org.CreatedBy = Guid.Empty;
-               //org.UpdatedAt = DateTime.UtcNow;
-               //org.UpdatedBy = Guid.Empty;
-               //data.Logistics_Organizations.AddObject(org);
+               // deploy first org
+               Weavver.Data.Logistics_Organizations org = new Weavver.Data.Logistics_Organizations();
+               org.Id = orgId;
+               org.OrganizationId = org.Id; // THIS IS OVERRIDDEN ANYWAY BY AUDITUTILITY AS A SECURITY PRECAUTION
+               org.OrganizationType = "Personal";
+               org.Name = Organization.Text;
+               org.VanityURL = "default";
+               org.EIN = "";
+               org.Founded = DateTime.UtcNow;
+               org.Bio = "This is a sample organization.";
+               org.CreatedAt = DateTime.UtcNow;
+               org.CreatedBy = Guid.Empty;
+               org.UpdatedAt = DateTime.UtcNow;
+               org.UpdatedBy = Guid.Empty;
+               data.Logistics_Organizations.AddObject(org);
+               data.SaveChanges();
 
-               //Weavver.Data.System_User user = new Weavver.Data.System_User();
-               //user.Id = Guid.NewGuid();
-               //user.OrganizationId = org.Id;
-               //user.FirstName = "Super";
-               //user.LastName = "User";
-               //user.Activated = true;
-               //user.Locked = false;
-               //user.Username = Username.Text;
-               //user.Password = Password.Text;
-               //user.CreatedAt = DateTime.UtcNow;
-               //user.CreatedBy = Guid.Empty;
-               //user.UpdatedAt = DateTime.UtcNow;
-               //user.UpdatedBy = Guid.Empty;
-               //data.System_Users.AddObject(user);
+               Weavver.Data.System_User user = new Weavver.Data.System_User();
+               user.Id = orgId;
+               user.OrganizationId = org.Id; // THIS IS OVERRIDDEN ANYWAY BY AUDITUTILITY AS A SECURITY PRECAUTION
+               user.FirstName = "Enlightened";
+               user.LastName = "User";
+               user.Activated = true;
+               user.Locked = false;
+               user.Username = Username.Text;
+               user.Password = Password.Text;
+               user.CreatedAt = DateTime.UtcNow;
+               user.CreatedBy = Guid.Empty;
+               user.UpdatedAt = DateTime.UtcNow;
+               user.UpdatedBy = Guid.Empty;
+               data.System_Users.AddObject(user);
+               data.SaveChanges();
 
-               //if (data.SaveChanges() > 0)
-               //     Response.Redirect("~/install/step2");
+               if (data.SaveChanges() > 0)
+                    Response.Redirect("~/install/step2");
           }
      }
 //-------------------------------------------------------------------------------------------
