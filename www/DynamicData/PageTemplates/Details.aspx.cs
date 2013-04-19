@@ -59,7 +59,7 @@ namespace DynamicData
           protected void Page_Load(object sender, EventArgs e)
           {
                Title = table.DisplayName;
-               DetailsDataSource.Include = table.ForeignKeyColumnsNames;
+               ///DetailsDataSource.Include = table.ForeignKeyColumnsNames;
           }
 //-------------------------------------------------------------------------------------------
           protected string SetTitle(object dataItem)

@@ -126,7 +126,7 @@ public partial class DynamicData_DynamicList : WeavverUserControl
           protected void Page_Load(object sender, EventArgs e)
           {
                //Title = table.DisplayName;
-               GridDataSource.Include = table.ForeignKeyColumnsNames;
+               //GridDataSource.Include = table.ForeignKeyColumnsNames;
 
                // Disable various options if the table is readonly
                if (table.IsReadOnly)

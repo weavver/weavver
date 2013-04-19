@@ -192,9 +192,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                     vanityurl = vanityurl.Replace("default,default", "default");
                     using (WeavverEntityContainer data = new WeavverEntityContainer())
                     {
-                         var orgs = (from x in data.Logistics_Organizations
-                                                  where x.VanityURL == vanityurl
-                                                  select x);
+                         var orgs = (from x in data.Logistics_Organizations where x.VanityURL == vanityurl select x);
                          if (orgs.Count() > 0)
                          {
                               SelectedOrganization = orgs.First();
@@ -204,12 +202,15 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                }
                else
                {
-                    Guid selectedOrgId = new Guid(Session["SelectedOrganizationId"].ToString());
                     using (WeavverEntityContainer data = new WeavverEntityContainer())
                     {
-                         SelectedOrganization = (from x in data.Logistics_Organizations
-                                                  where x.Id == selectedOrgId
-                                                  select x).First();
+                         Guid selectedOrgId = new Guid(Session["SelectedOrganizationId"].ToString());
+                         var orgs = (from x in data.Logistics_Organizations where x.Id == selectedOrgId select x);
+                         if (orgs.Count() > 0)
+                         {
+                              SelectedOrganization = orgs.First();
+                              data.Logistics_Organizations.Detach(_selectedOrganization);
+                         }
                     }
                }
           }
