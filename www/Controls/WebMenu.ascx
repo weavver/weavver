@@ -1,18 +1,43 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="WebMenu.ascx.cs" Inherits="WeavverWebMenu" %>
-
+<style type="text/css">
+    .navigationMenu
+    {
+        background-color: #414141;
+    }
+</style>
 <script type="text/javascript">
+     var expandedMode = true;
+     var hoverBackCover = "";
+     var normalBackCover = "";
+
+
+
+
+     function preventIFrameMouseEvents() {
+          $('iframe').css('pointer-events', 'none');
+     }
+
+     function allowIFrameMouseEvents() {
+          $('iframe').css('pointer-events', 'auto');
+     }
+
      function styleMenu() {
           $('.menuChildren', '.MenuOptions').hide();
 
+          $('.menuOption,.menuRoot', '.MenuOptions').css('cursor', 'pointer');
           $('.menuOption,.menuRoot', '.MenuOptions').hover
           (
                function () {
-                    $(this).css("background-Color", "white");
+                    $(this).css("background-Color", "#FFFFFF");
                     $(this).css("color", "black");
+                    $('.addMenu', $(this)).css('visibility', '');
                },
                function () {
                     $(this).css("background-Color", "");
                     $(this).css("color", "white");
+                    if (expandedMode == false) {
+                         $('.addMenu', $(this)).css('visibility', 'hidden');
+                    }
                }
           );
 
@@ -35,12 +60,14 @@
      }
 
      $(document).ready(function () {
-          $(".MenuOptions").slideUp("fast");
+          //$(".MenuOptions").slideUp("fast");
           $(".MenuRoot").hover(function () {
                $(".MenuOptionContainer").css('display', '');
                $(".MenuOptions").slideDown("fast");
           }, function () {
-               $(".MenuOptions").slideUp("fast");
+               if (expandedMode == false) {
+                    $(".MenuOptions").slideUp("fast");
+               }
           });
 
           styleMenu();
@@ -84,6 +111,36 @@
           //               }
           //          });
 
+          //$('.MenuOptions').css('position', 'absolute');
+          $('.MenuOptions').css('border-right', '2px solid gray');
+          $('.MenuOptions').css('border-top', '1px solid gray');
+          //          $('.MenuOptions').position({
+          //               my: 'left top',
+          //               at: 'left top',
+          //               of: '#ContentTable'
+          //          });
+
+          $('.MenuOptions').css('left', 0);
+          toggleMenu();
+
+          var x = $('<div id="menucontainer" style="background-color: #414141" />');
+          $(document.body).append(x);
+
+          $("#menucontainer").append($('.MenuOptions'));
+
+          //$('.MenuOptions').resizable();
+          //$('.MenuOptions').draggable();
+
+          $('#menucontainer').dialog({
+               open: function (event, ui) {
+                    //$(this).parent().find('.ui-dialog-titlebar').append($('#ItemTitle'));
+                    $(".ui-dialog-content").css("padding", 0);
+                    $(this).css('overflow', 'hidden');
+               },
+               height: 700, width: 200, position: [10, 82], title: "Navigation"
+          });
+          
+          $('.MenuRoot').remove();
 
      });
 
@@ -91,12 +148,65 @@
           if (!$('.MenuOptions').is(':visible')) {
                $(".MenuOptions").slideDown("fast");
           }
-          else {
+          else if (expandedMode == false) {
                $(".MenuOptions").slideUp("fast");
           }
      }
 
+     function createPopup(url, height, width) {
+          $('#ContentDIV').remove();
+
+          var windowId = getPseudoGuid();
+
+          var newPopup = $('#TheIFrame').clone();
+          newPopup.attr("id", windowId);
+          newPopup.attr("style", newPopup.attr("style") + "; ");
+          newPopup.attr("isdialog", 'yes');
+
+          // navigate to the frame
+          if (url.match(/\?/))
+               url = url + '&IFrame=true&WindowId=' + windowId;
+          else
+               url = url + '?IFrame=true&WindowId=' + windowId;
+          $('iframe', newPopup).attr('src', url);
+
+          newPopup.dialog({
+               open: function (event, ui) {
+                    //$(this).parent().find('.ui-dialog-titlebar').append($('#ItemTitle'));
+                    $(".ui-dialog-content").css("padding", 0);
+                    $(this).css('overflow', 'hidden');
+               },
+               title: "Loading..",
+               dragStart: preventIFrameMouseEvents,
+               dragStop: allowIFrameMouseEvents,
+               resizeStart: preventIFrameMouseEvents,
+               resizeStop: allowIFrameMouseEvents,
+               position: [240 + offsetX, 82 + offsetY],
+               width: width,
+               height: height
+           });
+
+          newPopup.resize(function () {
+               clearTimeout(doit);
+               doit = setTimeout(resizedw, 100);
+          });
+
+          $('div', 'iframe').ready(function () {
+               $(this).dialog('option', 'title', $(this).attr('title'));
+          });
+
+          //$('#ContentDIV').append(newPopup);
+
+          offsetX = (offsetX > 100) ? 0 : offsetX + 20;
+          offsetY = (offsetY > 100) ? 0 : offsetY + 20;
+     }
+     var offsetX = 0;
+     var offsetY = 0;
 </script>
+
+<div id='TheIFrame' style='display:none;'>
+     <iframe id='detailsframe' style='height: 95%; width: 100%;' src=""></iframe>
+</div>
 
 <%--
      Menu Example:
@@ -128,4 +238,5 @@
                <asp:Literal ID="MenuItems" runat="server"></asp:Literal>
           </div>
      </div>
-</div>
+</div>
+

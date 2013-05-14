@@ -50,43 +50,111 @@
                }
           });
      });
+
+
+     $(document).ready(function () {
+
+
+          //          $("#WindowLayer").resizable({
+          //               minHeight: 200,
+          //               minWidth: 210
+          //          });
+
+          //          $('#WindowLayer').draggable({
+          //               handle: "#ItemTitle",
+          //               containment: $("body"),
+          //               start: function () {
+          //                    if ($(this).css('position') != 'absolute') {
+          //                         //                         $(this).css('left', $(this).left());
+          //                         //                         $(this).css('top', $(this).top());
+          //                         $(this).css('position', 'absolute');
+          //                    }
+          //               },
+          //               stop: function (event, ui) { }
+          //          });
+
+          $("#WindowLayer").dialog({
+               position: {
+                    my: 'top',
+                    at: 'top',
+                    of: '#ContentDIV'
+               },
+               open: function (event, ui) {
+                    //$(this).parent().find('.ui-dialog-titlebar').append($('#ItemTitle'));
+                    $(".ui-dialog-content").css("padding", 0);
+               },
+               title: "Title",
+               dragStart: preventIFrameMouseEvents,
+               dragStop: allowIFrameMouseEvents,
+               resizeStart: preventIFrameMouseEvents,
+               resizeStop: allowIFrameMouseEvents,
+               height: 560,
+               width: 780
+          });
+
+          $("#WindowLayer").resize(function () {
+               var y = $("#WindowLayer").height() - $("#ItemTitle").height() - 5;
+               $("#OverflowLayer").height(y);
+          });
+
+//          $('#TheIFrame').dialog({
+//               open: function (event, ui) {
+//                    //$(this).parent().find('.ui-dialog-titlebar').append($('#ItemTitle'));
+//                    $(".ui-dialog-content").css("padding", 0);
+//                    $(this).css('overflow', 'hidden');
+//               },
+//               dragStart: preventIFrameMouseEvents,
+//               dragStop: allowIFrameMouseEvents,
+//               resizeStart: preventIFrameMouseEvents,
+//               resizeStop: allowIFrameMouseEvents
+//          });
+
+          $('#TheIFrame').resize(function () {
+               $('#detailsframe').height($('#TheIFrame').closest('.ui-dialog').height() - 15);
+               $('#detailsframe').width($('#TheIFrame').closest('.ui-dialog').width() - 15);
+          });
+
+     });
+
 </script>
-<div style="float:right;">
-     <asp:Button ID="DownloadCSV" runat="server" OnClick="DownloadCSV_Click" Text="Export Data" Height="30px" Visible="false" />
-</div>
-<asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
+
+<asp:UpdatePanel ID="EntityControls" runat="server" UpdateMode="Conditional">
      <ContentTemplate>
-          <asp:LoginView ID="SecureContent" runat="server">
-               <RoleGroups>
-               <asp:RoleGroup Roles="Administrators">
-                    <ContentTemplate>
-                         <div style="float:right; margin: 5px;">
-                              <wvvr:ColumnPicker id="ColumnPicker1" runat="server" Visible="true"></wvvr:ColumnPicker>
-                         </div>
-                    </ContentTemplate>
-               </asp:RoleGroup>
-               </RoleGroups>
-          </asp:LoginView>
+          <asp:Panel ID="AddedControls" runat="server"></asp:Panel>
+     </ContentTemplate>
+</asp:UpdatePanel>
+<asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
+<ContentTemplate>
+
+
+     <div id="WindowLayer" style="background-color: #FFFFFF; border: 2px inset;">
+          <div style="float:right; display: inline-block; padding: 5px;">
+               <asp:Button ID="DownloadCSV" runat="server" OnClick="DownloadCSV_Click" Text="Export Data" Height="30px" Visible="false" />
+               <a href="javascript:createPopup('/Accounting_Checks/Details.aspx');">New</a>
+               <asp:LoginView ID="SecureContent" runat="server">
+                    <RoleGroups>
+                         <asp:RoleGroup Roles="Administrators">
+                         <ContentTemplate>
+                                   | <wvvr:ColumnPicker id="ColumnPicker1" runat="server" Visible="true"></wvvr:ColumnPicker> |
+                         </ContentTemplate>
+                         </asp:RoleGroup>
+                    </RoleGroups>
+               </asp:LoginView>
+               <%--<asp:DynamicHyperLink <I>D="InsertHyperLink" runat="server" Action="Insert">
+                    <img id="Img1" runat="server" src="~/DynamicData/Content/Images/plus.gif" alt="Insert new item" />New
+               </asp:DynamicHyperLink>--%>
+               <a href="#" onclick="javascript:$('#filterRepeater').dialog('open')">Filter</a>
+          </div>
           <asp:DynamicDataManager ID="DynamicDataManager1" runat="server" AutoLoadForeignKeys="true">
                <DataControls>
                     <asp:DataControlReference ControlID="GridView1" />
                </DataControls>
           </asp:DynamicDataManager>
-          <%--<asp:DynamicHyperLink ID="InsertHyperLink" runat="server" Action="Insert">
-               <img id="Img1" runat="server" src="~/DynamicData/Content/Images/plus.gif" alt="Insert new item" />New
-          </asp:DynamicHyperLink>--%>
-
-          <div style="float:right;margin: 5px;">
-               <a href="#" onclick="javascript:$('#filterRepeater').dialog('open')">Filter Grid</a>
-          </div>
           <asp:PlaceHolder ID="QuickAdd" runat="server"></asp:PlaceHolder><br />
-
           <asp:GridView ID="GridView1" runat="server" DataSourceID="GridDataSource" EnablePersistedSelection="true"
                AllowPaging="True" AllowSorting="True" CssClass="DDGridView" BorderColor="#d3d3d3"
-               RowStyle-CssClass="td" HeaderStyle-CssClass="th"
-               CellPadding="3" PageSize="50">
-               <Columns>
-               </Columns>
+               RowStyle-CssClass="td" HeaderStyle-CssClass="th" CellPadding="3" PageSize="50">
+               <Columns></Columns>
                <PagerStyle CssClass="DDFooter" />
                <PagerTemplate>
                     <asp:GridViewPager ID="GridViewPager1" runat="server" />
@@ -95,10 +163,10 @@
                     There are currently no items in this table.
                </EmptyDataTemplate>
           </asp:GridView>
-          <div style="float: right; padding: 15px;">
+          <div style="float: right; padding: 10px 10px 0px 0px;">
                <asp:Label ID="RowSummary" runat="server" Text="Undefined"></asp:Label>
           </div>
-          <div style="clear:right; float: right; padding: 15px;">
+          <div style="clear:right; float: right; padding: 10px 10px 0px 0px;">
                <asp:PlaceHolder ID="Projections" runat="server"></asp:PlaceHolder>
           </div>
           <br />
@@ -108,15 +176,15 @@
           <asp:QueryExtender ID="GridQueryExtender" runat="server" TargetControlID="GridDataSource">
                <asp:DynamicFilterExpression ControlID="FilterRepeater" />
           </asp:QueryExtender>
-
           <div id="smoothmenu2" class="ddsmoothmenu-v" style="position: absolute; visibility: hidden;">
                <ul>
                     <asp:PlaceHolder ID="RightClickOptions" runat="server"></asp:PlaceHolder>
                </ul>
           </div>
-     </ContentTemplate>
+          <div style='clear: both;'></div>
+     </div>
+</ContentTemplate>
 </asp:UpdatePanel>
-
 <div id="filterRepeater" class="DD" style="background-color: #FFFFFF;">
      <asp:UpdatePanel ID="FilterUpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
      <ContentTemplate>

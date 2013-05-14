@@ -3,10 +3,6 @@
 <%@ MasterType VirtualPath="~/MasterPage.master" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="Head" Runat="Server">
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="NavigationHolder" Runat="Server">
-</asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="Banner" Runat="Server">
-</asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
      <div style="padding-bottom: 10px; float:right;">
           <asp:DropDownList ID="YearFilter" runat="server" Width="100px" AutoPostBack="true">

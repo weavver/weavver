@@ -19,11 +19,22 @@ using System.Data.Common;
 public partial class Company_Accounting_Reports_FinancialOverview : SkeletonPage
 {
 //-------------------------------------------------------------------------------------------
+     protected void Page_PreInit(object sender, EventArgs e)
+     {
+          if (Request["IFrame"] == "true")
+          {
+               MasterPageFile = "~/Blank.master";
+          }
+     }
+//-------------------------------------------------------------------------------------------
      protected void Page_Init(object sender, EventArgs e)
      {
-          Master.FixedWidth = false;
-          Master.Width = "100%";
-          Master.FormTitle = "Financial Overview";
+          WeavverMaster.FormTitle = "Financial Overview";
+          if (Request["IFrame"] != "true")
+          {
+               Master.FixedWidth = false;
+               Master.Width = "100%";
+          }
 
           //List.ItemDataBound += new DataGridItemEventHandler(List_ItemDataBound);
           ARList.ItemDataBound += new DataGridItemEventHandler(ARList_ItemDataBound);
@@ -289,7 +300,7 @@ public partial class Company_Accounting_Reports_FinancialOverview : SkeletonPage
                          string startDate = month + "/01/" + year;
                          string endDate = month + "/" + DateTime.DaysInMonth(year, month) + "/" + year;
                          // int ledgerTypeNum = (int) (LedgerType) Enum.Parse(typeof(LedgerType), ledgerType);
-                         e.Item.Cells[i].Text = "<a href='~/Accounting_LedgerItems/List.aspx?LedgerType=" + ledgerType + "&PostAt_Start=" + startDate + "&PostAt_End=" + endDate + "&Code=" + code + "'>" + text + "</a>";
+                         e.Item.Cells[i].Text = "<a href=\"javascript:createPopup('/Accounting_LedgerItems/List.aspx?LedgerType=" + ledgerType + "&PostAt_Start=" + startDate + "&PostAt_End=" + endDate + "&Code=" + code + "')\">" + text + "</a>";
                     }
                }
           }

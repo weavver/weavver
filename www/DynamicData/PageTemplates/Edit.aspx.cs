@@ -39,7 +39,7 @@ namespace DynamicData
                //FormView1.DataBind();
 
                //var obj = Weavver.Data.EntityDataSourceExtensions.GetItemObject<Weavver.Data.IT_Servers>(FormView1.DataItem);
-               GenerateMenu(TableActions.Edit, table.Provider.EntityType);
+               //GenerateMenu(TableActions.Edit, table.Provider.EntityType);
 
                WeavverMenuItem auditTrail = new WeavverMenuItem();
                auditTrail.Name = "Audit Trails";
@@ -67,7 +67,8 @@ namespace DynamicData
           protected void Page_Load(object sender, EventArgs e)
           {
                Title = table.DisplayName;
-               DetailsDataSource.Include = table.ForeignKeyColumnsNames;
+               // DetailsDataSource.Include = table.ForeignKeyColumnsNames;
+               //  ShowError(table.ForeignKeyColumnsNames);
 
                //if (!IsPostBack)
                //{

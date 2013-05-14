@@ -73,17 +73,6 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                     }
                }
 
-               if (Page.User.IsInRole("Administrators"))
-               {
-                    Literal editOption = new Literal();
-                    editOption.Text = "<li><a href=\"http://www.yahoo.com\" onclick=\"alert('test')\">Edit</a></li>";
-                    RightClickOptions.Controls.Add(editOption);
-
-                    Literal deleteOption = new Literal();
-                    deleteOption.Text = "<li><a href=\"#\" onclick=\"alert('asdf'); confirmDelete();\">Delete</a></li>";
-                    RightClickOptions.Controls.Add(deleteOption);
-               }
-
                if (Request["TransactionId"] != null)
                     GridDataSource.WhereParameters.Add(new Parameter("TransactionId", DbType.Guid, Request["TransactionId"]));
 
@@ -95,7 +84,7 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                     QuickAdd.Controls.Add(quickAdd);
                }
 
-               string projectionPath = "~/DynamicData/Projections/" + table.EntityType.ToString().Replace("Weavver.Data.", "") + ".ascx";
+               string projectionPath = "~/DynamicData/Projections/" + table.EntityType.Name + ".ascx";
                if (File.Exists(Server.MapPath(projectionPath)))
                {
                     Control projection = LoadControl(projectionPath);
@@ -204,10 +193,19 @@ public partial class DynamicData_DynamicList : WeavverUserControl
 
                          var auditableRow = owner as IAuditable;
                          if (auditableRow != null)
-                              url = "Details.aspx?id=" + auditableRow.Id;
+                              url = "/" + table.EntityType.Name + "/Details.aspx?id=" + auditableRow.Id;
+
+
+                         object[] atts = owner.GetType().GetCustomAttributes(typeof(CSSAttribute), true);
+                         string css = "";
+                         if (atts.Count() > 0)
+                         {
+                              CSSAttribute css2 = (CSSAttribute) atts[0];
+                              css = css2._CSS;
+                         }
 
                          if (url != null)
-                              e.Row.Attributes["onClick"] = String.Format("location.href='{0}'", url);
+                              e.Row.Attributes["onClick"] = String.Format("javascript:createPopup(\"" + url + "\", \"" + css + "\");"); // old: "location.href='{0}'", url);
 
                          var columnStyle = owner as IColumnStyle;
                          if (columnStyle != null)
@@ -219,6 +217,56 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                          }
                     }
                }
+          }
+//-------------------------------------------------------------------------------------------
+          private void AddControl(Random rnd)
+          {
+               int x = rnd.Next(10000);
+
+               //EntityDataSource eds = new EntityDataSource();
+               //eds.ID = "DetailsDataSource" + x.ToString();
+               //eds.EnableUpdate = true;
+               //eds.EntityTypeFilter = table.EntityType.Name;
+
+               ////eds.EntitySetName = "Accounting_Accounts";
+               ////eds.ContextTypeName = "WeavverEntityContext";
+               ////eds.Where = "it.id = @id";
+               ////eds.WhereParameters.Add("id", DbType.Guid, "3d322c57-2b4a-4b27-8187-2094931eb2ca");
+               //AddedControls.Controls.Add(eds);
+
+
+               //DynamicDataManager ddm = new DynamicDataManager();
+               //ddm.ID = "DynamicDataManager3";
+               //ddm.AutoLoadForeignKeys = true;
+               //DataControlReference ddr = new DataControlReference();
+               //ddr.ControlID = "FormView3";
+               //ddm.DataControls.Add(ddr);
+
+
+               //AddedControls.Controls.Add(ddm);
+
+               FormView fv = new FormView();
+               fv.ID = "FormView" + x.ToString();
+               fv.DataSourceID = "GridDataSource";
+               YourTemplate yt = new YourTemplate();
+               fv.ItemTemplate = yt;
+
+
+               //fv.ItemTemplate.Controls.Add(de);
+
+               AddedControls.Controls.Add(fv);
+
+               DynamicDataManager1.RegisterControl(fv);
+
+               EntityControls.Update();
+          }
+//-------------------------------------------------------------------------------------------
+          protected void TestAddControl_Click(object sender, EventArgs e)
+          {
+               Random rnd = new Random();
+               AddControl(rnd);
+               AddControl(rnd);
+               //fv.DataBind();
           }
 //-------------------------------------------------------------------------------------------
           protected void Label_PreRender(object sender, EventArgs e)
@@ -324,4 +372,17 @@ public partial class DynamicData_DynamicList : WeavverUserControl
           }
 //-------------------------------------------------------------------------------------------
           bool export = false;
+}
+
+public class YourTemplate : ITemplate
+{
+     public void InstantiateIn(Control container)
+     {
+          HtmlGenericControl div = new HtmlGenericControl("div");
+          div.InnerText = "sample text, other controls";
+          container.Controls.Add(div);
+
+          DynamicEntity de = new DynamicEntity();
+          container.Controls.Add(de);
+     }
 }

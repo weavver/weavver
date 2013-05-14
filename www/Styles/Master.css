@@ -11,6 +11,11 @@ body
      background-color: #3b3b3b;
 }
 
+.ui-widget
+{
+     font-size: 10pt !important;
+}
+
 .header
 {
      background-position: top;
@@ -61,6 +66,7 @@ h1,h2,h3,h4,h5,h6
      min-width: 200px;
      margin-top: 0px;
      display: none;
+     
 }
 
 .MenuOptionContainer
@@ -70,7 +76,7 @@ h1,h2,h3,h4,h5,h6
      background-color: #414141;
      left: 0px;
      border: 1px inset black;
-     top: 40px;
+     top: 0px;
      z-index: 1000;
 }
 
@@ -155,11 +161,6 @@ h1,h2,h3,h4,h5,h6
      overflow-x: auto;
 }
 
-div
-{
-     font-size: 11pt;     
-}
-
 .watermark
 {
      color: gray;
@@ -225,6 +226,11 @@ div
      padding: 5px;
      text-align: center;
      width: 200px;
+}
+
+.Field_Decimal
+{
+     
 }
 
 .itemrow, .alternatingitemrow
@@ -741,7 +747,8 @@ div.DDNoItem
 
 .DDValidator
 {
-	color:Red;
+	color: #000000;
+	background-color: #ffecec;
 }
 
 

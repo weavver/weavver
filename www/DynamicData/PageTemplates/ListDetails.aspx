@@ -100,7 +100,6 @@
                 </asp:FormView>
 
                 <asp:EntityDataSource ID="DetailsDataSource" runat="server" EnableDelete="true" EnableInsert="true" EnableUpdate="true" />
-
                 <asp:QueryExtender TargetControlID="DetailsDataSource" runat="server">
                     <asp:ControlFilterExpression ControlID="GridView1" />
                 </asp:QueryExtender>

@@ -360,68 +360,6 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
           return "~/images/mycompany.png";
      }
 //-------------------------------------------------------------------------------------------
-     public void GenerateMenu(TableActions currentPage, Type type)
-     {
-          MetaTable table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
-
-          string[] roles = Roles.GetRolesForUser();
-          if (roles.Length == 0)
-               roles = new string[] { "Guest" };
-          var tablePermissions = table.Attributes.OfType<SecureTableAttribute>();
-          foreach (var att in tablePermissions)
-          {
-               if (att.HasAnyRole(roles))
-               {
-                    switch (att.Actions)
-                    {
-                         case TableActions.List:
-                         case TableActions.Showcase:
-                         case TableActions.PressRoll:
-                              WeavverMenuItem mi = new WeavverMenuItem();
-                              mi.Name = att.Actions.ToString();
-                              mi.Link = "/" + table.EntityType.ToString().Replace("Weavver.Data.", "") + "/" + att.Actions.ToString() + ".aspx";
-                              WeavverMaster.ViewsMenuAdd(mi);
-                              break;
-
-                         case TableActions.Edit:
-                         case TableActions.Delete:
-                              if (currentPage == TableActions.Details ||
-                                  currentPage == TableActions.Page)
-                              {
-                                   WeavverMenuItem actionItem = new WeavverMenuItem();
-                                   actionItem.Name = att.Actions.ToString();
-                                   actionItem.Link = "/" + table.EntityType.ToString().Replace("Weavver.Data.", "") + "/" + att.Actions.ToString() + ".aspx?Id=" + Request["Id"];
-                                   WeavverMaster.ActionsMenuAdd(actionItem);
-                              }
-                              break;
-                    }
-               }
-          }
-
-
-          MethodInfo[] methods = type.GetMethods();
-          foreach (MethodInfo method in methods)
-          {
-               bool isWebAccessible = false;
-               foreach (object attrib in method.GetCustomAttributes(true))
-               {
-                    if (attrib.GetType() == typeof(DynamicDataWebMethod))
-                    {
-                         LinkButton webMethod = new LinkButton();
-                         webMethod.ID = "DynamicMethod_" + method.Name;
-                         webMethod.Text = ((DynamicDataWebMethod)attrib).MethodName;
-                         webMethod.CommandName = method.Name;
-                         webMethod.Click += new EventHandler(DynamicWebMethod_Click);
-                         webMethod.CssClass = "attachmentLink";
-
-                         //WebMethods.Controls.Add(webMethod);
-                         Master.FindControl("Attachments").Controls.Add(webMethod);
-                         break;
-                    }
-               }
-          }
-     }
-//-------------------------------------------------------------------------------------------
      protected void DynamicWebMethod_Click(object sender, EventArgs e)
      {
           FormView DataForm = Page.FindControlR<FormView>("FormView1");
@@ -465,6 +403,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                               Response.End();
                          }
 
+                         string url = "";
                          if (ret.Status != null)
                          {
                               messageTitle = ret.Status;
@@ -473,11 +412,15 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                               if (ret.RedirectRequest)
                               {
                                    redirectUrl = ret.RedirectURL;
+                                   Page.RegisterClientScriptBlock("redictUrl", "<script type='text/javascript'>createPopup('" + VirtualPathUtility.ToAbsolute(ret.RedirectURL) + "');</script>");
                               }
+
+                              
                          }
                          else if (ret.RedirectRequest)
                          {
-                              Response.Redirect(ret.RedirectURL);
+                              //Response.Redirect(ret.RedirectURL);
+                              Page.RegisterClientScriptBlock("redictUrl", "<script type='text/javascript'>createPopup('" + VirtualPathUtility.ToAbsolute(ret.RedirectURL) + "');</script>");
                          }
                     }
                }

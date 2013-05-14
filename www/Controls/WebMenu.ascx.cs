@@ -40,8 +40,6 @@ public partial class WeavverWebMenu : WeavverUserControl
           }
 
           //Guid adminGuid = BasePage.LoggedInUser.OrganizationId;
-          WeavverMenuItem item;
-
           menuDepartments.Name = "Departments";
           menuDepartments.Link = "#";
 
@@ -87,58 +85,45 @@ public partial class WeavverWebMenu : WeavverUserControl
 
           if (Global.DefaultModel == null || Global.DefaultModel.Tables.Count <= 0)
                return;
-          
+
           var tables = Global.DefaultModel.Tables.OrderBy(x => x.Name).ToList();
           foreach (MetaTable table in tables)
           {
-               var tablePermissions = table.Attributes.OfType<Weavver.Data.SecureTableAttribute>();
+               var tableViews = table.Attributes.OfType<DataAccess>();
+               var tableCSS = table.Attributes.OfType<CSSAttribute>();
 
                 // if no permission exist then do not add to navigation
-                if (tablePermissions.Count() == 0)
+               if (tableViews.Count() == 0)
                     continue;
 
-                foreach (var tp in tablePermissions)
+               foreach (var view in tableViews)
                 {
                     string[] roles = Roles.GetRolesForUser();
                     if (roles.Length == 0)
                          roles = new string[] { "Guest" };
 
-                    if (tp.HasAnyRole(roles))
+                    if (view.HasAnyRole(roles))
                     {
                          string tableNameFQN = table.Name;
                          string dept = (tableNameFQN.IndexOf("_") > 1) ? tableNameFQN.Substring(0, tableNameFQN.IndexOf("_")) : tableNameFQN;
                          string tableName = table.DisplayName; // tableNameFQN.Substring(tableNameFQN.IndexOf("_") + 1);
 
-                         if (table.Name == "System_Settings")
+                         if (view.Views.ToString().Contains("Showcase"))
                          {
-                              AddLinkToTable(menuDepartments, "System", "Settings", "/System_Settings/Edit.aspx?id=" + BasePage.LoggedInUser.OrganizationId.ToString());
+                              AddLinkToTable(menuDepartments, dept, tableName, "~/" + tableNameFQN + "/Showcase.aspx");
                          }
-
-                         switch (tp.Actions)
+                         else
                          {
-                              case TableActions.Insert:
-                                   string newname = (tableName.EndsWith("s")) ? tableName.Substring(0, tableName.Length - 1) : tableName;
-                                   AddLinkToTable(menuNew, dept, newname, "~/" + tableNameFQN + "/" + tp.Actions.ToString() + ".aspx");
-                                   break;
-
-                              //case TableActions.Edit:
-                              //case TableActions.Delete:
-                              //     break;
-
-                              case TableActions.Showcase:
-                                   continue;
-
-                              case TableActions.List:
-                                   if (tp.Actions.ToString().Contains("Showcase"))
+                              if (view.Views.ToString().Contains("List"))
+                              {
+                                   WeavverMenuItem wmi = AddLinkToTable(menuDepartments, dept, tableName, "~/" + tableNameFQN + "/List.aspx");
+                                   if (view.Actions.ToString().Contains("Insert"))
                                    {
-                                        AddLinkToTable(menuDepartments, dept, tableName, "~/" + tableNameFQN + "/Showcase.aspx");
+                                        //string newname = (tableName.EndsWith("s")) ? tableName.Substring(0, tableName.Length - 1) : tableName;
+                                        //AddLinkToTable(menuNew, dept, newname, "~/" + tableNameFQN + "/" + tp.Actions.ToString() + ".aspx");
+                                   
                                    }
-                                   else
-                                   {
-                                        if (tp.Actions.ToString().Contains("List"))
-                                             AddLinkToTable(menuDepartments, dept, tableName, "~/" + tableNameFQN + "/List.aspx");
-                                   }
-                                   break;
+                              }
                          }
                     }
                }
@@ -146,7 +131,8 @@ public partial class WeavverWebMenu : WeavverUserControl
 
           if (Roles.IsUserInRole("Administrators"))
           {
-               AddLinkToTable(menuDepartments, "System", "Roles", "/System/Roles");
+               AddLinkToTable(menuDepartments, "System", "Roles", "/System/Roles", 500, 700);
+               AddLinkToTable(menuDepartments, "System", "Settings", "/System_Settings/Edit.aspx?id=" + BasePage.LoggedInUser.OrganizationId.ToString(), 500, 500, false);
           }
      }
 //-------------------------------------------------------------------------------------------
@@ -184,10 +170,24 @@ public partial class WeavverWebMenu : WeavverUserControl
      {
           string output = "";
           if (menuItem.Items.Count == 0)
-               output += "<div class='menuOption' onclick=\"window.location='" + menuItem.Link + "'\">" + menuItem.Name + "</div>";
+          {
+               //string url = String.Format("createPopup('" + menuItem.Link + "','{0}','{1}');", menuItem.Width.ToString(), menuItem.Height.ToString());
+               // output += "<div class='menuOption' onclick=\"window.location='" + menuItem.Link + "'\">";
+               output += "<div class='menuOption' onclick=\"" + menuItem.Link + "\">";
+
+               if (menuItem.CanAdd)
+               {
+                    output += "<div class='addMenu' style='float:right;margin-right: 5px;'><a href='#' style=''>Add</a>"; //<img src='/images/new.png' />
+                    output += "</div>";
+               }
+
+               output += menuItem.Name + "</div>";
+          }
           else
           {
-               output += "<div class='menuRoot'>" + menuItem.Name + "</div>";
+               output += "<div class='menuRoot'>";
+               output += menuItem.Name;
+               output += "</div>";
                output += "<div class='menuChildren'>";
                foreach (WeavverMenuItem subItem in menuItem.Items)
                {
@@ -198,7 +198,7 @@ public partial class WeavverWebMenu : WeavverUserControl
           return output;
      }
 //-------------------------------------------------------------------------------------------
-     public void AddLinkToTable(WeavverMenuItem rootMenu, string DepartmentMenu, string ItemName, string ItemLink)
+     public WeavverMenuItem AddLinkToTable(WeavverMenuItem rootMenu, string DepartmentMenu, string ItemName, string ItemLink, int width = 500, int height = 500, bool canadd = false)
      {
           WeavverMenuItem parentMenu = null;
           foreach (WeavverMenuItem deptChild in rootMenu.Items)
@@ -221,9 +221,10 @@ public partial class WeavverWebMenu : WeavverUserControl
 
           WeavverMenuItem item = new WeavverMenuItem();
           item.Name = ItemName;
-          item.Link = ItemLink;
+          item.Link = "createPopup('" + ItemLink + "', '" + width + "', '" + height + "')";
           item.parent = parentMenu;
           parentMenu.Items.Add(item);
+          return item;
      }
 //-------------------------------------------------------------------------------------------
      public void AddLink(string department, string pluralname, string singlename, string href, string hrefnew, Guid adminGuid)
