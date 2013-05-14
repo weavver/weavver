@@ -46,7 +46,7 @@ public class HTMLPurifierLib
           // whole library (it is also possible to include more 
           // scripts if necessary by repeating this call with various 
           // relative script paths):
-          context.Config.FileSystem.IncludePaths = Path.Combine(ConfigurationManager.AppSettings["base_folder"], @"Vendors\HTMLPurifier\");
+          context.Config.FileSystem.IncludePaths = HttpContext.Current.Server.MapPath("~/vendors/htmlpurifier/");
           //context.WorkingDirectory = @"C:\Weavver\Main\Servers\web\c\Inetpub\www\";
           context.Include("Library.php", true);
 

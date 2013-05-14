@@ -50,7 +50,7 @@ public partial class Controls_ColumnPicker : WeavverUserControl
      {
           SetSelectedColumns();
           OnDataSaved(this, EventArgs.Empty);
-          MPE.Hide();
+        //  MPE.Hide();
      }
 //-------------------------------------------------------------------------------------------
      private void SetSelectedColumns()

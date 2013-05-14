@@ -140,7 +140,7 @@ public partial class System_Test : System.Web.UI.Page
           DirectoryEntry entry = GetDirectoryEntry();
           //Response.Write("<html>");
           DirectorySearcher dSearch = new DirectorySearcher(entry);
-          string username = "";
+          //string username = "";
           dSearch.Filter = "(&(objectClass=user))";
           // get all entries from the active directory.
           // Last Name, name, initial, homepostaladdress, title, company etc..

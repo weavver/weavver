@@ -1,12 +1,18 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="ColumnPicker.ascx.cs" Inherits="Controls_ColumnPicker" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
-<asp:HyperLink ID="ChooseColumns" runat="server" Text="Choose Columns" Height="30px" />
-<cc1:ModalPopupExtender ID="MPE" runat="server" PopupControlID="ColumnPanel" TargetControlID="ChooseColumns" BackgroundCssClass="modalPopup" />
-
-<asp:Panel ID="ColumnPanel" runat="server" BackColor="#f0f0f0" BorderColor="Black" BorderStyle="Solid" BorderWidth="1px" Width="275px">
-     <div style="padding: 10px;">
-          Choose columns:<br />
+<script type="text/javascript">
+     function show() {
+          $("#ColumnPanel").dialog({
+               title: "Choose columns",
+               width: 275,
+               position: 'center'
+          });
+     }
+</script>
+<a onclick='show()' href='#'>Choose Columns</a>
+<div id="ColumnPanel" style="background-color: #f0f0f0; width: 275px; display: none;">
+     <div style="padding: 10x;">
           <div style="max-height: 300px; overflow-y: scroll; margin-top: 10px; margin-bottom: 10px; border: solid 1px black; background-color: #FFFFFF;">
                <asp:CheckBoxList ID="Columns" runat="server"></asp:CheckBoxList>
                <%--
@@ -18,4 +24,4 @@
                <asp:Button ID="SetColumns" runat="server" Text="OK" Width="100%" Height="30px" OnClick="SetColumns_Click" /><br />
           </div>
      </div>
-</asp:Panel>
+</div>

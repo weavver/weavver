@@ -19,7 +19,7 @@
      <br />
      You can check your time card here.<br />
      <asp:LinkButton ID="HiddenButton" runat="server" Text="Properties" style="visibility:hidden; position: absolute; top: 0px; left: 0px;"></asp:LinkButton>
-     <cc1:ModalPopupExtender ID="Mod" BackgroundCssClass="modalPopup" runat="server" TargetControlID="TimeCardShow" PopupControlID="TimeCard" CancelControlID="Cancel" Drag="true"></cc1:ModalPopupExtender>
+     <cc1:ModalPopupExtender ID="Mod" BackgroundCssClass="modalPopup" runat="server" TargetControlID="TimeCardShow" PopupControlID="TimeCard" CancelControlID="Cancel"></cc1:ModalPopupExtender>
      <asp:Panel id="TimeCard" runat="server" style="border: solid 1px black; height: 350px; width: 400px;" BackColor="White">
           <asp:DataGrid ID="List" runat="server" AutoGenerateColumns="false" Width="100%" style="max-height: 150px; width: 100%; overflow-y: scroll; font-family: Cambria; font-size: 12pt">
           <Columns>

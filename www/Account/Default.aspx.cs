@@ -25,9 +25,9 @@ public partial class Account_Default : SkeletonPage
      {
           List.ItemDataBound += new DataGridItemEventHandler(List_ItemDataBound);
 
-          Master.FormTitle = "Weavver Account :: Welcome Home!";
-          Master.FormDescription = "This is your Weavver&reg; Account dashboard and contains links to the various departments and services you have access to.";
-          Master.FixedWidth = true;
+          WeavverMaster.FormTitle = "Weavver Account :: Welcome Home!";
+          WeavverMaster.FormDescription = "This is your Weavver&reg; Account dashboard and contains links to the various departments and services you have access to.";
+          WeavverMaster.FixedWidth = true;
      }
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)

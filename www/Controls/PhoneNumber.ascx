@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="PhoneNumber.ascx.cs" Inherits="Controls_PhoneNumber" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
-<cc1:ModalPopupExtender ID="PhoneNumber_ModalPopupExtender" runat="server" Drag="True" DropShadow="True" CancelControlID="PhoneNumberCancel" BackgroundCssClass="modalPopup" DynamicServicePath="" Enabled="True" PopupControlID="EditorPanel" TargetControlID="EditorAdd"></cc1:ModalPopupExtender>
+<cc1:ModalPopupExtender ID="PhoneNumber_ModalPopupExtender" runat="server" DropShadow="True" CancelControlID="PhoneNumberCancel" BackgroundCssClass="modalPopup" DynamicServicePath="" Enabled="True" PopupControlID="EditorPanel" TargetControlID="EditorAdd"></cc1:ModalPopupExtender>
 <asp:LinkButton ID="EditorAdd" runat="server" Text="Add Phone Number"></asp:LinkButton>
 <asp:Panel ID="EditorPanel" runat="server" BackColor="#FFFFFF" CssClass="ModalPopupPanel" BorderColor="Black" BorderStyle="Solid" BorderWidth="1px">
      <table id="PhoneNumberEditor" runat="server" cellpadding="2" cellspacing="2" style="border: solid 1px grey;">

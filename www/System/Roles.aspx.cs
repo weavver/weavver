@@ -10,11 +10,19 @@ using System.Configuration;
 public partial class System_Roles : SkeletonPage
 {
 //-------------------------------------------------------------------------------------------
+          protected void Page_PreInit(object sender, EventArgs e)
+          {
+               if (Request["IFrame"] == "true")
+               {
+                    MasterPageFile = "~/Blank.master";
+               }
+          }
+//-------------------------------------------------------------------------------------------
     protected void Page_Load(object sender, EventArgs e)
     {
          RolesList.SelectedIndexChanged += new EventHandler(RolesList_SelectedIndexChanged);
 
-         Master.FormTitle = "Role Management";
+         WeavverMaster.FormTitle = "Role Management";
 
          if (!Roles.RoleExists("Administrators"))
               Roles.CreateRole("Administrators");
@@ -29,51 +37,60 @@ public partial class System_Roles : SkeletonPage
               
          if (!IsPostBack)
          {
-              UpdatePage();
+              UpdateRoles();
          }
     }
 //-------------------------------------------------------------------------------------------
-    private void UpdatePage()
+    private void UpdateRoles()
     {
          RolesList.DataSource = Roles.GetAllRoles();
          RolesList.DataBind();
     }
 //-------------------------------------------------------------------------------------------
-    void RolesList_SelectedIndexChanged(object sender, EventArgs e)
-    {
-         //if (RolesList.SelectedItem == null)
-         {
-              // RolesList.SelectedItem.Text
-              UserList.DataSource = Roles.GetUsersInRole(RolesList.SelectedItem.Text);
-              UserList.DataBind();
-         }
-    }
+     private void UpdateUsers()
+     {
+         UserList.DataSource = Roles.GetUsersInRole(RolesList.SelectedItem.Text);
+         UserList.DataBind();
+     }
 //-------------------------------------------------------------------------------------------
-    protected void AddRole_Click(object sender, EventArgs e)
-    {
-         if (!Roles.RoleExists(RoleName.Text))
+     void RolesList_SelectedIndexChanged(object sender, EventArgs e)
+     {
+          //if (RolesList.SelectedItem == null)
+          {
+               // RolesList.SelectedItem.Text
+               UpdateUsers();
+          }
+     }
+//-------------------------------------------------------------------------------------------
+     protected void AddRole_Click(object sender, EventArgs e)
+     {
+          if (!Roles.RoleExists(RoleName.Text))
                Roles.CreateRole(RoleName.Text);
+
+         UpdateRoles();
     }
 //-------------------------------------------------------------------------------------------
     protected void AddUserToRole_Click(object sender, EventArgs e)
     {
          Roles.AddUserToRole(Username.Text, RolesList.SelectedItem.Text);
 
-         UpdatePage();
+         UpdateUsers();
     }
 //-------------------------------------------------------------------------------------------
     protected void RemoveRole_Click(object sender, EventArgs e)
     {
          Roles.DeleteRole(RolesList.SelectedItem.Text, false);
 
-         UpdatePage();
+         
+         UserList.Items.Clear();
+         UpdateRoles();
     }
 //-------------------------------------------------------------------------------------------
     protected void RemoveUserFromRole_Click(object sender, EventArgs e)
     {
          Roles.RemoveUserFromRole(UserList.SelectedItem.Text, RolesList.SelectedItem.Text);
 
-         UpdatePage();
+         UpdateUsers();
     }
 //-------------------------------------------------------------------------------------------
 }

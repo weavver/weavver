@@ -50,6 +50,7 @@ public partial class Company_Accounting_Import_PayPal : SkeletonPage
                          }
                          catch (Exception ex)
                          {
+                              ShowError(ex, "Import error");
                               continue;
                          }
                          if (itemtitle == "Snap Pro")

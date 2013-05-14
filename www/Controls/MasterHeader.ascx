@@ -33,3 +33,4 @@
 <div id="NavigationBox" runat="server" style="float:right; padding-bottom: 0px; padding-right: 15px; text-align: center; clear: right; max-width: 500px;">
      <uc1:Navigation ID="Navigation1" runat="server" />
 </div>
+<div style="clear: both;"></div>
