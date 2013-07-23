@@ -17,8 +17,8 @@
      <ContentTemplate>
           <table cellpadding="0" cellspacing="0" width="100%" style="width: 100%">
           <tr>
-               <td valign="top" style="width: 280px; border-right: 2px solid #CCCCCC; padding-right: 10px; background-color:#fbfcfc; padding-top: 0px; min-width: 150px">
-                    <h2>Knowledge Base</h2>
+               <td valign="top" style="width: 280px; border-right: 2px solid #CCCCCC; padding-right: 10px; background-color:#fbfcfc; padding-top: 0px; min-width: 150px; padding-bottom: 8px;">
+                    <h2 style='padding-left: 5px; padding-top: 5px;'>Knowledge Base</h2>
                     <hr />
                     <asp:TreeView ID="Navigation" runat="server" CssClass="tree" ShowExpandCollapse="true" RootNodeStyle-HorizontalPadding="0" NodeIndent="15" ExpandDepth="5" ShowLines="True" BackColor=""></asp:TreeView>
                </td>

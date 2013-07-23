@@ -30,6 +30,7 @@ public partial class Sales_Order_Place : SkeletonPage
           }
 
           Master.FixedWidth = true;
+          Master.MaxWidth = "880px";
           WeavverMaster.SetToolbarVisibility(false);
           RequiresSSL = true;
           ActivationRequired = false;

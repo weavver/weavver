@@ -96,7 +96,7 @@ public partial class RegisterControl : WeavverUserControl
                string password = ((TextBox)GetControlFromWizard(UserInfoStep, "Password")).Text;
 
                WeavverMembershipProvider provider = (WeavverMembershipProvider) System.Web.Security.Membership.Provider;
-               System_User item = provider.GetUser(username);
+               System_Users item = provider.GetUser(username);
                if (item != null)
                {
                     UsernameTaken();
@@ -139,7 +139,7 @@ public partial class RegisterControl : WeavverUserControl
                {
                     using (WeavverEntityContainer data = new WeavverEntityContainer())
                     {
-                         System_User newUser = provider.GetUser(username);
+                         System_Users newUser = provider.GetUser(username);
 
                          Logistics_Organizations newOrg = new Logistics_Organizations();
                          newOrg.Id = Guid.NewGuid();

@@ -12,13 +12,13 @@ namespace DynamicData
      {
           protected override void OnDataBinding(EventArgs e)
           {
-               string urlprefix = "/Communication_Emails/Insert.aspx?To=";
+               string urlprefix = "javascript:createPopup('/Communication_Emails/Insert.aspx?To=";
                string url = FieldValueString;
                if (!url.StartsWith(urlprefix, StringComparison.OrdinalIgnoreCase))
                {
                     url = urlprefix + url;
                }
-               HyperLink1.NavigateUrl = url;
+               HyperLink1.NavigateUrl = url + "')";
           }
 
           public override Control DataControl

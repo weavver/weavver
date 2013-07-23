@@ -1,8 +1,13 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="MasterHeader.ascx.cs" Inherits="Controls_MasterHeader" %>
+<%@ Register src="~/Controls/WebMenu.ascx" tagname="WebMenu" tagprefix="wvvr" %>
 <%@ Register src="~/Navigation.ascx" tagname="Navigation" tagprefix="uc1" %>
 <%@ Register src="~/Controls/Log In.ascx" tagname="LogIn" tagprefix="wvvr" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
-<div id="SignInArea" runat="server" class="sign-in">
+<div id="topbar" style='background-color: #59b8ee; border-bottom: 0px solid black; z-index: 100000'>
+     <wvvr:WebMenu ID="Toolbar" runat="server" />
+     <div style='clear: both;'></div>
+</div>
+<div id="SignInArea" runat="server" class="sign-in" style="color: #000000;">
      <asp:UpdatePanel ID="RegisterLogInPanel" runat="server">
      <ContentTemplate>
           <asp:LoginView ID="LoginView1" runat="server">
@@ -23,14 +28,15 @@
      </asp:DropDownList>
 </div>
 <div style="float:right; height:10px;width: auto; color: Black; padding-bottom: 5px;">
-     <wvvr:LogIn ID="LogIn" runat="server" />
+     <div style='clear: both;'></div>
 </div>
-<div style="float:left; max-width: 300px; vertical-align: middle; height: 63px; margin-top: 10px;">
+<wvvr:LogIn ID="LogIn" runat="server" />
+<div style="float:left; max-width: 300px; vertical-align: middle; height: 63px; margin-top: 5px; margin-bottom: 5px;">
      <a style="vertical-align: middle;" href="~/">
           <img alt="" id="HeaderLogo" runat="server" src="~/images/logo.png" style="border: none; display:block; float:left; max-width: 100%;" />
      </a>
 </div>
-<div id="NavigationBox" runat="server" style="float:right; padding-bottom: 0px; padding-right: 15px; text-align: center; clear: right; max-width: 500px;">
+<div id="NavigationBox" runat="server" style="float:right; padding-bottom: 0px; padding-right: 15px; text-align: center; clear: right;">
      <uc1:Navigation ID="Navigation1" runat="server" />
 </div>
 <div style="clear: both;"></div>

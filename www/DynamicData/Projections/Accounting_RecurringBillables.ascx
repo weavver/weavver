@@ -20,17 +20,27 @@
 </asp:Panel>
 
 <asp:Panel ID="Projection" runat="server" Visible="false">
-     <br />
-     <br />
-     Projected Billing Schedule:<br />
-     <br />
-     <asp:DataGrid id="ProjectionList" runat="server" width="100%" headerstyle-backcolor="burlywood" autogeneratecolumns="false">
-     <Columns>
-          <asp:BoundColumn HeaderText="Post On" DataField="PostAt" DataFormatString="{0:MM/dd/yy}" ItemStyle-Width="100px" ItemStyle-HorizontalAlign="center"></asp:BoundColumn>
-          <asp:BoundColumn HeaderText="Code" DataField="Code" ItemStyle-Width="75px" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
-          <asp:BoundColumn HeaderText="Memo" DataField="Memo"></asp:BoundColumn>
-          <asp:BoundColumn HeaderText="Amount" DataField="Amount" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="right" ItemStyle-Width="100px"></asp:BoundColumn>
-     </Columns>
-     </asp:DataGrid><br />
-     If the End At date is not set the schedule is projected only 24 periods out.
+     <div id="Projection" style='padding: 5px;'>
+          <br />
+          Projected Billing Schedule:<br />
+          <br />
+          <asp:DataGrid id="ProjectionList" runat="server" width="100%" headerstyle-backcolor="burlywood" autogeneratecolumns="false">
+          <Columns>
+               <asp:BoundColumn HeaderText="Post On" DataField="PostAt" DataFormatString="{0:MM/dd/yy}" ItemStyle-Width="100px" ItemStyle-HorizontalAlign="center"></asp:BoundColumn>
+               <asp:BoundColumn HeaderText="Code" DataField="Code" ItemStyle-Width="75px" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+               <asp:BoundColumn HeaderText="Memo" DataField="Memo"></asp:BoundColumn>
+               <asp:BoundColumn HeaderText="Amount" DataField="Amount" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="right" ItemStyle-Width="100px"></asp:BoundColumn>
+          </Columns>
+          </asp:DataGrid><br />
+          If the End At date is not set the schedule is projected only 24 periods out.
+     </div>
+     <script type="text/javascript">
+          $(document).ready(function () {
+               var tabs = $("#tableControl").tabs();
+               var ul = tabs.find("ul");
+               $("<li><a href='#Projection'>Projection</a></li>").appendTo(ul);
+               $('#tableControl').append($('#Projection'));
+               tabs.tabs("refresh");
+          });
+     </script>
 </asp:Panel>

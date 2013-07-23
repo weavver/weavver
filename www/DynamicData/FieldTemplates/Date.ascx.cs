@@ -13,6 +13,9 @@ namespace DynamicData
 //-------------------------------------------------------------------------------------------
           public string Format()
           {
+               if (Mode == DataBoundControlMode.Insert)
+                    return "";
+
                DateTime UtcDateTime = DateTime.SpecifyKind(((DateTime)FieldValue), DateTimeKind.Utc);
                DateTime LocalDateTime = TimeZoneInfo.ConvertTime(UtcDateTime, TimeZoneInfo.Local);
                Date.Attributes["title"] = "Database Value: " + FieldValueString + " UTC";
@@ -21,6 +24,7 @@ namespace DynamicData
                     return Weavver.Utilities.DateTimeHelper.GetFriendlyDateString(LocalDateTime);
                }
                return LocalDateTime.ToString();
+               //return "commented out";
           }
 //-------------------------------------------------------------------------------------------
           public string FormatTitle(string value)

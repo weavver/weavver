@@ -17,7 +17,7 @@ namespace DynamicData
                DropDownList1.ToolTip = Column.Description;
                var enumDataType = Column.GetAttribute<EnumDataTypeAttribute>();
 
-               if (!IsPostBack)
+               if (DropDownList1.Items.Count == 0)
                {
                     var type = enumDataType.EnumType;
                     var values = Enum.GetValues(enumDataType.EnumType);
@@ -40,6 +40,7 @@ namespace DynamicData
                     //DropDownList1.DataBind();
                }
 
+               //DropDownList1.Items.Add(new ListItem("UNKNOWN"));
                //SetUpValidator(RequiredFieldValidator1);
                //SetUpValidator(RegularExpressionValidator1);
                //SetUpValidator(DynamicValidator1);

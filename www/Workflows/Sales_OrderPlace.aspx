@@ -13,25 +13,27 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
      <div style="width:100%; background-color: #414141; color: White;">
           <div style="padding: 10px;">
+               <div style="float:left; color: White;">
+                    <h2><asp:Literal ID="OrderFormTitle" runat="server" Text="Order Form"></asp:Literal></h2>
+               </div>
                <div style="float:right; color: White;">
                     <a href="~/workflows/sales_orderreview" style="color: White;">Back to your Shopping Cart</a>
                </div>
-               <h2><asp:Literal ID="OrderFormTitle" runat="server" Text="Order Form"></asp:Literal></h2>
+               <div style='clear: both;'></div>
           </div>
      </div>
      <asp:Panel ID="Message" runat="server" style="padding: 30px;">
           You don't have any items in your cart.
      </asp:Panel>
-     <table id="CustomerInfo" runat="server" style="margin-top: 10px;" cellpadding="0" cellspacing="0">
-     <tr>
-          <td valign="top" style="width:33%;padding-right:2px;">
+     <div id='CustomerInfo' runat="server" style="padding-bottom: 105px;">
+          <div class="orderplace_box">
                <wvvr:Contact ID="PrimaryContact" runat="server" />
-          </td>
-          <td valign="top" style="width:33%;padding-left: 2px;padding-right:2px;">
+          </div>
+          <div class="orderplace_box">
                <wvvr:Contact ID="BillingContact" runat="server" />
-          </td>
-          <td valign="top" style="width:33%;padding-left: 2px;">
-               <table style="border: solid 1px #CCCCCC; margin-top: 0px; height: 280px; width: 100%;" cellpadding="0" cellspacing="0">
+          </div>            
+          <div class="orderplace_box">
+               <table style="border-left: solid 1px #CCCCCC; margin-top: 0px; height: 280px; width: 100%;" cellpadding="0" cellspacing="0">
                <tr style="background-color: #d4e2e2; text-align: left; padding: 5px; margin-bottom: 5px; color: #000000; height: 25px;">
                     <td style="padding-left: 8px;">
                          <h3>Payment Information</h3>
@@ -50,18 +52,16 @@
                     </td>
                </tr>
                </table>
-          </td>
-     </tr>
-     <tr>
-          <td valign="top" style="width:33%;padding-right: 2px; padding-top: 4px;">
-               <table style="border-right: solid 1px #CCCCCC; width: 100%;" cellpadding="0" cellspacing="0">
-               <tr>
-                    <td style="background-color: #d4e2e2; padding: 5px; margin-bottom: 5px; border: none 1px #CCCCCC; color: #000000;">
+          </div>
+          <div class="orderplace_box">
+               <table style="border-left: solid 1px #CCCCCC; margin-top: 0px; width: 100%;" cellpadding="0" cellspacing="0">
+               <tr style="background-color: #d4e2e2; text-align: left; padding: 5px; margin-bottom: 5px; color: #000000; height: 25px;">
+                    <td style="padding-left: 8px;">
                          <h3>Order Summary</h3>
                     </td>
                </tr>
                <tr>
-                    <td colspan="2" style="background-color: #FFFFFF; width: 320px; border: none 1px; padding: 8px;">
+                    <td valign="top" colspan="2" style="background-color: #FFFFFF; border: none 1px; padding: 8px;">
                          <table style="width: 100%;">
                          <tr>
                               <td style="text-align: left; width: 75px;">Deposit:</td>
@@ -76,31 +76,26 @@
                               <td style="text-align:right;"><asp:Label ID="CartTotal" runat="server"></asp:Label></td>
                          </tr>
                          </table>
+                         <table style="padding: 10px;" cellpadding="0" cellspacing="0">
+                         <tr>
+                              <td style="padding: 0px; margin-bottom: 5px; border: none 1px #CCCCCC; color: #000000;">
+                                   Special Notes:
+                              </td>
+                         </tr>
+                         <tr>
+                              <td style="text-align: center; padding: 0px; height: 81px; padding-top:5px;">
+                                   <asp:TextBox ID="SpecialInstructions" runat="server" BorderStyle="Solid" TextMode="MultiLine" Width="235" Height="100%"></asp:TextBox>
+                              </td>
+                         </tr>
+                         </table>
                     </td>
                </tr>
                </table>
-          </td>
-          <td valign="top" style="width:33%;padding-right: 2px; padding-top: 4px;">
-               <table style="border: solid 1px #CCCCCC; width: 100%;" cellpadding="0" cellspacing="0">
-               <tr>
-                    <td style="background-color: #d4e2e2; padding: 5px; margin-bottom: 5px; border: none 1px #CCCCCC; color: #000000;">
-                         <h3>Special Instructions:</h3>
-                    </td>
-               </tr>
-               <tr>
-                    <td style="text-align: center; padding: 0px; height: 81px;">
-                         <asp:TextBox ID="SpecialInstructions" runat="server" BorderStyle="None" TextMode="MultiLine" Width="98%" Height="100%"></asp:TextBox>
-                    </td>
-               </tr>
-               </table>
-          </td>
-          <td valign="top" style="padding-top: 8px; padding-left: 2px;">
-               <br />
-               <div style="float:right;">
-                    <asp:ImageButton ID="btnOrder" runat="server" ImageUrl="~/images/sales/OrderPlace.png" OnClick="Order_Click" ValidationGroup="OrderForm" />
-               </div>
-               <%--<asp:Button ID="btnOrder" runat="server" Text="Place Order" Width="120" Height="35" Enabled="true" OnClick="Order_Click" style="text-align:center;" ValidationGroup="OrderForm2" />--%>
-          </td>
-     </tr>
-     </table>
+          </div>
+     </div>
+     <div style="float: right;">
+          <asp:ImageButton ID="btnOrder" runat="server" ImageUrl="~/images/sales/OrderPlace.png" OnClick="Order_Click" ValidationGroup="OrderForm" style="padding: 10px;" />
+     </div>
+     <div style="clear: both; margin-bottom: 10px;"></div>
+          <%--<asp:Button ID="btnOrder" runat="server" Text="Place Order" Width="120" Height="35" Enabled="true" OnClick="Order_Click" style="text-align:center;" ValidationGroup="OrderForm2" />--%>
 </asp:Content>

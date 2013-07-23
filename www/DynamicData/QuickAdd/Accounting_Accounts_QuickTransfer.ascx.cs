@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 using Weavver.Data;
 using System.Web.Security;
 
-public partial class DynamicData_QuickAdd_Accounting_Accounts : WeavverUserControl
+public partial class DynamicData_QuickAdd_Accounting_Accounts_QuickTransfer : WeavverUserControl
 {
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)

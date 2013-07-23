@@ -13,8 +13,8 @@ public partial class Company_Sales_Order : SkeletonPage
           List.ItemDataBound += new DataGridItemEventHandler(List_ItemDataBound);
           List.ItemCommand += new DataGridCommandEventHandler(List_ItemCommand);
 
-          Master.FormTitle = "Your Shopping Cart";
-          Master.FixedWidth = true;
+          WeavverMaster.FormTitle = "Your Shopping Cart";
+          WeavverMaster.FixedWidth = true;
           ActivationRequired = false;
           RunCustomValidationJs = true;
           IsPublic = true;
@@ -175,7 +175,12 @@ public partial class Company_Sales_Order : SkeletonPage
      {
           if (LoggedInUser == null && ShoppingCart.RequiresOrganizationId)
           {
-               Response.Redirect("~/account/register?checkingout=true");
+               string redirect = "~/account/register?checkingout=true";
+               if (Request["IFrame"] == "true")
+               {
+                    redirect += "&IFrame=true";
+               }
+               Response.Redirect(redirect);
           }
           else
           {

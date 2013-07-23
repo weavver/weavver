@@ -18,18 +18,57 @@
      <script type="text/javascript" src="/Scripts/Weavver.js"></script>
      <asp:ContentPlaceHolder id="head" runat="server"></asp:ContentPlaceHolder>
 </head>
-<body style='overflow: visible; background-color: #e1e1e1;'>
+<body style='overflow: visible; background-color: #FFFFFF;'>
+     <asp:Literal ID="ScriptVars" runat="server"></asp:Literal>
      <script type="text/javascript">
-          function createPopup(url) {
-               parent.createPopup(url);
+          function createPopup(url, width, height) {
+//               if (window.event.toElement.tagName == "A")
+//                    return;
+
+               if (window.event) {
+                    if (window.event.ctrlKey) {
+                         window.open(url + '&IFrame=true', '_blank');
+                         return;
+                    }
+                    if (window.event.shiftKey) {
+                         window.open(url + '&IFrame=true', '1374266622070', 'toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,width=' + width + ",height=" + height);
+                         return;
+                    }
+               }
+
+               if (window.self === window.top) {
+                    window.open(url + '&IFrame=true', '1374266622070', 'toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,width=' + width + ",height=" + height);
+               }
+               else {
+                    parent.createPopup(url, width, height, windowId);
+               }
           }
+
+          function run() {
+               $('.menuLink').hover(function () {
+                         $(this).css('background-color', 'white');
+                         $(this).css('color', 'black');
+                    }, function () {
+                         $(this).css('background-color', '');
+                         $(this).css('color', '#FFFFFF');
+                    });
+          }
+
+          function preventIFrameMouseEvents() { }
+          function allowIFrameMouseEvents() { }
      </script>
      <form id="form1" runat="server">
-          <div id="ErrorLayer" runat="server" visible="false" style="background-color: #f3eaea; margin: auto; border: solid 1px lightgrey; padding: 5px; margin: auto; margin-bottom: 10px;">
+               <div id="modalBox" style="">
+               </div>
+          <div id="DescriptionLayer" runat="server" class="banner" style="margin: 10px; padding: 10px;" Visible="false">
+               <asp:Label ID="Description" runat="server"></asp:Label>
+          </div>
+          <div id="ErrorLayer" runat="server" visible="false" style="background-color: #f3eaea; border: solid 1px lightgrey; padding: 5px; margin: 10px; margin-bottom: 10px;">
                <asp:Literal ID="ErrorMessage" runat="server" ViewStateMode="Disabled"></asp:Literal>
           </div>
-          <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true"></asp:ScriptManager>
+          <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" EnablePartialRendering="true"></asp:ScriptManager>
           <asp:ContentPlaceHolder id="Content" runat="server"></asp:ContentPlaceHolder>
+          <div style='clear: both; float: right;margin: 10px;'><a id='PageLink' runat="server" href='#' target="_blank">Direct Link</a></div>
      </form>
 </body>
 </html>

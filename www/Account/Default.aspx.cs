@@ -23,11 +23,12 @@ public partial class Account_Default : SkeletonPage
 //-------------------------------------------------------------------------------------------
      protected void Page_Init(object sender, EventArgs e)
      {
-          List.ItemDataBound += new DataGridItemEventHandler(List_ItemDataBound);
+          //VoicemailList.ItemDataBound += new DataGridItemEventHandler(List_ItemDataBound);
 
-          WeavverMaster.FormTitle = "Weavver Account :: Welcome Home!";
-          WeavverMaster.FormDescription = "This is your Weavver&reg; Account dashboard and contains links to the various departments and services you have access to.";
-          WeavverMaster.FixedWidth = true;
+          Master.FormTitle = "Weavver Account :: Welcome Home!";
+          Master.FormDescription = "This is your dashboard, it contains links to the services you have access to.";
+          Master.FixedWidth = false;
+          Master.Width = "100%";
      }
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)
@@ -61,7 +62,9 @@ public partial class Account_Default : SkeletonPage
                Self_URL.Text = Self_URL.Text.TrimEnd(charsToTrim);
           }
 
-
+          ReceivablesLink.HRef = String.Format("~/Accounting_LedgerItems/List.aspx?AccountId={0}&LedgerType={1}", LoggedInUser.OrganizationId.ToString(), LedgerType.Receivable.ToString());
+          PayablesLink.HRef = String.Format("~/Accounting_LedgerItems/List.aspx?AccountId={0}&LedgerType={1}", LoggedInUser.OrganizationId.ToString(), LedgerType.Payable.ToString());
+          TasksLink.HRef = String.Format("~/HR_Tasks/List.aspx?AssignedTo={0}", LoggedInUser.Id.ToString());
 
           using (WeavverEntityContainer data = new WeavverEntityContainer())
           {
@@ -126,8 +129,8 @@ public partial class Account_Default : SkeletonPage
                MySqlCommand command = new MySqlCommand("select * from voicemail_msgs where username=?username order by created_epoch desc;", conn);
                command.Parameters.AddWithValue("?username", LoggedInUser.Username);
                MySqlDataReader reader = command.ExecuteReader();
-               List.DataSource = reader;
-               List.DataBind();
+               VoicemailList.DataSource = reader;
+               VoicemailList.DataBind();
                reader.Close();
 
                command.CommandText = "select distinct in_folder from voicemail_msgs where username=?username;";
@@ -141,11 +144,15 @@ public partial class Account_Default : SkeletonPage
 
                Voicemail.Visible = (VoicemailFolders.Items.Count > 0);
 
+               if (VoicemailList.Items.Count > 0)
+               {
+                    Voicemail.FindControlR<Literal>("NoVoicemails").Visible = true;
+               }
           }
           catch (MySqlException ex)
           {
-               Voicemail.Visible = false;
-               DebugOut("Could not connect to MySQL server", true);
+               Voicemail.FindControlR<Literal>("NoVoicemails").Text = "Could not load your voicemails, please try back later.";
+               Voicemail.FindControlR<Literal>("NoVoicemails").Visible = true;
           }
      }
 //-------------------------------------------------------------------------------------------

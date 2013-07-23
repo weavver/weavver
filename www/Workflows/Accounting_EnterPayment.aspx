@@ -1,11 +1,4 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Accounting_EnterPayment.aspx.cs" Inherits="Workflows_Accounting_EnterPayment" %>
-
-<asp:Content ID="Content1" ContentPlaceHolderID="Head" Runat="Server">
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="NavigationHolder" Runat="Server">
-</asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="Banner" Runat="Server">
-</asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
      <br />
      <table cellpadding="0" cellspacing="0">

@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Accounting_Checks.ascx.cs" Inherits="DynamicData_EntityTemplates_Accounting_Checks" %>
 
-<div style="background-color: #EBFCF6; margin: auto; margin-top: 5px; border: outset 2px; width: 800px; padding: 10px;clear: both;">
+<div style="background-color: #EBFCF6; margin: auto; margin-top: 5px; border: outset 3px #CCCCCC; width: 800px; padding: 10px;clear: both;">
      <div style="float:left">
           Funds from: <asp:DynamicControl ID="DynamicControl6" runat="server" DataField="Accounting_Accounts" OnInit="DynamicControl_Init" />
      </div>

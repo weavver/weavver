@@ -4,73 +4,54 @@
     {
         background-color: #414141;
     }
+    
+     .menuContainer
+     {
+     }
+     .menuOption
+     {
+          background-color: #FFFFFF;
+          color: #000000;
+          clear: both;
+          min-width: 120px;
+          z-index: 1000000000;
+     }
+     .menuLink
+     {
+          padding: 8px;
+          display: inline-block;
+          text-decoration: none;
+     }
+     li
+     {
+          padding: 0px;
+          margin: 5px;
+     }
+     ul
+     {
+          padding: 0px;
+          margin: 0px;
+          list-style-type: none;
+     }
+     .menuChild
+     {
+     }
+     .no-close .ui-dialog-titlebar-close
+     {
+          display: none;
+     }
 </style>
 <script type="text/javascript">
      var expandedMode = true;
      var hoverBackCover = "";
      var normalBackCover = "";
-
-
-
-
-     function preventIFrameMouseEvents() {
-          $('iframe').css('pointer-events', 'none');
-     }
-
-     function allowIFrameMouseEvents() {
-          $('iframe').css('pointer-events', 'auto');
-     }
-
-     function styleMenu() {
-          $('.menuChildren', '.MenuOptions').hide();
-
-          $('.menuOption,.menuRoot', '.MenuOptions').css('cursor', 'pointer');
-          $('.menuOption,.menuRoot', '.MenuOptions').hover
-          (
-               function () {
-                    $(this).css("background-Color", "#FFFFFF");
-                    $(this).css("color", "black");
-                    $('.addMenu', $(this)).css('visibility', '');
-               },
-               function () {
-                    $(this).css("background-Color", "");
-                    $(this).css("color", "white");
-                    if (expandedMode == false) {
-                         $('.addMenu', $(this)).css('visibility', 'hidden');
-                    }
-               }
-          );
-
-          $('.menuRoot', '.MenuOptions').bind({
-               click: function () {
-                    var html = $(this).html();
-
-                    var state = $(this).attr('state');
-                    if (state == "shown") {
-                         $(this).next('.menuChildren').slideUp("fast");
-                         $(this).attr('state', 'hidden');
-                    }
-                    else {
-                         $(this).next('.menuChildren').slideDown("fast");
-                         $(this).next('.menuChildren').children().css("padding-left", "10px");
-                         $(this).attr('state', 'shown');
-                    }
-               }
-          });
-     }
+     var offsetX = 0;
+     var offsetY = 0;
 
      $(document).ready(function () {
-          //$(".MenuOptions").slideUp("fast");
-          $(".MenuRoot").hover(function () {
-               $(".MenuOptionContainer").css('display', '');
-               $(".MenuOptions").slideDown("fast");
-          }, function () {
-               if (expandedMode == false) {
-                    $(".MenuOptions").slideUp("fast");
-               }
-          });
-
-          styleMenu();
+          jQuery.expr[':'].focus = function (elem) {
+               return elem === document.activeElement && (elem.type || elem.href);
+          };
 
           $.ctrl = function (key, callback, args) {
                $(document).keydown(function (e) {
@@ -81,6 +62,68 @@
                     }
                });
           };
+
+          //initialization
+          $('.menu').menu({
+               focus: function (event, ui) {
+                    var menu = $(this);
+                    var timeout = menu.data('timer');
+                    if (timeout) {
+                         clearTimeout(timeout);
+                         menu.data('timer', null);
+                    }
+               },
+               blur: function (event, ui) {
+                    var menu = $(this);
+                    timer = setTimeout(function () {
+                         menu.menu().hide();
+                         menu.data('state', 'hidden');
+                         menu.data('timer', null);
+                    }, 300);
+                    menu.data('timer', timer);
+               }
+          }).removeClass('ui-corner-all').hide();
+
+          $('.menuLink').hover
+          (
+               function () {
+                    $(this).css("background-Color", "#FFFFFF");
+                    $(this).css("color", "black");
+                    //$('.addMenu', $(this)).css('visibility', '');
+               },
+               function () {
+                    $(this).css("background-Color", "");
+                    $(this).css("color", "white");
+                    //                    if (expandedMode == false) {
+                    //                         $('.addMenu', $(this)).css('visibility', 'hidden');
+                    //                    }
+               }
+          );
+
+          $('.menuLink').bind({
+               click: function () {
+                    var menu = $(this).next('.menu');
+
+                    var state = menu.data('state');
+                    if (state == "shown") {
+                         $(this).css('background-color', 'white');
+                         menu.menu().hide();
+                         menu.data('state', 'hidden');
+                    }
+                    else {
+                         var left = $(this).offset().left;
+                         menu.menu().css('left', left);
+                         var top = $('#topbar').offset().top + $('#topbar').height();
+                         menu.menu().css('top', top);
+                         menu.menu().show();
+                         menu.data('state', 'shown');
+                         $(this).css('background-color', '');
+                    }
+               }
+          });
+
+          //                         menu.css('position', 'absolute');
+          //                         menu.slideDown("fast");
 
           $(document).keyup(function (e) {
                //alert(e.keyCode);
@@ -98,63 +141,47 @@
                }
           });
 
-          jQuery.expr[':'].focus = function (elem) {
-               return elem === document.activeElement && (elem.type || elem.href);
-          };
-
           //          $.ctrl('M', function (event) {
           //               //alert('box has focus');
-
           //               if (!$("input").is(":focus")) {
           //                    toggleMenu();
           //                    event.stopPropagation();
           //               }
           //          });
-
-          //$('.MenuOptions').css('position', 'absolute');
-          $('.MenuOptions').css('border-right', '2px solid gray');
-          $('.MenuOptions').css('border-top', '1px solid gray');
-          //          $('.MenuOptions').position({
-          //               my: 'left top',
-          //               at: 'left top',
-          //               of: '#ContentTable'
-          //          });
-
-          $('.MenuOptions').css('left', 0);
-          toggleMenu();
-
-          var x = $('<div id="menucontainer" style="background-color: #414141" />');
-          $(document.body).append(x);
-
-          $("#menucontainer").append($('.MenuOptions'));
-
-          //$('.MenuOptions').resizable();
-          //$('.MenuOptions').draggable();
-
-          $('#menucontainer').dialog({
-               open: function (event, ui) {
-                    //$(this).parent().find('.ui-dialog-titlebar').append($('#ItemTitle'));
-                    $(".ui-dialog-content").css("padding", 0);
-                    $(this).css('overflow', 'hidden');
-               },
-               height: 700, width: 200, position: [10, 82], title: "Navigation"
-          });
-          
-          $('.MenuRoot').remove();
-
      });
 
-     function toggleMenu() {
-          if (!$('.MenuOptions').is(':visible')) {
-               $(".MenuOptions").slideDown("fast");
-          }
-          else if (expandedMode == false) {
-               $(".MenuOptions").slideUp("fast");
-          }
+     function preventIFrameMouseEvents() {
+          $('iframe').css('pointer-events', 'none');
      }
 
-     function createPopup(url, height, width) {
-          $('#ContentDIV').remove();
+     function allowIFrameMouseEvents() {
+          $('iframe').css('pointer-events', 'auto');
+     }
+
+     function closeIFrame(windowId, parentId) {
+          refreshParent(parentId);
+          $('#' + windowId).remove();
+     }
+
+     function refreshParent(parentId) {
+          var obj = $('iframe', '#' + parentId);
+          obj.attr('src', obj.attr('src'));
+
+          //$(obj)[0].contentWindow.document.forms[0].submit()
+          //$('input[type=submit]').click();
+          //$(obj)[0].WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions("ctl00$Content$DList$searchButton", "", true, "", "", false, false));
+     }
+
+     function createPopup(url, width, height, myId) {
+          if (width == 0) {
+               width = $(document).width() - 10;
+               if (width > 800)
+                    width = 800;
+          }
+          if (height == 0)
+               height = 500;
+
+          $('#ContentTable').remove();
 
           var windowId = getPseudoGuid();
 
@@ -165,9 +192,9 @@
 
           // navigate to the frame
           if (url.match(/\?/))
-               url = url + '&IFrame=true&WindowId=' + windowId;
+               url = url + '&IFrame=true&WindowId=' + windowId + '&ParentId=' + myId;
           else
-               url = url + '?IFrame=true&WindowId=' + windowId;
+               url = url + '?IFrame=true&WindowId=' + windowId + '&ParentId=' + myId;
           $('iframe', newPopup).attr('src', url);
 
           newPopup.dialog({
@@ -181,10 +208,10 @@
                dragStop: allowIFrameMouseEvents,
                resizeStart: preventIFrameMouseEvents,
                resizeStop: allowIFrameMouseEvents,
-               position: [240 + offsetX, 82 + offsetY],
+               position: [offsetX + 5, offsetY + 120],
                width: width,
                height: height
-           });
+          });
 
           newPopup.resize(function () {
                clearTimeout(doit);
@@ -200,8 +227,6 @@
           offsetX = (offsetX > 100) ? 0 : offsetX + 20;
           offsetY = (offsetY > 100) ? 0 : offsetY + 20;
      }
-     var offsetX = 0;
-     var offsetY = 0;
 </script>
 
 <div id='TheIFrame' style='display:none;'>
@@ -227,16 +252,5 @@
      </div
 
 --%>
-
-
-<div class="MenuRoot" style="float:left;z-index: 1000; min-width: 65px; cursor: pointer; min-height: 28px;max-width: 100px; background-color: #414141; color: #FFFFFF; margin-top: 4px; padding-top: 7px; border: 1px solid black; text-align: center;">
-     <div style="display: inline-block; vertical-align: middle;">
-          MENU
-     </div>
-     <div class="MenuOptionContainer">
-          <div class='MenuOptions'>
-               <asp:Literal ID="MenuItems" runat="server"></asp:Literal>
-          </div>
-     </div>
-</div>
-
+<asp:Literal ID="MenuItems" runat="server"></asp:Literal>
+<div style='clear: both;'></div>

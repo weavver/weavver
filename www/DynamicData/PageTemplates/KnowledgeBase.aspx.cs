@@ -25,7 +25,8 @@ namespace DynamicData
                Navigation.SelectedNodeChanged += new EventHandler(Navigation_SelectedNodeChanged);
                FormView1.ItemCommand += new FormViewCommandEventHandler(FormView1_ItemCommand);
 
-               Master.FixedWidth = true;
+               Master.FixedWidth = false;
+               Master.Width = "100%";
                table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
 
                if (!IsPostBack)
@@ -63,7 +64,7 @@ namespace DynamicData
                Navigation.Nodes.Clear();
                using (WeavverEntityContainer data = new WeavverEntityContainer())
                {
-                    var rootItems = from article in data.KnowledgeBases
+                    var rootItems = from article in data.KnowledgeBase
                                     where article.ParentId.HasValue == false
                                     select article;
 
@@ -131,7 +132,7 @@ namespace DynamicData
 
                     //if (article.KnowledgeBase2Reference.HasValue)
                     //{
-                         var childItems = from childArticles in data.KnowledgeBases
+                         var childItems = from childArticles in data.KnowledgeBase
                                           where childArticles.ParentId == article.Id
                                           orderby childArticles.Position, childArticles.Title
                                           select childArticles;

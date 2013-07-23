@@ -10,6 +10,14 @@ using Weavver.Data;
 public partial class Workflows_Accounting_EnterPayment : SkeletonPage
 {
 //-------------------------------------------------------------------------------------------
+     protected void Page_PreInit(object sender, EventArgs e)
+     {
+          if (Request["IFrame"] == "true")
+          {
+               MasterPageFile = "~/Blank.master";
+          }
+     }
+//-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)
      {
           WeavverMaster.FormTitle = "Quick Payment Entry";

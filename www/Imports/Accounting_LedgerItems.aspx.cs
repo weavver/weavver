@@ -22,13 +22,21 @@ using SoftwareIsHardwork.Tools.QifConvUtil;
 public partial class Company_Accounting_Import_Default : SkeletonPage
 {
 //-------------------------------------------------------------------------------------------
+     protected void Page_PreInit(object sender, EventArgs e)
+     {
+          if (Request["IFrame"] == "true")
+          {
+               MasterPageFile = "~/Blank.master";
+          }
+     }
+//-------------------------------------------------------------------------------------------
      protected void Page_Init(object sender, EventArgs e)
      {
           TransactionsDetected.ItemDataBound += new DataGridItemEventHandler(TransactionsDetected_ItemDataBound);
 
-          Master.FormTitle = "Import Financial Records";
-          Master.FormDescription = "Use this tool to import your accounting records.";
-          Master.FixedWidth = true;
+          WeavverMaster.FormTitle = "Import Financial Records";
+          WeavverMaster.FormDescription = "Use this tool to import your accounting records.";
+          WeavverMaster.FixedWidth = true;
 
           //transactionFolder = Path.Combine(ConfigurationManager.AppSettings["data_folder"], @"Accounting\Transactions\");
 

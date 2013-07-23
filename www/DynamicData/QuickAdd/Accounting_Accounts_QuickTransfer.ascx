@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Accounting_Accounts.ascx.cs" Inherits="DynamicData_QuickAdd_Accounting_Accounts" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Accounting_Accounts_QuickTransfer.ascx.cs" Inherits="DynamicData_QuickAdd_Accounting_Accounts_QuickTransfer" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <style type="text/css">
      .quickLabel
@@ -47,7 +47,7 @@
 
 </script>
 
-<a href="javascript:$('#QuickAdd').dialog('open')">Quick Transfer</a>
+<a href="javascript:$('#QuickAdd').dialog('open')" class="attachmentLink">Quick Transfer</a>
 
 <div id="QuickAdd" title="Quick Transfer">
      <div class="quickLabel">

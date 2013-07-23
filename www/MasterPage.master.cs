@@ -61,7 +61,7 @@ using Weavver.Data;
 //-------------------------------------------------------------------------------------------
           public void SetToolbarVisibility(bool visible)
           {
-               Toolbar.Visible = visible;
+               //Toolbar.Visible = visible;
                //MenuFiller.Visible = visible;
           }
           //CustomerChat
@@ -74,33 +74,49 @@ using Weavver.Data;
 //-------------------------------------------------------------------------------------------
           public void ToolBarMenuAdd(WeavverMenuItem item)
           {
-               Toolbar.menuTools.Items.Add(item);
+               //Toolbar.menuTools.Items.Add(item);
           }
 //-------------------------------------------------------------------------------------------
           public void ViewsMenuAdd(WeavverMenuItem item)
           {
-               Toolbar.menuViews.Items.Add(item);
+               //Toolbar.menuViews.Items.Add(item);
           }
 //-------------------------------------------------------------------------------------------
           public void ActionsMenuAdd(WeavverMenuItem item)
           {
-               Toolbar.menuActions.Items.Add(item);
+               //Toolbar.menuActions.Items.Add(item);
           }
 //-------------------------------------------------------------------------------------------
           public void DataViewsMenuAdd(WeavverMenuItem item)
           {
-               Toolbar.menuViews.Items.Add(item);
+               //Toolbar.menuViews.Items.Add(item);
           }
 //-------------------------------------------------------------------------------------------
           public WeavverWebMenu FormToolbar
           {
                get
                {
-                    return Toolbar;
+                    //return Toolbar;
+                    return null;
                }
           }
 //-------------------------------------------------------------------------------------------
           public string Width
+          {
+               get
+               {
+                    return ContentTable.Style["width"];
+               }
+               set
+               {
+                    if (value != null)
+                    {
+                         ContentTable.Style["width"] = value;
+                    }
+               }
+          }
+//-------------------------------------------------------------------------------------------
+          public string MaxWidth
           {
                get
                {
@@ -112,6 +128,10 @@ using Weavver.Data;
                     {
                          ContentTable.Style["max-width"] = value;
                     }
+                    else
+                    {
+                         ContentTable.Style.Remove("max-width");
+                    }
                }
           }
 //-------------------------------------------------------------------------------------------
@@ -119,7 +139,7 @@ using Weavver.Data;
           {
                get
                {
-                    return !(ContentTable.Style["max-width"] == "940px");
+                    return !(MaxWidth == "950px");
                }
                set
                {
@@ -129,7 +149,7 @@ using Weavver.Data;
                     }
                     else
                     {
-                         ContentTable.Style["max-width"] = "940px";
+                         MaxWidth = "950px";
                     }
                }
           }
@@ -187,7 +207,7 @@ using Weavver.Data;
           {
                if (Request["id"] != null && BasePage != null && BasePage.LoggedInUser != null)
                {
-                    WeavverMasterPage x;
+                    //WeavverMasterPage x;
                     //Guid id = new Guid(Request["id"]);
                     //using (WeavverEntityContainer data = new WeavverEntityContainer())
                     //{
@@ -217,20 +237,6 @@ using Weavver.Data;
           public void Attach_Click(object sender, EventArgs e)
           {
                Response.Redirect("/system/link?linkto=" + Request["id"].ToString());
-          }
-//-------------------------------------------------------------------------------------------
-          public void AddAttachmentLink(string linkname, string href, string typeName)
-          {
-               HtmlAnchor link = new HtmlAnchor();
-               link.InnerText = linkname;
-               link.HRef = href;
-               link.Title = typeName;
-               link.Attributes["class"] = "attachmentLink";
-               Attachments.Controls.Add(link);
-
-               //Literal litHR = new Literal();
-               //litHR.Text = "&nbsp;&nbsp;";
-               //Attachments.Controls.Add(litHR);
           }
 //-------------------------------------------------------------------------------------------
           protected override void Render(HtmlTextWriter writer)

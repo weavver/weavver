@@ -47,13 +47,17 @@
                title: "Filter Options",
                open: function (type, data) {
                     $(this).parent().appendTo("form");
+               },
+               width: 400,
+               minHeight: 0,
+               create: function () {
+                    $(this).css("maxHeight", 400);
                }
           });
      });
 
 
      $(document).ready(function () {
-
 
           //          $("#WindowLayer").resizable({
           //               minHeight: 200,
@@ -72,30 +76,6 @@
           //               },
           //               stop: function (event, ui) { }
           //          });
-
-          $("#WindowLayer").dialog({
-               position: {
-                    my: 'top',
-                    at: 'top',
-                    of: '#ContentDIV'
-               },
-               open: function (event, ui) {
-                    //$(this).parent().find('.ui-dialog-titlebar').append($('#ItemTitle'));
-                    $(".ui-dialog-content").css("padding", 0);
-               },
-               title: "Title",
-               dragStart: preventIFrameMouseEvents,
-               dragStop: allowIFrameMouseEvents,
-               resizeStart: preventIFrameMouseEvents,
-               resizeStop: allowIFrameMouseEvents,
-               height: 560,
-               width: 780
-          });
-
-          $("#WindowLayer").resize(function () {
-               var y = $("#WindowLayer").height() - $("#ItemTitle").height() - 5;
-               $("#OverflowLayer").height(y);
-          });
 
 //          $('#TheIFrame').dialog({
 //               open: function (event, ui) {
@@ -118,37 +98,39 @@
 
 </script>
 
-<asp:UpdatePanel ID="EntityControls" runat="server" UpdateMode="Conditional">
-     <ContentTemplate>
-          <asp:Panel ID="AddedControls" runat="server"></asp:Panel>
-     </ContentTemplate>
-</asp:UpdatePanel>
+<asp:Panel ID="AvailableActions" runat="server" style="float:left; margin-left: 5px;"></asp:Panel>
 <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
 <ContentTemplate>
-
-
-     <div id="WindowLayer" style="background-color: #FFFFFF; border: 2px inset;">
-          <div style="float:right; display: inline-block; padding: 5px;">
-               <asp:Button ID="DownloadCSV" runat="server" OnClick="DownloadCSV_Click" Text="Export Data" Height="30px" Visible="false" />
-               <a href="javascript:createPopup('/Accounting_Checks/Details.aspx');">New</a>
-               <asp:LoginView ID="SecureContent" runat="server">
-                    <RoleGroups>
-                         <asp:RoleGroup Roles="Administrators">
-                         <ContentTemplate>
-                                   | <wvvr:ColumnPicker id="ColumnPicker1" runat="server" Visible="true"></wvvr:ColumnPicker> |
-                         </ContentTemplate>
-                         </asp:RoleGroup>
-                    </RoleGroups>
-               </asp:LoginView>
-               <%--<asp:DynamicHyperLink <I>D="InsertHyperLink" runat="server" Action="Insert">
-                    <img id="Img1" runat="server" src="~/DynamicData/Content/Images/plus.gif" alt="Insert new item" />New
-               </asp:DynamicHyperLink>--%>
-               <a href="#" onclick="javascript:$('#filterRepeater').dialog('open')">Filter</a>
+     <div id="WindowLayer" style="background-color: #FFFFFF;">
+          <div style='background-color: #59b8ee; padding: 0px; vertical-align: middle; color: #FFFFFF;'>
+               <div style="float:right; display: inline-block; padding: 0px;">
+                    <asp:Button ID="DownloadCSV" runat="server" OnClick="DownloadCSV_Click" Text="Export Data" Height="30px" Visible="false" />
+                    <a id="newObjectLink" runat="server" href="#" class="menuLink" visible="false">New</a>&nbsp;
+                    <asp:LoginView ID="SecureContent" runat="server">
+                         <RoleGroups>
+                              <asp:RoleGroup Roles="Administrators">
+                              <ContentTemplate>
+                                        <wvvr:ColumnPicker id="ColumnPicker1" runat="server" Visible="true"></wvvr:ColumnPicker>
+                              </ContentTemplate>
+                              </asp:RoleGroup>
+                         </RoleGroups>
+                    </asp:LoginView>
+                    <%--<asp:DynamicHyperLink <I>D="InsertHyperLink" runat="server" Action="Insert">
+                         <img id="Img1" runat="server" src="~/DynamicData/Content/Images/plus.gif" alt="Insert new item" />New
+                    </asp:DynamicHyperLink>--%>
+                    <a href="#" onclick="javascript:$('#filterRepeater').dialog('open')" class="menuLink">Filter</a>
+               </div>
+               <asp:UpdatePanel ID="EntityControls" runat="server" UpdateMode="Conditional">
+               <ContentTemplate>
+                    <asp:Panel ID="AddedControls" runat="server"></asp:Panel>
+               </ContentTemplate>
+               </asp:UpdatePanel>
+               <div style='clear: both;'></div>
           </div>
           <asp:DynamicDataManager ID="DynamicDataManager1" runat="server" AutoLoadForeignKeys="true">
-               <DataControls>
-                    <asp:DataControlReference ControlID="GridView1" />
-               </DataControls>
+          <DataControls>
+               <asp:DataControlReference ControlID="GridView1" />
+          </DataControls>
           </asp:DynamicDataManager>
           <asp:PlaceHolder ID="QuickAdd" runat="server"></asp:PlaceHolder><br />
           <asp:GridView ID="GridView1" runat="server" DataSourceID="GridDataSource" EnablePersistedSelection="true"
@@ -166,7 +148,7 @@
           <div style="float: right; padding: 10px 10px 0px 0px;">
                <asp:Label ID="RowSummary" runat="server" Text="Undefined"></asp:Label>
           </div>
-          <div style="clear:right; float: right; padding: 10px 10px 0px 0px;">
+          <div style="clear:right; float: right; padding: 10px 10px 10px 0px;">
                <asp:PlaceHolder ID="Projections" runat="server"></asp:PlaceHolder>
           </div>
           <br />
@@ -181,6 +163,7 @@
                     <asp:PlaceHolder ID="RightClickOptions" runat="server"></asp:PlaceHolder>
                </ul>
           </div>
+          <span style='padding: 10px;'><asp:Literal ID="Permissions" runat="server">Shown to: Public</asp:Literal></span>
           <div style='clear: both;'></div>
      </div>
 </ContentTemplate>

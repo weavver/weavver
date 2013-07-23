@@ -1,8 +1,19 @@
 ﻿var pageloading = true; // we use this so the test suite tests don't time out
+//var pageX = 0;
+//var pageY = 0;
+
+function getPseudoGuid() {
+     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+     });
+}
 
 function initializeRequest(sender, args)
 {
-    pageloading = true;
+     pageloading = true;
+     var orderForm = $('#Content_OrderForm');
+     if (orderForm.length > 0)
         OrderFormLoading();
 }
 
@@ -11,6 +22,12 @@ function pageLoaded(sender, args) {
     var orderForm = $('#Content_OrderForm');
     if (orderForm.length > 0)
         OrderFormLoaded();
+}
+function getParameterByName(name) {
+     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+     return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
 var origNoticeText = null;
@@ -86,6 +103,13 @@ $(document).ready(function () {
      prm.add_initializeRequest(initializeRequest);
      prm.add_pageLoaded(pageLoaded);
 });
+
+
+$(document).mousemove(function (e) {
+     document.pageX = e.pageX;
+     document.pageY = e.pageY;
+});
+
 //$(document).ready(function() {
 //     $("#MyTreeDiv A").contextMenu({
 //          menu: 'myMenu'
@@ -123,7 +147,7 @@ function AutoCompleteTextBox_itemSelected(sender, e)
      
      __doPostBack(textBox.name, e.get_value());
 }
-               
+
 function handleEnter(targetBtn, event)
 {
      var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
@@ -203,11 +227,6 @@ var OrderFormLoaded = function ()
 
 
 
-$(document).mousemove(function (e) {
-     document.pageX = e.pageX;
-     document.pageY = e.pageY;
-});
-
 $(document).ready(function () {
 //     $("img").load(function () { $(this).data('status', 'loaded'); })
 //     $("img").error(function () { $(this).data('status', 'error'); })
@@ -222,7 +241,6 @@ $(document).ready(function () {
      function hideURLbar() {
           window.scrollTo(0, 1);
      }
-
 });
 
 
@@ -241,10 +259,15 @@ function showMessage($title, $body, $redirurl)
                     id: "modalBoxOK",
                     click: function () {
                          //$(this).dialog("close");
-                         if ($redirurl)
-                              window.location.replace($redirurl);
-                         else
+                         if ($redirurl) {
+                              if ($redirurl == "refresh")
+                                   location.reload();
+                              else
+                                   window.location.replace($redirurl);
+                         }
+                         else {
                               $(this).dialog("close");
+                         }
                     }
                }
           }

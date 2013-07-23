@@ -25,8 +25,10 @@ public partial class DynamicData_DynamicList : WeavverUserControl
 //-------------------------------------------------------------------------------------------
           protected override void  OnInit(EventArgs e)
           {
- 	          base.OnInit(e);
+               base.OnInit(e);
                table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
+
+               ScriptManager.RegisterStartupScript(UpdatePanel1, typeof(string), "RunScripts", "run();", true);
 
                Controls_ColumnPicker obj = (Controls_ColumnPicker) SecureContent.FindControl("ColumnPicker1");
                if (obj != null)
@@ -53,6 +55,13 @@ public partial class DynamicData_DynamicList : WeavverUserControl
 
                GridDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, BasePage.SelectedOrganization.Id.ToString()));
 
+               //set the default sort
+               if (table.DisplayColumn != null)
+               {
+                    GridDataSource.AutoGenerateOrderByClause = true;
+                    GridDataSource.OrderByParameters.Add(new Parameter(table.DisplayColumn.Name));
+               }
+
                if (Request["ObjectId"] != null)
                     GridDataSource.WhereParameters.Add(new Parameter("ObjectId", DbType.Guid, Request["ObjectId"]));
 
@@ -69,17 +78,51 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                               title += " - " + Request["LedgerType"];
                          }
 
-                         //WeavverMaster.FormTitle = title;
+                         BasePage.WeavverMaster.FormTitle = title;
+                    }
+               }
+
+
+               MethodInfo tableMenu = table.EntityType.GetMethod("GetTableMenu");
+               if (tableMenu != null && tableMenu.IsStatic)
+               {
+                    var x = tableMenu.Invoke(null, null);
+                    if (x != null)
+                    {
+                         List<WeavverMenuItem> items = (List<WeavverMenuItem>)x;
+                         foreach (WeavverMenuItem item in items)
+                         {
+                              if (item.Link.StartsWith("control://"))
+                              {
+                                   string controlPath = item.Link.Substring(10);
+                                   if (File.Exists(Server.MapPath(controlPath)))
+                                   {
+                                        WeavverUserControl customControl = (WeavverUserControl)LoadControl(controlPath);
+                                        //quickAdd.DataSaved += new DataSavedHandler(QuickAdd_DataSaved);
+                                        AvailableActions.Controls.Add(customControl);
+                                   }
+                              }
+                              else
+                              {
+                                   LinkButton webMethod = new LinkButton();
+                                   webMethod.ID = "DynamicMethod_" + item.Name;
+                                   webMethod.Text = item.Name;
+                                   webMethod.CommandName = item.Name;
+                                   webMethod.CssClass = "attachmentLink";
+                                   AvailableActions.Controls.Add(webMethod);
+                              }
+                         }
                     }
                }
 
                if (Request["TransactionId"] != null)
                     GridDataSource.WhereParameters.Add(new Parameter("TransactionId", DbType.Guid, Request["TransactionId"]));
 
+               // TODO: Repurpose this block to add a customizable "TOP panel"
                string quickAddPath = "~/DynamicData/QuickAdd/" + table.EntityType.ToString().Replace("Weavver.Data.", "") + ".ascx";
                if (File.Exists(Server.MapPath(quickAddPath)))
                {
-                    WeavverUserControl quickAdd = (WeavverUserControl) LoadControl(quickAddPath);
+                    WeavverUserControl quickAdd = (WeavverUserControl)LoadControl(quickAddPath);
                     quickAdd.DataSaved += new DataSavedHandler(QuickAdd_DataSaved);
                     QuickAdd.Controls.Add(quickAdd);
                }
@@ -104,6 +147,8 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                          GridQueryExtender.Expressions.Add(order);
                     }
                }
+
+               //newObjectLink.HRef = String.Format("javascript:createPopup('{0}', {1}, {2});", table.Name, 1000, 500);
           }
 //-------------------------------------------------------------------------------------------
           void GridDataSource_Selected(object sender, EntityDataSourceSelectedEventArgs e)
@@ -114,14 +159,14 @@ public partial class DynamicData_DynamicList : WeavverUserControl
 //-------------------------------------------------------------------------------------------
           protected void Page_Load(object sender, EventArgs e)
           {
-               //Title = table.DisplayName;
+               BasePage.WeavverMaster.FormTitle = table.DisplayName;
                //GridDataSource.Include = table.ForeignKeyColumnsNames;
 
                // Disable various options if the table is readonly
                if (table.IsReadOnly)
                {
                     GridView1.Columns[0].Visible = false;
-                    //InsertHyperLink.Visible = false;
+                    newObjectLink.Visible = false;
                     GridView1.EnablePersistedSelection = false;
                }
           }
@@ -196,16 +241,48 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                               url = "/" + table.EntityType.Name + "/Details.aspx?id=" + auditableRow.Id;
 
 
-                         object[] atts = owner.GetType().GetCustomAttributes(typeof(CSSAttribute), true);
+                         DataAccess[] atts = (DataAccess[])owner.GetType().GetCustomAttributes(typeof(DataAccess), true);
+                         foreach (DataAccess da in atts)
+                         {
+                              if (da.Actions == RowAction.Insert)
+                              {
+                                   if (da.HasAnyRole(Roles.GetRolesForUser()))
+                                   {
+                                        //newObjectLink.Visible = da.AllowedRoles.Contains(j)
+                                        newObjectLink.Visible = true;
+                                   }
+                              }
+                         }
+
                          string css = "";
                          if (atts.Count() > 0)
                          {
-                              CSSAttribute css2 = (CSSAttribute) atts[0];
-                              css = css2._CSS;
-                         }
+                              string perms = "";
+                              if (atts[0].AllowedRoles.Count() > 0)
+                              {
+                                   foreach (string role in atts[0].AllowedRoles)
+                                   {
+                                        perms += role + ", ";
+                                   }
+                                   perms = perms.Substring(0, perms.Length - 2);
+                              }
+                              else
+                              {
+                                   perms = "Public";
+                              }
+                              Permissions.Text = "Shown to: " + perms;
+                              var att = (from a in atts
+                                        where a.RowViews == RowView.Details
+                                        select a).FirstOrDefault();
 
-                         if (url != null)
-                              e.Row.Attributes["onClick"] = String.Format("javascript:createPopup(\"" + url + "\", \"" + css + "\");"); // old: "location.href='{0}'", url);
+                              //DataAccess defaultDataProperties = (DataAccess)atts[0];
+
+                              if (url != null)
+                                   e.Row.Attributes["onClick"] = String.Format("javascript:createPopup('{0}', {1}, {2});", url, att.Width, att.Height); // old: "location.href='{0}'", url);
+
+                              string newLink = "javascript:createPopup('/{0}/Details.aspx', {1}, {2});";
+                              newObjectLink.HRef = String.Format(newLink, table.EntityType.Name, att.Width, att.Height);
+                         }
 
                          var columnStyle = owner as IColumnStyle;
                          if (columnStyle != null)

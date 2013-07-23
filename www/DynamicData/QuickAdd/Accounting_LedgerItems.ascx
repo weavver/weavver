@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Accounting_LedgerItems.ascx.cs" Inherits="DynamicData_QuickAdd_Accounting_LedgerItems" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
-<table align="right" cellpadding="2" cellspacing="2" style="background-color: lightyellow; border: solid 1px gray; margin-bottom: 0px; padding-left: 0px; margin-bottom: 10px; padding: 5px;">
+<table align="right" cellpadding="2" cellspacing="0" style="background-color: lightyellow; border: solid 1px gray; margin-bottom: 0px; padding-left: 0px; margin: 5px; padding: 3px;">
 <tr>
      <td>Post At:
           <asp:TextBox ID="LedgerItemPostAt" runat="server" Width="100px"></asp:TextBox>

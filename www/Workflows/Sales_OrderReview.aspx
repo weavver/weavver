@@ -4,12 +4,6 @@
 <%@ Register src="~/Controls/Log In.ascx" tagname="LogIn" tagprefix="wvvr" %>
 <%@ Register src="~/Controls/Register.ascx" tagname="Register" tagprefix="wvvr" %>
 <%@ Register src="~/Controls/BillingMethod.ascx" tagname="BillingMethod" tagprefix="wvvr" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="Head" Runat="Server">
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="NavigationHolder" Runat="Server">
-</asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="Banner" Runat="Server">
-</asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
      <asp:UpdatePanel ID="Update1" runat="server" ChildrenAsTriggers="true">
      <ContentTemplate>
@@ -18,7 +12,7 @@
                <asp:Button id="AddCode" runat="server" Text="Add Code" OnClick="CodeAdd_Click" />
                <cc1:TextBoxWatermarkExtender ID="Watermark1" runat="server" TargetControlID="CouponCode" WatermarkCssClass="watermark" WatermarkText="Discount or gift card code"></cc1:TextBoxWatermarkExtender>
           </div>
-          <asp:DataGrid ID="List" runat="server" Width="100%" AutoGenerateColumns="false" HeaderStyle-BackColor="BurlyWood" BorderColor="LightGray" CellPadding="4">
+          <asp:DataGrid ID="List" runat="server" Width="100%" AutoGenerateColumns="false" HeaderStyle-BackColor="BurlyWood" BorderColor="LightGray" CellPadding="4" BackColor="#FFFFFF">
           <Columns>
                <asp:BoundColumn HeaderText="Id" DataField="Id" Visible="false"></asp:BoundColumn>
                <asp:TemplateColumn HeaderText="Quantity" HeaderStyle-Width="60px" ItemStyle-Width="60px" ItemStyle-HorizontalAlign="Center">
@@ -70,10 +64,10 @@
      </ContentTemplate>
      </asp:UpdatePanel>
      <hr />
-     <div style="float:right; clear:both; margin-bottom: 10px;">
+     <div style="clear:both; margin-bottom: 10px;margin-right: 10px; float: right;">
           <asp:ImageButton ID="btnOrder" runat="server" ImageUrl="~/images/sales/checkout.png" OnClick="Next_Click" ValidationGroup="OrderForm" />
      </div>
-     <div style="width: 700px;">
+     <div style="width: 700px; padding: 10px;">
      <%--<a href="#">sp:CustomValidator ID="Priv" runat="server" Text="*" ValidationGroup="OrderForm" ErrorMessage="*" ToolTip="Agreement is required." ClientValidationFunction="ValidateChecked" OnServerValidate="Privacy_Validate"></asp:CustomValidator>--%>
           <asp:Literal ID="StorePolicy" runat="server"></asp:Literal>
      </div>

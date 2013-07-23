@@ -21,6 +21,7 @@ namespace DynamicData
                IsPublic = true;
                
                WeavverMaster.FixedWidth = false;
+               WeavverMaster.Width = "100%";
                //WeavverMaster.FormTitle = table.DisplayName;
                WeavverMaster.SetToolbarVisibility(true);
           }

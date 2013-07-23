@@ -18,7 +18,10 @@ public partial class System_Debug : SkeletonPage
           //Roles.ApplicationName = "Weavver";
           IsPublic = true;
           Master.FormTitle = "Debug";
+          Master.Width = "100%";
+          Master.MaxWidth = "800px";
           SelectedOrgId.Text = SelectedOrganization.Id.ToString();
+          OrgName.Text = SelectedOrganization.Name;
 
           if (LoggedInUser != null)
           {
@@ -30,7 +33,7 @@ public partial class System_Debug : SkeletonPage
           if (user != null)
           {
                Username.Text = user.UserName; // Membership.Provider.GetType().ToString();
-               Provider.Text = HttpContext.Current.User.Identity.Name; // user.ProviderName;
+               Provider.Text = Membership.Provider.Name;
           }
           InRoles.Text = String.Join(", ", Roles.GetRolesForUser());
 

@@ -27,14 +27,19 @@ namespace DynamicData
 //-------------------------------------------------------------------------------------------
           protected void Page_Init(object sender, EventArgs e)
           {
-               Master.SetChatVisibility(true);
+               IsPublic = true;
+               table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
+               FormView1.SetMetaTable(table);
+          }
+//-------------------------------------------------------------------------------------------
+          protected void Page_Load(object sender, EventArgs e)
+          {
 
-               HtmlControl wc = (HtmlControl)Master.FindControl("ContentDIV");
-               wc.Attributes.CssStyle["padding"] = "0px";
-               wc.Attributes.CssStyle["padding-left"] = "0px";
-               wc.Attributes.CssStyle["background-color"] = "transparent";
-               wc.Attributes.CssStyle["border"] = "none";
-
+               //HtmlControl wc = (HtmlControl)Master.FindControl("ContentDIV");
+               //wc.Attributes.CssStyle["padding"] = "0px";
+               //wc.Attributes.CssStyle["padding-left"] = "0px";
+               //wc.Attributes.CssStyle["background-color"] = "transparent";
+               //wc.Attributes.CssStyle["border"] = "none";
 
                if (Roles.IsUserInRole("Administrators"))
                     AdminLinks.Visible = true;
@@ -43,19 +48,18 @@ namespace DynamicData
                pathBase = pathBase.Substring(0, pathBase.LastIndexOf("/"));
                EditLink.HRef = pathBase + "/Edit.aspx?Id=" + Request["Id"];
 
-               table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
-               FormView1.SetMetaTable(table);
                DetailsDataSource.EntityTypeFilter = table.EntityType.Name;
 
-               Master.FormTitle = "Entry from table " + table.DisplayName;
+               WeavverMaster.SetChatVisibility(true);
+               WeavverMaster.FormTitle = "Entry from table " + table.DisplayName;
+               WeavverMaster.FixedWidth = true;
 
-               IsPublic = true;
                ActivationRequired = false;
                string id = Request["id"];
                if (id != null)
                {
                     Guid idGuid = new Guid(id);
-                    
+
                     using (WeavverEntityContainer data = new WeavverEntityContainer())
                     {
                          item = (from x in data.Logistics_Products
@@ -66,16 +70,13 @@ namespace DynamicData
                          {
                               //Master.FormDescription = description;
                               ItemInquire.HRef = "~/Sales_Leads/Insert.aspx?Source=" + item.Name + " Inquiry";
+                              if (Request["IFrame"] == "true")
+                                   ItemInquire.HRef += "&IFrame=true";
                               InitializeDesign();
                          }
                     }
                }
-
-          }
-//-------------------------------------------------------------------------------------------
-          protected void Page_Load(object sender, EventArgs e)
-          {
-               Title = table.DisplayName;
+               //Title = table.DisplayName;
                DetailsDataSource.Include = table.ForeignKeyColumnsNames;
 
                if (!IsPostBack)
@@ -377,7 +378,10 @@ namespace DynamicData
                     data.Sales_ShoppingCartItems.AddObject(shoppingCartItem);
                     data.SaveChanges();
 
-                    Response.Redirect("~/workflows/sales_orderreview");
+                    string reviewurl = "~/workflows/sales_orderreview";
+                    if (Request["IFrame"] == "true")
+                         reviewurl += "?IFrame=true";
+                    Response.Redirect(reviewurl);
                }
           }
 //-------------------------------------------------------------------------------------------

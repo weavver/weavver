@@ -20,11 +20,11 @@ public partial class WeavverDefault : SkeletonPage
      protected void Page_Init(object sender, EventArgs e)
      {
           Master.SetChatVisibility(true);
-          Master.FindControlR<Control>("HeaderLogo").Visible = false;
-          Master.FindControlR<Control>("NavigationBox").Visible = false;
+          //Master.FindControlR<Control>("HeaderLogo").Visible = false;
+          //Master.FindControlR<Control>("NavigationBox").Visible = false;
           IsPublic = true;
-          HasHeader = !true;
-          Master.Width = "850px";
+          //HasHeader = !true;
+          Master.FixedWidth = false;
 
           RegisterControl regControl = (RegisterControl)LoginView1.FindControl("RegisterUser");
           if (regControl != null)
@@ -46,16 +46,16 @@ public partial class WeavverDefault : SkeletonPage
                var pressrelease = (from x in containers.Marketing_PressReleases
                                    where x.OrganizationId == SelectedOrganization.Id
                                    orderby x.PublishAt descending
-                                   select x).Take(1);
+                                   select x).Take(10);
 
                NewsList.DataSource = pressrelease;
                NewsList.DataBind();
           }
 
-          Logo.Src = GetLogoPath();
+          //Logo.Src = GetLogoPath();
 
-          if (Logo.Src.Contains("mycompany.png"))
-               Logo.Style["max-width"] = "480px";
+          //if (Logo.Src.Contains("mycompany.png"))
+          //     Logo.Style["max-width"] = "480px";
 
           if (Request.Url.Host != "www.weavver.local" &&
               Request.Url.Host != "www.weavver.local" &&
@@ -64,6 +64,10 @@ public partial class WeavverDefault : SkeletonPage
           {
                Notice.InnerHtml = "Weavver&reg; is a framework for building an open and transparent internet company. <a href='#' style='color:white; text-decoration:underline;'>Click here</a> to change this text.";
           }
+
+          WeavverMaster.FixedWidth = true;
+          WeavverMaster.Width = "100%";
+          WeavverMaster.MaxWidth = "960px";
      }
 //-------------------------------------------------------------------------------------------
      void regControl_AccountActivated(object sender, EventArgs e)

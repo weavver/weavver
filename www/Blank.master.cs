@@ -11,6 +11,12 @@ public partial class Blank : MasterPage, WeavverMasterPageInterface
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)
      {
+          string js = "<script type='text/javascript'>var windowId = '{0}'; var parentId = '{1}';</script>";
+          ScriptVars.Text = String.Format(js, Request["WindowId"], Request["ParentId"]);
+
+          string url = Request.Url.ToString().Replace("?IFrame=true&", "?");
+          PageLink.HRef = url;
+          PageLink.HRef = url.Replace("&IFrame=true", "");
      }
 //-------------------------------------------------------------------------------------------
      public string FormTitle
@@ -29,7 +35,11 @@ public partial class Blank : MasterPage, WeavverMasterPageInterface
 //-------------------------------------------------------------------------------------------
      public string FormDescription
      {
-          set { Response.Write(value); }
+          set
+          {
+               Description.Text = value;
+               DescriptionLayer.Visible = (!String.IsNullOrEmpty(Description.Text));
+          }
      }
 //-------------------------------------------------------------------------------------------
      public void ActionsMenuAdd(Weavver.Web.WeavverMenuItem item)
@@ -59,11 +69,34 @@ public partial class Blank : MasterPage, WeavverMasterPageInterface
           }
      }
 //-------------------------------------------------------------------------------------------
-     #region WeavverMasterPageInterface Members
      public void ToolBarMenuAdd(Weavver.Web.WeavverMenuItem item)
      {
-          throw new NotImplementedException();
      }
-     #endregion
+//-------------------------------------------------------------------------------------------
+     public void SetChatVisibility(bool visible)
+     {
+     }
+//-------------------------------------------------------------------------------------------
+     public string Width
+     {
+          get
+          {
+               return Width;
+          }
+          set
+          {
+          }
+     }
+//-------------------------------------------------------------------------------------------
+     public string MaxWidth
+     {
+          get
+          {
+               return null;
+          }
+          set
+          {
+          }
+     }
 //-------------------------------------------------------------------------------------------
 }

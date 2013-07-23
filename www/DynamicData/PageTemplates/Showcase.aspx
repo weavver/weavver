@@ -50,7 +50,7 @@
                <div style="text-align: center; width: 100%;">
                <asp:Repeater ID="List" runat="server" DataSourceID="GridDataSource">
                <ItemTemplate>
-                    <div style="display: inline-block; padding: 5px; width: 210px; text-decoration: none; height:270px; overflow: auto; vertical-align: top; margin-bottom: 20px; background-color: #FAFAFA; border: solid 2px #e4e4e4;-moz-border-radius: 6px;-webkit-border-radius:6px;border-radius: 6px;">
+                    <div style="display: inline-block; margin-right: 5px; padding: 5px; width: 210px; text-decoration: none; height:270px; overflow: auto; vertical-align: top; margin-bottom: 10px; background-color: #FAFAFA; border: solid 2px #e4e4e4;-moz-border-radius: 6px;-webkit-border-radius:6px;border-radius: 6px;">
                          <a id="<%# DataBinder.Eval(Container.DataItem, "Id") %>" style="text-decoration: none; font-size: 14pt; margin-bottom: 10px; color: blue;" href="<%# GetURL(Container.DataItem) %>">
                               <%# DataBinder.Eval(Container.DataItem, "Name") %>
                               <div style="padding-top: 10px;padding-right: 5px; text-align: center;"><%# GetLogo(new Guid(DataBinder.Eval(Container.DataItem, "Id").ToString())) %></div>
@@ -67,7 +67,7 @@
             <asp:EntityDataSource ID="GridDataSource" runat="server" />
         </ContentTemplate>
      </asp:UpdatePanel>
-     <div id="specials" style="clear:both;">
+     <div id="specials" style="clear:both; margin: 10px;">
           <asp:Literal ID="StoreSpecials" runat="server"></asp:Literal>
           <a href="~/Sales_ResellerProgram">Reseller Program</a>
      </div>

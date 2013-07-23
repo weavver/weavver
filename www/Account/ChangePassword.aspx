@@ -9,6 +9,8 @@
           <asp:ChangePassword ID="ChangePassword1" runat="server" ContinueDestinationPageUrl="/account/" ChangePasswordTitleText="" CancelDestinationPageUrl="/Account/Default.aspx"></asp:ChangePassword>
      </div>
      <br />
-     Notice: If you change your password and are using one of our SIP or XMPP services please remember
-     to update your respective clients or you will experience a loss of connectivity.     
+     <div style="padding: 10px;">
+          Notice: If you change your password and are using one of our SIP or XMPP services please remember
+          to update your respective clients or you will experience a loss of connectivity.
+     </div>
 </asp:Content>

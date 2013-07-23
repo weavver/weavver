@@ -11,11 +11,17 @@ public partial class Register : SkeletonPage
 //-------------------------------------------------------------------------------------------
      protected void Page_Init(object sender, EventArgs e)
      {
-          WeavverMaster.FormTitle = "Register for your Weavver Account";
-          WeavverMaster.FixedWidth = true;
-          WeavverMaster.SetToolbarVisibility(false);
+          IsPublic = true;
           ActivationRequired = false;
-
+          WeavverMaster.FormTitle = "Register for your Weavver Account";
+          WeavverMaster.FixedWidth = false;
+          WeavverMaster.Width = "100%";
+          WeavverMaster.MaxWidth = "800px";
+          WeavverMaster.SetToolbarVisibility(false);
+     }
+//-------------------------------------------------------------------------------------------
+     protected void Page_Load(object sender, EventArgs e)
+     {
           if (Request["checkingout"] == "true")
           {
                RegisterInfo.Visible = false;
@@ -29,11 +35,6 @@ public partial class Register : SkeletonPage
                     regControl.AccountActivated += new EventHandler(regControl_AccountActivated);
                }
           }
-     }
-//-------------------------------------------------------------------------------------------
-     protected void Page_Load(object sender, EventArgs e)
-     {
-          IsPublic = true;
           MembershipUser mu = Membership.GetUser();
           if (HttpContext.Current.User.Identity.IsAuthenticated && LoggedInUser.Activated)
           {

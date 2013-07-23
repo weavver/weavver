@@ -7,14 +7,16 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="Content" Runat="Server">
      <asp:UpdatePanel ID="UpdatePanel1" runat="server">
      <ContentTemplate>
-          <div style="clear: both;">&nbsp;</div>
           <asp:ValidationSummary ID="ValidationSummary1" runat="server" EnableClientScript="true" HeaderText="List of validation errors" CssClass="DDValidator" />
           <asp:DynamicValidator runat="server" ID="DetailsViewValidator" ControlToValidate="FormView1" Display="None" CssClass="DDValidator" />
           <asp:FormView runat="server" ID="FormView1" DataSourceID="DetailsDataSource" DefaultMode="Edit" OnItemCommand="FormView1_ItemCommand" OnItemUpdated="FormView1_ItemUpdated" RenderOuterTable="false">
                <EditItemTemplate>
-                    <div style="float:right;">
-                         <asp:LinkButton ID="LinkButton1" runat="server" CommandName="Update" Text="Save" /> | 
-                         <asp:LinkButton ID="LinkButton2" runat="server" CommandName="Cancel" Text="Cancel" CausesValidation="false" />
+                    <div style='background-color: #59b8ee; padding: 5px; vertical-align: middle; margin-bottom: 5px;'>
+                         <div style="float:right; color: #FFFFFF">
+                              <asp:LinkButton ID="LinkButton1" runat="server" CommandName="Update" Text="Save" style="color: #FFFFFF" /> | 
+                              <asp:LinkButton ID="LinkButton2" runat="server" CommandName="Cancel" Text="Cancel" CausesValidation="false" style="color: #FFFFFF" />
+                         </div>
+                         <div style="clear: both;"></div>
                     </div>
                     <br />
                     <br />

@@ -20,43 +20,10 @@ namespace DynamicData
      public partial class Showcase : SkeletonPage
      {
           protected MetaTable table;
-          Guid orgId;
 //-------------------------------------------------------------------------------------------
           protected void Page_Init(object sender, EventArgs e)
           {
-               table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
-
-               Master.SetChatVisibility(true);
-               Master.FixedWidth = true;
-               Master.Width = "930px";
-
-               //GridView1.SetMetaTable(table, table.GetColumnValuesFromRoute(Context));
-               //GridView1.RowCreated += new GridViewRowEventHandler(GridView1_RowCreated);
-               GridDataSource.EntityTypeFilter = table.EntityType.Name;
-
-               // HACKED TOGETHER FOR NOW
-               if (User.Identity.IsAuthenticated)
-               {
-                    orgId = SelectedOrganization.Id;
-                    GridDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, orgId.ToString()));
-               }
-               else
-               {
-                    orgId = new Guid("0baae579-dbd8-488d-9e51-dd4dd6079e95");
-                    GridDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, orgId.ToString()));
-               }
-               
-               if (table.EntityType.FullName.Contains("Logistics_Products"))
-                    GridDataSource.WhereParameters.Add(new Parameter("IsPublic", DbType.Boolean, "True"));
-
-               GridDataSource.OrderBy = "it.Name";
-
-               //Master.FixedWidth = false;
-               Master.FormTitle = table.DisplayName;
                IsPublic = true;
-
-               //Master.FormTitle = "Professional Services";
-               Master.FormDescription = "If you need help or would like to discuss a custom project please call us at +1-714-872-5920.";
           }
 //-------------------------------------------------------------------------------------------
           void GridView1_RowCreated(object sender, GridViewRowEventArgs e)
@@ -82,7 +49,29 @@ namespace DynamicData
 //-------------------------------------------------------------------------------------------
           protected void Page_Load(object sender, EventArgs e)
           {
-               Title = table.DisplayName;
+               table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
+
+               WeavverMaster.SetChatVisibility(true);
+               WeavverMaster.FixedWidth = false;
+               WeavverMaster.Width = "100%";
+               WeavverMaster.FormTitle = table.DisplayName;
+               WeavverMaster.FormDescription = "If you need help or would like to discuss a custom project please call us at +1-714-872-5920.";
+
+               //GridView1.SetMetaTable(table, table.GetColumnValuesFromRoute(Context));
+               //GridView1.RowCreated += new GridViewRowEventHandler(GridView1_RowCreated);
+               GridDataSource.EntityTypeFilter = table.EntityType.Name;
+
+               if (table.EntityType.FullName.Contains("Logistics_Products"))
+               {
+                    if (LoggedInUser == null || LoggedInUser.OrganizationId != SelectedOrganization.OrganizationId)
+                    {
+                         GridDataSource.WhereParameters.Add(new Parameter("IsPublic", DbType.Boolean, "True"));
+                    }
+               }
+
+               GridDataSource.OrderBy = "it.Name";
+
+               WeavverMaster.FormTitle = table.DisplayName;
                GridDataSource.Include = table.ForeignKeyColumnsNames;
 
                using (WeavverEntityContainer data = new WeavverEntityContainer())
@@ -117,10 +106,10 @@ namespace DynamicData
 //-------------------------------------------------------------------------------------------
           public string GetLogo(Guid id)
           {
-               string logopath = Server.MapPath("~/uploads/" + orgId.ToString() + "/products/" + id.ToString() + ".png");
+               string logopath = Server.MapPath("~/uploads/" + SelectedOrganization.OrganizationId.ToString() + "/products/" + id.ToString() + ".png");
                if (File.Exists(logopath))
                {
-                    return "<img border='0' src='~/uploads/" + orgId.ToString() + "/products/" + id.ToString() + ".png' />";
+                    return String.Format("<img border='0' src='{0}.png' />", System.Web.VirtualPathUtility.ToAbsolute("~/uploads/" + SelectedOrganization.OrganizationId.ToString() + "/products/" + id.ToString()));
                }
                return "";
           }
@@ -135,6 +124,8 @@ namespace DynamicData
                catch { }
                if (String.IsNullOrEmpty(x))
                     x = "StoreItem.aspx?Id=" + DataBinder.Eval(dataItem, "Id").ToString();
+               if (Request["IFrame"] == "true")
+                    x += "&IFrame=true";
                return x;
           }
 //-------------------------------------------------------------------------------------------

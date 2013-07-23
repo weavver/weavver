@@ -9,6 +9,8 @@
           <WizardSteps>
                <asp:TemplatedWizardStep ID="UserInfoStep" runat="server">
                <ContentTemplate>
+                    Get a free Weavver account and enable your business within minutes.<br />
+                    <br />
                     <div style="float:left; max-width: 175px">
                          <cc1:TextBoxWatermarkExtender ID="FirstNameWatermark" runat="server" TargetControlID="FirstName" WatermarkText="first name" WatermarkCssClass="watermark"></cc1:TextBoxWatermarkExtender>
                          <asp:TextBox ID="FirstName" runat="server" Visible="true" ValidationGroup="RegisterInfo"></asp:TextBox>
@@ -114,7 +116,7 @@
           Recaptcha.create('6LdVur8SAAAAAOqDC6K--CIsFtLhzJkvCTsIb5mb', 'captchadiv',
               {
                    tabindex: 1,
-                   theme: "red",
+                   theme: "clean",
                    callback: Recaptcha.focus_response_field
               }
             );

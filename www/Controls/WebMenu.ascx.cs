@@ -39,9 +39,10 @@ public partial class WeavverWebMenu : WeavverUserControl
                return;
           }
 
-          //Guid adminGuid = BasePage.LoggedInUser.OrganizationId;
           menuDepartments.Name = "Departments";
           menuDepartments.Link = "#";
+
+          //Guid adminGuid = BasePage.LoggedInUser.OrganizationId;
 
           menuReports.Name = "Reports";
           menuReports.Link = "#";
@@ -61,35 +62,31 @@ public partial class WeavverWebMenu : WeavverUserControl
           menuViews.Name = "Views";
           menuViews.Link = "#";
 
-          if (HttpContext.Current.User.Identity.IsAuthenticated)
-          {
-               AddMenuItem(menuMy, "Receivables", String.Format("/Accounting_LedgerItems/List.aspx?AccountId={0}&LedgerType={1}", BasePage.LoggedInUser.OrganizationId.ToString(), LedgerType.Receivable.ToString()));
-               AddMenuItem(menuMy, "Payables", String.Format("/Accounting_LedgerItems/List.aspx?AccountId={0}&LedgerType={1}", BasePage.LoggedInUser.OrganizationId.ToString(), LedgerType.Payable.ToString()));
-               AddMenuItem(menuMy, "Tasks", String.Format("/HR_Tasks/List.aspx?AssignedTo={0}", BasePage.LoggedInUser.Id.ToString(), (int)LedgerType.Payable));
-          }
-
           if (Roles.IsUserInRole("Accountants"))
           {
-               WeavverMenuItem accountingReports = AddMenuItem(menuReports, "Accounting", "#");
-
-               AddMenuItem(accountingReports, "Financial Overview", "/Reports/Accounting_FinancialOverview");
+               //AddMenuItem(accountingReports, "Financial Overview", "/Reports/Accounting_FinancialOverview");
                //AddMenuItem(accountingReports, "Expenses", "/reports/accounting_expenses");
-               AddMenuItem(accountingReports, "Account Balances", "~/Accounting_AccountBalances/List.aspx");
 
                //WeavverMenuItem humanresourcesReports = AddMenuItem(menuReports, "Human Resources", null);
                //AddMenuItem(humanresourcesReports, "Labor Overview", "/Reports/HR_LaborOverview");
 
-               AddLinkToTable(menuTools, "Accounting", "Enter Payment", "/workflows/accounting_enterpayment");
-               AddLinkToTable(menuTools, "Accounting", "Import Data", "/Imports/Accounting_LedgerItems");
+               // AddLinkToTable(menuTools, "Accounting", "Enter Payment", "/workflows/accounting_enterpayment");
           }
 
           if (Global.DefaultModel == null || Global.DefaultModel.Tables.Count <= 0)
                return;
 
-          var tables = Global.DefaultModel.Tables.OrderBy(x => x.Name).ToList();
+          string[] roles = Roles.GetRolesForUser();
+          if (roles.Length == 0)
+               roles = new string[] { "Guest" };
+
+          var tables = Global.DefaultModel.Tables.OrderBy(x => x.Name).ToList().Where(x => x.Scaffold == true);
           foreach (MetaTable table in tables)
           {
-               var tableViews = table.Attributes.OfType<DataAccess>();
+               var tableViews = table.Attributes.OfType<DataAccess>()
+                    .Where(x => x.TableViews == TableView.List &&
+                                x.HasAnyRole(roles));
+
                var tableCSS = table.Attributes.OfType<CSSAttribute>();
 
                 // if no permission exist then do not add to navigation
@@ -97,41 +94,46 @@ public partial class WeavverWebMenu : WeavverUserControl
                     continue;
 
                foreach (var view in tableViews)
-                {
-                    string[] roles = Roles.GetRolesForUser();
-                    if (roles.Length == 0)
-                         roles = new string[] { "Guest" };
+               {
+                    string tableNameFQN = table.Name;
+                    string dept = (tableNameFQN.IndexOf("_") > 1) ? tableNameFQN.Substring(0, tableNameFQN.IndexOf("_")) : tableNameFQN;
+                    string tableName = table.DisplayName; // tableNameFQN.Substring(tableNameFQN.IndexOf("_") + 1);
 
-                    if (view.HasAnyRole(roles))
+                    WeavverMenuItem wmi;
+                    if (view.TableViews.ToString().Contains("Showcase"))
                     {
-                         string tableNameFQN = table.Name;
-                         string dept = (tableNameFQN.IndexOf("_") > 1) ? tableNameFQN.Substring(0, tableNameFQN.IndexOf("_")) : tableNameFQN;
-                         string tableName = table.DisplayName; // tableNameFQN.Substring(tableNameFQN.IndexOf("_") + 1);
-
-                         if (view.Views.ToString().Contains("Showcase"))
-                         {
-                              AddLinkToTable(menuDepartments, dept, tableName, "~/" + tableNameFQN + "/Showcase.aspx");
-                         }
-                         else
-                         {
-                              if (view.Views.ToString().Contains("List"))
-                              {
-                                   WeavverMenuItem wmi = AddLinkToTable(menuDepartments, dept, tableName, "~/" + tableNameFQN + "/List.aspx");
-                                   if (view.Actions.ToString().Contains("Insert"))
-                                   {
-                                        //string newname = (tableName.EndsWith("s")) ? tableName.Substring(0, tableName.Length - 1) : tableName;
-                                        //AddLinkToTable(menuNew, dept, newname, "~/" + tableNameFQN + "/" + tp.Actions.ToString() + ".aspx");
-                                   
-                                   }
-                              }
-                         }
+                         wmi = AddLinkToTable(menuDepartments, dept, tableName, "~/" + tableNameFQN + "/Showcase.aspx");
                     }
+                    else if (view.TableViews.ToString().Contains("List"))
+                    {
+                         wmi = AddLinkToTable(menuDepartments,
+                                                       dept,
+                                                       tableName, "~/" + tableNameFQN + "/List.aspx",
+                                                       Width: view.Width,
+                                                       Height: view.Height);
+
+
+                         var insertPermissions = table.Attributes.OfType<DataAccess>()
+                              .Where(x => x.Actions == RowAction.Insert
+                                          && x.HasAnyRole(roles));
+                         if (insertPermissions.Count() > 0)
+                         {
+                              //string newname = (tableName.EndsWith("s")) ? tableName.Substring(0, tableName.Length - 1) : tableName;
+                              //AddLinkToTable(menuNew, dept, newname, "~/" + tableNameFQN + "/" + tp.Actions.ToString() + ".aspx");
+                                   
+                         }
+
+
+                         wmi.Title = "Accessible by: " + String.Join(", ", view.AllowedRoles);
+                    }
+
+
                }
           }
 
           if (Roles.IsUserInRole("Administrators"))
           {
-               AddLinkToTable(menuDepartments, "System", "Roles", "/System/Roles", 500, 700);
+               AddLinkToTable(menuDepartments, "System", "Roles", "/System/Roles", 650, 500);
                AddLinkToTable(menuDepartments, "System", "Settings", "/System_Settings/Edit.aspx?id=" + BasePage.LoggedInUser.OrganizationId.ToString(), 500, 500, false);
           }
      }
@@ -150,56 +152,76 @@ public partial class WeavverWebMenu : WeavverUserControl
      {
           MenuItems.Text = "";
           //if (menuDepartments.Items.Count > 0)
-               MenuItems.Text += RenderMenu(menuDepartments);
-          if (menuNew.Items.Count > 0)
-               MenuItems.Text += RenderMenu(menuNew);
           if (menuMy.Items.Count > 0)
-               MenuItems.Text += RenderMenu(menuMy);
+               MenuItems.Text += RenderMenuLink(menuMy);
+          foreach (WeavverMenuItem menu in menuDepartments.Items)
+          {
+               MenuItems.Text += RenderMenuLink(menu);
+          }
           if (menuActions.Items.Count > 0)
-               MenuItems.Text += RenderMenu(menuActions);
+               MenuItems.Text += RenderMenuLink(menuActions);
           if (menuViews.Items.Count > 0)
-               MenuItems.Text += RenderMenu(menuViews);
+               MenuItems.Text += RenderMenuLink(menuViews);
           if (menuTools.Items.Count > 0)
-               MenuItems.Text += RenderMenu(menuTools);
+               MenuItems.Text += RenderMenuLink(menuTools);
           if (menuReports.Items.Count > 0)
-               MenuItems.Text += RenderMenu(menuReports);
+               MenuItems.Text += RenderMenuLink(menuReports);
           MenuItems.Text += "";
+     }
+//-------------------------------------------------------------------------------------------
+     private string RenderMenuLink(WeavverMenuItem menuItem)
+     {
+          string output = "<a class='menuLink' href='#'>" + menuItem.Name;
+          output += "</a>&nbsp;";
+          if (menuItem.Items.Count > 0)
+          {
+               output += "<ul class='menu'>";
+               foreach (WeavverMenuItem subItem in menuItem.Items)
+               {
+                    output += RenderMenu(subItem);
+               }
+               output += "</ul>";
+          }
+          return output;
      }
 //-------------------------------------------------------------------------------------------
      private string RenderMenu(WeavverMenuItem menuItem)
      {
           string output = "";
-          if (menuItem.Items.Count == 0)
+          output += "<li class='menuOption'>";
+          if (menuItem.CanAdd)
           {
-               //string url = String.Format("createPopup('" + menuItem.Link + "','{0}','{1}');", menuItem.Width.ToString(), menuItem.Height.ToString());
-               // output += "<div class='menuOption' onclick=\"window.location='" + menuItem.Link + "'\">";
-               output += "<div class='menuOption' onclick=\"" + menuItem.Link + "\">";
-
-               if (menuItem.CanAdd)
-               {
-                    output += "<div class='addMenu' style='float:right;margin-right: 5px;'><a href='#' style=''>Add</a>"; //<img src='/images/new.png' />
-                    output += "</div>";
-               }
-
-               output += menuItem.Name + "</div>";
-          }
-          else
-          {
-               output += "<div class='menuRoot'>";
-               output += menuItem.Name;
+               output += "<div style='float:right;margin-right: 5px;'><a href='#' style=''>Add</a>"; //<img src='/images/new.png' />
                output += "</div>";
-               output += "<div class='menuChildren'>";
+          }
+          output += String.Format("<a href=\"javascript:{0}\" title='{1}'>", menuItem.Link, menuItem.Title) + menuItem.Name + "</a><div style='clear: both;'></div>";
+          if (menuItem.Items.Count > 0)
+          {
+               output += "<ul class='menu'>";
                foreach (WeavverMenuItem subItem in menuItem.Items)
                {
                     output += RenderMenu(subItem);
                }
-               output += "</div>";
+               output += "</ul>";
           }
+          output += "</li>";
           return output;
      }
 //-------------------------------------------------------------------------------------------
-     public WeavverMenuItem AddLinkToTable(WeavverMenuItem rootMenu, string DepartmentMenu, string ItemName, string ItemLink, int width = 500, int height = 500, bool canadd = false)
+     public WeavverMenuItem AddLinkToTable(WeavverMenuItem rootMenu, string DepartmentMenu, string ItemName, string ItemLink, int Width = 940, int Height = 500, bool canadd = false)
      {
+          string formattedName = "";
+          // add space at new Upper case letter
+          for (int i = 0; i < DepartmentMenu.Length; i++)
+          {
+               if (DepartmentMenu[i].ToString() == DepartmentMenu[i].ToString().ToUpper()
+                    && DepartmentMenu.Length > i + 1 && // ignore acronyms
+                    DepartmentMenu[i + 1].ToString() != DepartmentMenu[i + 1].ToString().ToUpper())
+                    formattedName += " ";
+               formattedName += DepartmentMenu[i];
+          }
+          DepartmentMenu = formattedName;
+
           WeavverMenuItem parentMenu = null;
           foreach (WeavverMenuItem deptChild in rootMenu.Items)
           {
@@ -215,13 +237,14 @@ public partial class WeavverWebMenu : WeavverUserControl
                newDept.Name = DepartmentMenu;
                newDept.Link = "#";
                newDept.parent = rootMenu;
+               newDept.Title = "test";
                parentMenu = newDept;
                rootMenu.Items.Add(newDept);
           }
 
           WeavverMenuItem item = new WeavverMenuItem();
           item.Name = ItemName;
-          item.Link = "createPopup('" + ItemLink + "', '" + width + "', '" + height + "')";
+          item.Link = "createPopup('" + ItemLink + "', '" + Width + "', '" + Height + "')";
           item.parent = parentMenu;
           parentMenu.Items.Add(item);
           return item;

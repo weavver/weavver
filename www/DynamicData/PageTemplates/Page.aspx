@@ -1,7 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" CodeFile="Page.aspx.cs" Inherits="DynamicData.Page" %>
 <%@ MasterType VirtualPath="~/MasterPage.master" %>
-<%--<asp:Content ID="headContent" ContentPlaceHolderID="head" Runat="Server">
-</asp:Content>--%>
 <asp:Content ID="Content1" ContentPlaceHolderID="Content" Runat="Server">
     <asp:DynamicDataManager ID="DynamicDataManager1" runat="server" AutoLoadForeignKeys="true">
         <DataControls>
@@ -10,7 +8,9 @@
     </asp:DynamicDataManager>
      <asp:FormView runat="server" ID="FormView1" DataSourceID="DetailsDataSource" RenderOuterTable="false">
           <ItemTemplate>
-               <%# DataBinder.Eval(Container.DataItem, "Page")%>
+               <div style="padding: 10px;">
+                    <%# DataBinder.Eval(Container.DataItem, "Page")%>
+               </div>
           </ItemTemplate>
           <EmptyDataTemplate>
           <div class="DDNoItem">No such item.</div>

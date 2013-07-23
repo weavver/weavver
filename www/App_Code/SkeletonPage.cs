@@ -38,7 +38,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
      private bool _IsPublic = false;
      private bool _HasHeader = true;
      public bool ActivationRequired = true;
-     private System_User _LoggedInUser = null;
+     private System_Users _LoggedInUser = null;
      public string BaseURL { get { return Request.Url.Scheme + "://" + Request.Url.Host; } }
 //-------------------------------------------------------------------------------------------
      public Sales_ShoppingCarts ShoppingCart
@@ -96,7 +96,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
           }
      }
 //-------------------------------------------------------------------------------------------
-     public System_User LoggedInUser
+     public System_Users LoggedInUser
      {
           get
           {
@@ -165,6 +165,10 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
      void SkeletonPage_PreInit(object sender, EventArgs e)
      {
           //Roles.ApplicationName = SelectedOrganization.Id.ToString();
+          if (Request["IFrame"] == "true")
+          {
+               MasterPageFile = "~/Blank.master";
+          }
      }
 //-------------------------------------------------------------------------------------------
      public Control FindControlRecursive(Control Root, string Id)
@@ -397,10 +401,13 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                     {
                          if (ret.FilePath != null && File.Exists(ret.FilePath))
                          {
+                              Response.Clear();
                               Response.ContentType = ret.FileMimeType;
                               Response.AddHeader("Content-Disposition", String.Format("attachment;filename=\"{0}\"", ret.FileName));
                               Response.WriteFile(ret.FilePath);
                               Response.End();
+                              
+                              return;
                          }
 
                          string url = "";
@@ -411,16 +418,22 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
 
                               if (ret.RedirectRequest)
                               {
-                                   redirectUrl = ret.RedirectURL;
-                                   Page.RegisterClientScriptBlock("redictUrl", "<script type='text/javascript'>createPopup('" + VirtualPathUtility.ToAbsolute(ret.RedirectURL) + "');</script>");
+                                   ScriptManager.RegisterStartupScript(Page,
+                                                                       this.GetType(),
+                                                                       "redirectUrl",
+                                                                       String.Format("<script type='text/javascript'>createPopup('{0}', {1}, {2});</script>", redirectUrl, ret.RedirectWidth, ret.RedirectHeight),
+                                                                       false);
                               }
 
-                              
+                              if (ret.RefreshData)
+                              {
+                                   redirectUrl = "refresh";
+                              }
                          }
                          else if (ret.RedirectRequest)
                          {
-                              //Response.Redirect(ret.RedirectURL);
-                              Page.RegisterClientScriptBlock("redictUrl", "<script type='text/javascript'>createPopup('" + VirtualPathUtility.ToAbsolute(ret.RedirectURL) + "');</script>");
+                              string js = String.Format("<script type='text/javascript'>createPopup('{0}', {1}, {2});</script>", VirtualPathUtility.ToAbsolute(ret.RedirectURL), ret.RedirectWidth, ret.RedirectHeight);
+                              ScriptManager.RegisterStartupScript(Page, this.GetType(), "redirectUrl", js, false);
                          }
                     }
                }
@@ -437,16 +450,18 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                messageBody = "You are not authorized to access this command.";
           }
 
-          string escapedTitle = messageTitle.Replace("'", @"\'");
-          string escapedBody = messageBody.Replace("'", @"\'");
-          string escapedURL = (redirectUrl == null) ? "null" : "'" + redirectUrl + "'";
+          if (!String.IsNullOrEmpty(messageTitle))
+          {
+               string escapedTitle = messageTitle.Replace("'", @"\'");
+               string escapedBody = messageBody.Replace("'", @"\'");
+               string escapedURL = (String.IsNullOrEmpty(redirectUrl)) ? "null" : (redirectUrl == "refresh") ? "'refresh'" : "'" + VirtualPathUtility.ToAbsolute(redirectUrl) + "'";
 
-          string popUpJS = "<script type='text/javascript'>"
-                          + String.Format("showMessage('{0}', '{1}', {2});\r\n", escapedTitle, escapedBody, escapedURL)
-                          + "</script>";
+               string popUpJS = "<script type='text/javascript'>"
+                               + String.Format("showMessage('{0}', '{1}', {2});\r\n", escapedTitle, escapedBody, escapedURL)
+                               + "</script>";
 
-
-          Page.RegisterStartupScript("notification", popUpJS);
+               ScriptManager.RegisterStartupScript(Page, this.GetType(), "notification", popUpJS, false);
+          }
      }
 //-------------------------------------------------------------------------------------------
      protected override void OnError(EventArgs e)

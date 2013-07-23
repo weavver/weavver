@@ -10,7 +10,7 @@
           });
      }
 </script>
-<a onclick='show()' href='#'>Choose Columns</a>
+<a onclick='show()' href='#' class='menuLink'>Choose Columns</a>
 <div id="ColumnPanel" style="background-color: #f0f0f0; width: 275px; display: none;">
      <div style="padding: 10x;">
           <div style="max-height: 300px; overflow-y: scroll; margin-top: 10px; margin-bottom: 10px; border: solid 1px black; background-color: #FFFFFF;">
