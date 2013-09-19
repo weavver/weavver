@@ -45,13 +45,14 @@
                     <asp:LinkButton ID="SaveEdit" runat="server" Text="Save" OnClick="Save_Link" ForeColor="White" CssClass="menuLink" Visible="false"></asp:LinkButton>
                     <asp:LinkButton ID="BeginEdit" runat="server" Text="Edit" OnClick="Edit_Link" ForeColor="White" CssClass="menuLink"></asp:LinkButton>
                     <asp:LinkButton ID="CancelEdit" runat="server" Text="Cancel" OnClick="Cancel_Link" CausesValidation="false" Visible="false" CssClass="menuLink"></asp:LinkButton>
-                    <asp:LinkButton ID="DeleteItem" runat="server" OnClick="Delete_Link" Text="Delete" OnClientClick='return confirm("Are you sure you want to delete this item?");' CssClass="menuLink" />
-                    <asp:DynamicHyperLink ID="BackToTheList" runat="server" Action="List" Text="Back to the List" CssClass="menuLink" />
+                    <asp:LinkButton ID="DeleteItem" runat="server" OnClick="Delete_Link" Text="Delete" OnClientClick='return confirm("Are you sure you want to delete this item?");' CssClass="menuLink" CausesValidation="false" Visible="false" />
+                    <asp:DynamicHyperLink ID="BackToTheList" runat="server" Action="List" Text="Back to the List" CssClass="menuLink" Visible="false" />
                </div>
                <%--<h2><asp:Literal ID="ItemTitle" runat="server"></asp:Literal></h2>--%>
                <div style="clear:both;"></div>
           </div>
-          <asp:FormView runat="server" ID="FormView1" DataSourceID="DetailsDataSource" OnItemCommand="FormView1_ItemCommand" OnItemDeleting="FormView1_ItemDeleting" OnItemDeleted="FormView1_ItemDeleted" RenderOuterTable="false">
+          <asp:FormView runat="server" ID="FormView1" DataSourceID="DetailsDataSource" OnItemDeleting="FormView1_ItemDeleting" OnItemDeleted="FormView1_ItemDeleted" 
+RenderOuterTable="false" OnModeChanged="FormView1_ModeChanged" OnDataBound="FormView1_DataBound">
           <InsertItemTemplate>
                <asp:DynamicEntity ID="DynamicEntity2" runat="server" Mode="Insert" /><br />
                <div style="float:right; clear:right; margin-right: 20px;">
@@ -61,10 +62,12 @@
           <ItemTemplate>
                <div style='visibility: hidden;'><%# SetTitle(Container.DataItem) %></div>
                <asp:DynamicEntity ID="DynamicEntity1" runat="server" />
+               <span style='padding: 10px;'><asp:Literal ID="Permissions" runat="server">Accessible to: Public</asp:Literal></span>
           </ItemTemplate>
           <EditItemTemplate>
                <asp:DynamicEntity ID="DynamicEntity1" runat="server" Mode="Edit" />
                <br />
+               <span style='padding: 10px;'><asp:Literal ID="Permissions" runat="server">Accessible to: Public</asp:Literal></span>
                <div id="dialog" style="font-size: 12pt;">
                </div>
           </EditItemTemplate>

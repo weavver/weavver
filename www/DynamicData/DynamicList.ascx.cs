@@ -105,10 +105,11 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                               else
                               {
                                    LinkButton webMethod = new LinkButton();
-                                   webMethod.ID = "DynamicMethod_" + item.Name;
+                                   webMethod.ID = "DynamicWebMethod_" + item.Name;
                                    webMethod.Text = item.Name;
                                    webMethod.CommandName = item.Name;
                                    webMethod.CssClass = "attachmentLink";
+                                   webMethod.Click += new EventHandler(DynamicWebMethod_Click);
                                    AvailableActions.Controls.Add(webMethod);
                               }
                          }
@@ -149,6 +150,11 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                }
 
                //newObjectLink.HRef = String.Format("javascript:createPopup('{0}', {1}, {2});", table.Name, 1000, 500);
+          }
+//-------------------------------------------------------------------------------------------
+          public void DynamicWebMethod_Click(object sender, EventArgs e)
+          {
+               Response.Redirect("http://yahoo.com");
           }
 //-------------------------------------------------------------------------------------------
           void GridDataSource_Selected(object sender, EntityDataSourceSelectedEventArgs e)
@@ -240,48 +246,26 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                          if (auditableRow != null)
                               url = "/" + table.EntityType.Name + "/Details.aspx?id=" + auditableRow.Id;
 
+                         string[] userRoles = BasePage.GetUserRoles(); // cache database trips
 
-                         DataAccess[] atts = (DataAccess[])owner.GetType().GetCustomAttributes(typeof(DataAccess), true);
-                         foreach (DataAccess da in atts)
+                         DataAccess insertPermissions = ((EntityObject)owner).InsertPermissions();
+                         if (insertPermissions.HasAnyRole(userRoles))
                          {
-                              if (da.Actions == RowAction.Insert)
-                              {
-                                   if (da.HasAnyRole(Roles.GetRolesForUser()))
-                                   {
-                                        //newObjectLink.Visible = da.AllowedRoles.Contains(j)
-                                        newObjectLink.Visible = true;
-                                   }
-                              }
-                         }
-
-                         string css = "";
-                         if (atts.Count() > 0)
-                         {
-                              string perms = "";
-                              if (atts[0].AllowedRoles.Count() > 0)
-                              {
-                                   foreach (string role in atts[0].AllowedRoles)
-                                   {
-                                        perms += role + ", ";
-                                   }
-                                   perms = perms.Substring(0, perms.Length - 2);
-                              }
-                              else
-                              {
-                                   perms = "Public";
-                              }
-                              Permissions.Text = "Shown to: " + perms;
-                              var att = (from a in atts
-                                        where a.RowViews == RowView.Details
-                                        select a).FirstOrDefault();
-
-                              //DataAccess defaultDataProperties = (DataAccess)atts[0];
-
-                              if (url != null)
-                                   e.Row.Attributes["onClick"] = String.Format("javascript:createPopup('{0}', {1}, {2});", url, att.Width, att.Height); // old: "location.href='{0}'", url);
+                              newObjectLink.Visible = true;
+                              newObjectLink.Title = "Accessible to: " + String.Join(", ", insertPermissions.AllowedRoles);
 
                               string newLink = "javascript:createPopup('/{0}/Details.aspx', {1}, {2});";
-                              newObjectLink.HRef = String.Format(newLink, table.EntityType.Name, att.Width, att.Height);
+                              newObjectLink.HRef = String.Format(newLink, table.EntityType.Name, insertPermissions.Width, insertPermissions.Height);
+                         }
+
+                         DataAccess readPermissions = ((EntityObject)owner).ReadPermissions();
+                         if (readPermissions.HasMatchingRole(userRoles))
+                         {
+                              //perms = "Public";
+                              Permissions.Text = "Accessible to: " + String.Join(", ", readPermissions.AllowedRoles);
+
+                              if (url != null)
+                                   e.Row.Attributes["onClick"] = String.Format("javascript:createPopup('{0}', {1}, {2});", url, insertPermissions.Width, insertPermissions.Height); // old: "location.href='{0}'", url);
                          }
 
                          var columnStyle = owner as IColumnStyle;

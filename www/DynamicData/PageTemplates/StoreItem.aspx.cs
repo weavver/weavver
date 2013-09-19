@@ -46,13 +46,14 @@ namespace DynamicData
 
                string pathBase = Request.Url.PathAndQuery;
                pathBase = pathBase.Substring(0, pathBase.LastIndexOf("/"));
-               EditLink.HRef = pathBase + "/Edit.aspx?Id=" + Request["Id"];
+               string url = pathBase + "/Edit.aspx?Id=" + Request["Id"];
 
                DetailsDataSource.EntityTypeFilter = table.EntityType.Name;
 
                WeavverMaster.SetChatVisibility(true);
                WeavverMaster.FormTitle = "Entry from table " + table.DisplayName;
                WeavverMaster.FixedWidth = true;
+               WeavverMaster.FormDescription = "";
 
                ActivationRequired = false;
                string id = Request["id"];
@@ -69,9 +70,23 @@ namespace DynamicData
                          if (item != null)
                          {
                               //Master.FormDescription = description;
-                              ItemInquire.HRef = "~/Sales_Leads/Insert.aspx?Source=" + item.Name + " Inquiry";
+                              url = item.Name + " Inquiry";
                               if (Request["IFrame"] == "true")
-                                   ItemInquire.HRef += "&IFrame=true";
+                                   url += "&IFrame=true";
+
+                              using (WeavverEntityContainer data2 = new WeavverEntityContainer())
+                              {
+                                   var formDescription  = (from x in data2.CMS_Pages
+                                                           where x.Title == "Sales/Header" &&
+                                                         x.OrganizationId == SelectedOrganization.Id
+                                                         select x).FirstOrDefault();
+
+                                   if (formDescription != null)
+                                   {
+                                        WeavverMaster.FormDescription = formDescription.Page.Replace("{ITEM_NAME}", url);
+                                   }
+                              }
+
                               InitializeDesign();
                          }
                     }

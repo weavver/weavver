@@ -117,6 +117,14 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
           }
      }
 //-------------------------------------------------------------------------------------------
+     public string[] GetUserRoles()
+     {
+          string[] roles = Roles.GetRolesForUser();
+          Array.Resize(ref roles, roles.Length + 1);
+          roles[roles.Length - 1] = "Guest";
+          return roles;
+     }
+//-------------------------------------------------------------------------------------------
      public Logistics_Organizations SelectedOrganization
      {
           get
@@ -364,7 +372,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
           return "~/images/mycompany.png";
      }
 //-------------------------------------------------------------------------------------------
-     protected void DynamicWebMethod_Click(object sender, EventArgs e)
+     public void DynamicWebMethod_Click(object sender, EventArgs e)
      {
           FormView DataForm = Page.FindControlR<FormView>("FormView1");
           if (DataForm.DataItem == null)
@@ -375,9 +383,10 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
           MethodInfo method = obj.GetType().GetMethod(lButton.CommandName);
           var methodDefinition = (DynamicDataWebMethod) method.GetCustomAttributes(true)[0]; // typeof(DynamicDataWebMethod));
           bool authorized = false;
+          string[] userRoles = GetUserRoles();
           foreach (string role in methodDefinition.Roles)
           {
-               if (Roles.IsUserInRole(role))
+               if (userRoles.Contains(role, StringComparer.OrdinalIgnoreCase))
                {
                     authorized = true;
                     break;

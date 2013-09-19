@@ -1,11 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" CodeFile="StoreItem.aspx.cs" Inherits="DynamicData.StoreItem" %>
 <%@ MasterType VirtualPath="~/MasterPage.master" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="Content" Runat="Server">
-     <div class="banner" style="text-align: left; float: right; clear: right; padding:8px; margin-bottom: 5px;">
-          If you need help or would like to discuss your project please call us at +1-714-872-5920 or
-          <a id="ItemInquire" runat="server" href="#" style="color: blue; text-decoration: underline;">inquire online</a>.
-     </div>
-     <div style="clear: both;"></div>
      <div id='storeitemcontent'>
           <ul>
                <li><a href="#tabs-1"><asp:Label ID="PageName" runat="server" Text="General Information"></asp:Label></a></li>

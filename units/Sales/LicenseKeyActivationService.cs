@@ -170,7 +170,7 @@ namespace Weavver.Testing.Sales
                doc.LoadXml(xml);
 
                var rsaKey = new RSACryptoServiceProvider();
-               rsaKey.FromXmlString(File.ReadAllText("C:\\public.key"));
+               rsaKey.FromXmlString(File.ReadAllText(Helper.GetAppSetting("sales_licensekeys_public")));
                bool isNotTamperedWith = VerifyXml(doc, rsaKey);
                Assert.IsTrue(isNotTamperedWith, "The XML was tampered with or the signature does not match.");
 

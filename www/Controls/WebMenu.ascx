@@ -192,9 +192,12 @@
 
           // navigate to the frame
           if (url.match(/\?/))
-               url = url + '&IFrame=true&WindowId=' + windowId + '&ParentId=' + myId;
+               url = url + '&IFrame=true&WindowId=' + windowId;
           else
-               url = url + '?IFrame=true&WindowId=' + windowId + '&ParentId=' + myId;
+               url = url + '?IFrame=true&WindowId=' + windowId;
+          if (myId)
+               url = url + '&ParentId=' + myId;
+
           $('iframe', newPopup).attr('src', url);
 
           newPopup.dialog({

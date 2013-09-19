@@ -62,12 +62,15 @@ public partial class WeavverDefault : SkeletonPage
               Request.Url.Host != "www.weavver.com" &&
               Request.Url.Host != "weavver.com")
           {
-               Notice.InnerHtml = "Weavver&reg; is a framework for building an open and transparent internet company. <a href='#' style='color:white; text-decoration:underline;'>Click here</a> to change this text.";
+               WeavverMaster.FormDescription = "Weavver&reg; is a framework for building an open and transparent internet company. <a href='#' style='color:white; text-decoration:underline;'>Click here</a> to change this text.";
           }
-
-          WeavverMaster.FixedWidth = true;
+          else
+          {
+               WeavverMaster.FormDescription = "Weavver&reg; is a free business management platform built on <a href=\"~/source/\" style=\"text-decoration: underline;\">open source</a> principles.  <a href='~/products/weavver/'>[learn more]</a>";
+          //WeavverMaster.FixedWidth = true;
+          //WeavverMaster.MaxWidth = "960px";
+          }
           WeavverMaster.Width = "100%";
-          WeavverMaster.MaxWidth = "960px";
      }
 //-------------------------------------------------------------------------------------------
      void regControl_AccountActivated(object sender, EventArgs e)

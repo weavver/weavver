@@ -8,7 +8,8 @@ body
      font-size: 11pt;
      font-family: Cambria,Georgia,Myriad;
      /*background-color: #d5d5d5;*/
-     background-color: #6f6f6f;
+     background-color: #3b3b3b;
+     padding-bottom: 45px;
 }
 
 .ui-widget
@@ -244,6 +245,11 @@ li
 .clear { /* generic container (i.e. div) for floating buttons */
     overflow: hidden;
     width: 100%;
+}
+
+.ui-widget
+{
+     font-family: Cambria;
 }
 
 a.button {

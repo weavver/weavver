@@ -134,7 +134,7 @@ public partial class WeavverWebMenu : WeavverUserControl
           if (Roles.IsUserInRole("Administrators"))
           {
                AddLinkToTable(menuDepartments, "System", "Roles", "/System/Roles", 650, 500);
-               AddLinkToTable(menuDepartments, "System", "Settings", "/System_Settings/Edit.aspx?id=" + BasePage.LoggedInUser.OrganizationId.ToString(), 500, 500, false);
+               AddLinkToTable(menuDepartments, "System", "Settings", "/Logistics_Organizations/Details.aspx?id=" + BasePage.LoggedInUser.OrganizationId.ToString(), 500, 500, false);
           }
      }
 //-------------------------------------------------------------------------------------------

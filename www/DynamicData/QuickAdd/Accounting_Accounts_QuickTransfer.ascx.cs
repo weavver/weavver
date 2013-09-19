@@ -13,6 +13,9 @@ public partial class DynamicData_QuickAdd_Accounting_Accounts_QuickTransfer : We
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)
      {
+          Visible = false;
+          return;
+
           if (!Roles.IsUserInRole("Administrators") ||
               !Roles.IsUserInRole("Accountants"))
           {

@@ -12,6 +12,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using System.Text;
+using System.Configuration;
 
 public partial class Exports_Sales_LicenseKeys : SkeletonPage
 {
@@ -87,7 +88,10 @@ public partial class Exports_Sales_LicenseKeys : SkeletonPage
           // Signing XML Documents: http://msdn.microsoft.com/en-us/library/ms229745.aspx
 
           var rsaKey = new RSACryptoServiceProvider();
-          rsaKey.FromXmlString(System.IO.File.ReadAllText("C:\\private.key"));
+          string sales_licensekeys_privatekey = ConfigurationManager.AppSettings["sales_licensekeys_privatekey"];
+          if (!File.Exists(sales_licensekeys_privatekey))
+               throw new Exception("The private signing key is missing");
+          rsaKey.FromXmlString(System.IO.File.ReadAllText(sales_licensekeys_privatekey));
 
           XmlDocument doc = new XmlDocument();
           doc.PreserveWhitespace = true;

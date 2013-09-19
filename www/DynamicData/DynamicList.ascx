@@ -163,7 +163,7 @@
                     <asp:PlaceHolder ID="RightClickOptions" runat="server"></asp:PlaceHolder>
                </ul>
           </div>
-          <span style='padding: 10px;'><asp:Literal ID="Permissions" runat="server">Shown to: Public</asp:Literal></span>
+          <span style='padding: 10px;'><asp:Literal ID="Permissions" runat="server">Accessible to: Public</asp:Literal></span>
           <div style='clear: both;'></div>
      </div>
 </ContentTemplate>
