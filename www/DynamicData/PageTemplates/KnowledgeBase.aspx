@@ -97,6 +97,9 @@
           <asp:QueryExtender TargetControlID="TreeDataSource" runat="server">
                <asp:ControlFilterExpression ControlID="Navigation" />
           </asp:QueryExtender>
+          <asp:Panel ID="EmptyData" runat="server" Visible="false">
+               <div style="padding: 25px;">There are no articles yet.</div>
+          </asp:Panel>
      </ContentTemplate>
      </asp:UpdatePanel>
 </asp:Content>

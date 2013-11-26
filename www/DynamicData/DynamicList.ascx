@@ -110,7 +110,7 @@
                          <RoleGroups>
                               <asp:RoleGroup Roles="Administrators">
                               <ContentTemplate>
-                                        <wvvr:ColumnPicker id="ColumnPicker1" runat="server" Visible="true"></wvvr:ColumnPicker>
+                                   <wvvr:ColumnPicker id="ColumnPicker1" runat="server" Visible="true"></wvvr:ColumnPicker>
                               </ContentTemplate>
                               </asp:RoleGroup>
                          </RoleGroups>
@@ -132,7 +132,7 @@
                <asp:DataControlReference ControlID="GridView1" />
           </DataControls>
           </asp:DynamicDataManager>
-          <asp:PlaceHolder ID="QuickAdd" runat="server"></asp:PlaceHolder><br />
+          <asp:PlaceHolder ID="QuickAdd" runat="server"></asp:PlaceHolder>
           <asp:GridView ID="GridView1" runat="server" DataSourceID="GridDataSource" EnablePersistedSelection="true"
                AllowPaging="True" AllowSorting="True" CssClass="DDGridView" BorderColor="#d3d3d3"
                RowStyle-CssClass="td" HeaderStyle-CssClass="th" CellPadding="3" PageSize="50">

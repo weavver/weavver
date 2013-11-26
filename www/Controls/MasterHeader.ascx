@@ -4,12 +4,13 @@
 <%@ Register src="~/Controls/Log In.ascx" tagname="LogIn" tagprefix="wvvr" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
-     <div id="topbar" style='background-color: #59b8ee; border-bottom: 0px solid black; z-index: 100000; clear: both;'>
-          <wvvr:WebMenu ID="Toolbar" runat="server" />
-          <div style='clear: both;'></div>
-     </div>
-<div style="margin: auto;">
-     <div id="SignInArea" runat="server" class="sign-in" style="color: #000000;">
+<div id="topbar" style='background-color: #59b8ee; border-bottom: 0px solid black; z-index: 100000; clear: both;'>
+     <wvvr:WebMenu ID="Toolbar" runat="server" />
+     <div style='clear: both;'></div>
+</div>
+<div style="margin: auto; text-align: right;">
+     <asp:DropDownList ID="OrganizationsList" runat="server" AutoPostBack="true" Width="150px" Visible="true" CssClass="orgList"></asp:DropDownList>&nbsp;&nbsp;
+     <div id="SignInArea" runat="server" class="sign-in" style="color: #000000;display:inline-block;">
           <asp:UpdatePanel ID="RegisterLogInPanel" runat="server">
           <ContentTemplate>
                <asp:LoginView ID="LoginView1" runat="server">
@@ -26,8 +27,6 @@
                </asp:LoginView>
           </ContentTemplate>
           </asp:UpdatePanel>
-          <asp:DropDownList ID="OrganizationsList" runat="server" AutoPostBack="true" Width="150px" Visible="false">
-          </asp:DropDownList>
      </div>
      <div style="float:right; height:10px;width: auto; color: Black; padding-bottom: 5px;">
           <div style='clear: both;'></div>

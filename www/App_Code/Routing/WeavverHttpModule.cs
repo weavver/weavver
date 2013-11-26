@@ -18,58 +18,76 @@ namespace Weavver.Web
 {
      public class WeavverHttpModule : IHttpModule, IRequiresSessionState
      {
-          Guid selectedOrganizationId = Guid.Empty;
 //-------------------------------------------------------------------------------------------
           public void Init(HttpApplication application)
           {
-               application.BeginRequest += new EventHandler(Application_BeginRequest);
-               application.AcquireRequestState += new EventHandler(application_AcquireRequestState);
-               //this.app.EndRequest += new EventHandler(Application_EndRequest);
+               application.PostAcquireRequestState += new EventHandler(Application_PostAcquireRequestState);
+               application.PostMapRequestHandler += new EventHandler(Application_PostMapRequestHandler);
           }
 //-------------------------------------------------------------------------------------------
-          void application_AcquireRequestState(object sender, EventArgs e)
+          void Application_PostMapRequestHandler(object source, EventArgs e)
           {
-               HttpApplication app = (HttpApplication)sender;
-               if (HttpContext.Current.Session != null)
+               HttpApplication app = (HttpApplication)source;
+
+               if (app.Context.Handler is IReadOnlySessionState || app.Context.Handler is IRequiresSessionState)
                {
-                    if (HttpContext.Current.Items["SelectedOrganizationId"] != null)
-                    {
-                         HttpContext.Current.Session["test"] = "hello";
-                         HttpContext.Current.Session["SelectedOrganizationId"] = HttpContext.Current.Items["SelectedOrganizationId"];
-                    }
+                    // no need to replace the current handler
+                    return;
                }
+
+               // swap the current handler
+               app.Context.Handler = new MyHttpHandler(app.Context.Handler);
           }
 //-------------------------------------------------------------------------------------------
-          public void Application_BeginRequest(object sender, EventArgs e)
+          void Application_PostAcquireRequestState(object source, EventArgs e)
           {
-               HttpApplication app = (HttpApplication)sender;
+               HttpApplication app = (HttpApplication)source;
+
+               MyHttpHandler resourceHttpHandler = HttpContext.Current.Handler as MyHttpHandler;
+
+               if (resourceHttpHandler != null)
+               {
+                    // set the original handler back
+                    HttpContext.Current.Handler = resourceHttpHandler.OriginalHandler;
+               }
+
+               // -> at this point session state should be available
 
                string url = app.Context.Request.Url.ToString(); // url: http://www.weavver.local/default.aspx
                string path = app.Context.Request.Path; // path: /default.aspx OR /org/default/company/services/hosting/
                string exten = System.IO.Path.GetExtension(app.Context.Request.Path);
                string newpath = path;
-               string query = "";
                string org = "default";
-               if (url.Contains(".asmx/")) // protects autocomplete
+
+               // protects autocomplete
+               if (url.Contains(".asmx/"))
                     return;
 
+               string query = "";
                if (HttpContext.Current.Request.QueryString.HasKeys())
                {
                     query += HttpUtility.UrlDecode(HttpContext.Current.Request.QueryString.ToString());
                }
-               if (ConfigurationManager.AppSettings["install_mode"] == "false")
-               {
-                    using (WeavverEntityContainer data = new WeavverEntityContainer())
-                    {
-                         var dynamicUrl = (from x in data.System_URLs
-                                           where x.Path == path
-                                           select x).FirstOrDefault();
 
-                         if (dynamicUrl != null)
+               // checks for dynamic urls (pages/content that only lives in the database)
+               if (app.Context.Session != null && app.Context.Session["SelectedOrganizationId"] != null)
+               {
+                    Guid selectedOrganizationId = (Guid)app.Context.Session["SelectedOrganizationId"];
+                    if (ConfigurationManager.AppSettings["install_mode"] == "false")
+                    {
+                         using (WeavverEntityContainer data = new WeavverEntityContainer())
                          {
-                              query = "Id=" + dynamicUrl.ObjectId.ToString();
-                              HttpContext.Current.RewritePath("/" + dynamicUrl.TableName + "/" + dynamicUrl.PageTemplate + ".aspx", null, query, false);
-                              return;
+                              var dynamicUrl = (from x in data.System_URLs
+                                                where x.Path == path &&
+                                                     x.OrganizationId == selectedOrganizationId
+                                                select x).FirstOrDefault();
+
+                              if (dynamicUrl != null)
+                              {
+                                   query = "Id=" + dynamicUrl.ObjectId.ToString();
+                                   HttpContext.Current.RewritePath("/" + dynamicUrl.TableName + "/" + dynamicUrl.PageTemplate + ".aspx", null, query, false);
+                                   return;
+                              }
                          }
                     }
                }
@@ -113,22 +131,53 @@ namespace Weavver.Web
                          Weavver.Utilities.ErrorHandling.SendError(new Exception(logmsg));
                     }
 
+                    string filePath = HttpContext.Current.Server.MapPath(newpath);
+                    if (!System.IO.File.Exists(filePath))
+                         newpath = "/System/HTTP404.aspx";
+
                     HttpContext.Current.RewritePath(newpath, null, query, false);
                }
-          }
-//-------------------------------------------------------------------------------------------
-          void app_EndRequest(object sender, EventArgs e)
-          {
-               //send_message_chat message = new send_message_chat();
-               //message.from = "weavver.com";
-               //message.body = "WeavverHttpModule: EndRequest: " + HttpContext.Current.Items["vanityurl"];
-               //message.to = System.Configuration.ConfigurationManager.AppSettings.Get("admin_address");
-               //ejabberdRPC rpc = new ejabberdRPC();
-               //rpc.SendMessageChat(message);
+
+               Debug.Assert(app.Session != null, "it did not work :(");
           }
 //-------------------------------------------------------------------------------------------
           public void Dispose()
           {
+
+          }
+//-------------------------------------------------------------------------------------------
+          //void app_EndRequest(object sender, EventArgs e)
+          //{
+//               //send_message_chat message = new send_message_chat();
+//               //message.from = "weavver.com";
+//               //message.body = "WeavverHttpModule: EndRequest: " + HttpContext.Current.Items["vanityurl"];
+//               //message.to = System.Configuration.ConfigurationManager.AppSettings.Get("admin_address");
+//               //ejabberdRPC rpc = new ejabberdRPC();
+//               //rpc.SendMessageChat(message);
+//          }
+////-------------------------------------------------------------------------------------------
+          // from: http://stackoverflow.com/questions/276355/can-i-access-session-state-from-an-httpmodule/7400727
+          // a temp handler used to force the SessionStateModule to load session state
+          public class MyHttpHandler : IHttpHandler, IRequiresSessionState
+          {
+               internal readonly IHttpHandler OriginalHandler;
+
+               public MyHttpHandler(IHttpHandler originalHandler)
+               {
+                    OriginalHandler = originalHandler;
+               }
+
+               public void ProcessRequest(HttpContext context)
+               {
+                    // do not worry, ProcessRequest() will not be called, but let's be safe
+                    throw new InvalidOperationException("MyHttpHandler cannot process requests.");
+               }
+
+               public bool IsReusable
+               {
+                    // IsReusable must be set to false since class has a member!
+                    get { return false; }
+               }
           }
 //-------------------------------------------------------------------------------------------
      }

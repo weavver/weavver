@@ -8,7 +8,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">
      <div style="text-align: center;">
           <br />
-          <img style="margin-bottom: 10px; border: outset 1px lightgrey; width: 100%; max-width: 550px;" alt="The photography of Michael Magoski." src="/images/art/burningman.png" />
+          <img id="Logo" runat="server" style="margin-bottom: 10px; border: outset 1px lightgrey; width: 100%; max-width: 550px;" alt="The photography of Michael Magoski." src="/images/art/burningman.png" />
           <asp:LoginView ID="LoginView1" runat="server" Visible="false">
           <AnonymousTemplate>
                <div style="width: 100%; max-width: 350px; display:inline-block; vertical-align: top;margin-bottom: 10px;">
@@ -19,7 +19,7 @@
           <div style="margin-bottom: 10px; display: inline-block; max-width: 350px; text-align:left;padding: 0px; vertical-align: top; min-width: 30px;">
                &nbsp;
           </div>
-          <div style="width: 100%; margin-bottom: 10px; display: inline-block; max-width: 350px; text-align:left;border: 1px solid lightgrey; padding: 0px; vertical-align: top">
+          <div style="width: 100%; margin-bottom: 10px; display: inline-block; max-width: 350px; text-align:left;border: 0px solid lightgrey; padding: 0px; vertical-align: top">
                <asp:ListView ID="NewsList" runat="server" AllowPaging="True" AllowSorting="True" EnableViewState="False" PageSize="1">
                <ItemTemplate>
                     <div title="<%# Eval("PublishAt") %>" style="padding-top: 5px; cursor: pointer" onclick="window.location = '~/Marketing_PressReleases/PressRoll.aspx'">
@@ -41,7 +41,7 @@
                          <span ID="itemPlaceholder" runat="server" />
                     </div>
                     <div style='text-align: right; margin-right: 5px;'>
-                         <a href='~/marketing_pressreleases/pressroll'>view all</a>
+                         <a href='~/Marketing_PressReleases/Details.aspx?Id=31d5a275-e44a-478a-87ef-f67c8a70f09c'>view all</a>
                     </div>
                </LayoutTemplate>
                </asp:ListView>

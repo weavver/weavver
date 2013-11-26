@@ -134,7 +134,7 @@ public partial class Install_Default : SkeletonPage
                data.Logistics_Organizations.AddObject(org);
                data.SaveChanges();
 
-               Weavver.Data.System_User user = new Weavver.Data.System_User();
+               Weavver.Data.System_Users user = new Weavver.Data.System_Users();
                user.Id = orgId;
                user.OrganizationId = org.Id; // THIS IS OVERRIDDEN ANYWAY BY AUDITUTILITY AS A SECURITY PRECAUTION
                user.FirstName = "Enlightened";

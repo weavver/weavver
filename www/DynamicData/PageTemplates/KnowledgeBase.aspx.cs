@@ -29,6 +29,8 @@ namespace DynamicData
                Master.Width = "100%";
                table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
 
+               TreeDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, SelectedOrganization.Id.ToString()));
+
                if (!IsPostBack)
                {
                     DoDataBind();
@@ -37,9 +39,6 @@ namespace DynamicData
                FormView1.SetMetaTable(table);
                //GridDataSource.EntityTypeFilter = table.EntityType.Name;
                TreeDataSource.EntityTypeFilter = table.EntityType.Name;
-
-
-               TreeDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, SelectedOrganization.OrganizationId.ToString()));
                
                //TreeDataSource.WhereParameters.Add(new Parameter("Parent", DbType.Guid, SelectedOrganization.OrganizationId.ToString()));
 
@@ -47,6 +46,9 @@ namespace DynamicData
                //Master.FixedWidth = false;
 
                IsPublic = true;
+
+               if (Navigation.Nodes.Count == 0)
+                    EmptyData.Visible = true;
 
                //GridView1.RowCreated += new GridViewRowEventHandler(GridView1_RowCreated);
           }
@@ -66,21 +68,24 @@ namespace DynamicData
                {
                     var rootItems = from article in data.KnowledgeBase
                                     where article.ParentId.HasValue == false
+                                             && article.OrganizationId == SelectedOrganization.Id
                                     select article;
 
                     if (Request["ParentId"] != null)
                     {
                          Guid parentId = new Guid(Request["ParentId"]);
-                         rootItems =  rootItems.Where(x => x.Id == parentId);
+                         rootItems = rootItems.Where(x => x.Id == parentId && x.OrganizationId == SelectedOrganization.Id);
 
                          //rootItems = from x in rootItems
                          //            where x.ParentId == parentId
                          //            select x;
                     }
 
-                    var rootItems2 = (from article in rootItems
-                                 orderby article.Position, article.Title
-                                 select article);
+                    var rootItems2 = (
+                              from article in rootItems
+                              where article.OrganizationId == SelectedOrganization.Id
+                              orderby article.Position, article.Title
+                              select article);
 
                     PopulateTree(data, null, rootItems2);
 
@@ -134,6 +139,7 @@ namespace DynamicData
                     //{
                          var childItems = from childArticles in data.KnowledgeBase
                                           where childArticles.ParentId == article.Id
+                                             && article.OrganizationId == SelectedOrganization.Id
                                           orderby childArticles.Position, childArticles.Title
                                           select childArticles;
 

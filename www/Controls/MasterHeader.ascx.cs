@@ -45,6 +45,8 @@ public partial class Controls_MasterHeader : WeavverUserControl
           }
 
 
+          // Projects.Visible = (BasePage.LoggedInUser != null && BasePage.LoggedInUser.OrganizationId == new Guid("0baae579-dbd8-488d-9e51-dd4dd6079e95"));
+
 //          if (BasePage != null)
 //          {
 //               HeaderLogo.Src = BasePage.GetLogoPath();
@@ -75,21 +77,42 @@ public partial class Controls_MasterHeader : WeavverUserControl
 //-------------------------------------------------------------------------------------------
      public void UpdatePage()
      {
+          // hide it in case the user is not logged in
           OrganizationsList.Visible = false;
-          if (BasePage != null && BasePage.SelectedOrganization != null)
+          if (BasePage != null && BasePage.SelectedOrganization != null && !Request.Path.ToLower().EndsWith("/account/logout.aspx"))
           {
                // User is Logged In
-               if (BasePage.LoggedInUser != null
-                    // && BasePage.LoggedInUser.Id == new Guid("6bb552e9-debb-40d3-a5a9-60329aedeaac")
-                    && !Request.Path.ToLower().EndsWith("/account/logout.aspx"))
+               if (BasePage.LoggedInUser != null)
                {
-                    Guid masterOrganizationId = BasePage.SelectedOrganization.OrganizationId;
-                    AddOrganizationListChoice(masterOrganizationId);
-
-                    if (!IsPostBack && BasePage.LoggedInUser.OrganizationId != BasePage.SelectedOrganization.OrganizationId)
+                    string defaultOrgId = System.Configuration.ConfigurationManager.AppSettings["default_organizationid"];
+                    Guid orgId = Guid.Empty;
+                    if (Guid.TryParse(defaultOrgId, out orgId))
                     {
-                         AddOrganizationListChoice(BasePage.SelectedOrganization.Id);
-                         OrganizationsList.SelectedValue = BasePage.SelectedOrganization.Id.ToString();
+                         AddOrganizationListChoice(orgId);
+                    }
+
+                    if (BasePage.LoggedInUser.OrganizationId != orgId)
+                    {
+                         AddOrganizationListChoice(BasePage.LoggedInUser.OrganizationId);
+                         OrganizationsList.SelectedValue = BasePage.LoggedInUser.OrganizationId.ToString();
+                    }
+
+                    if (OrganizationsList.Items.Count > 1)
+                    {
+                         OrganizationsList.Visible = true;
+
+                         foreach (ListItem x in OrganizationsList.Items)
+                         {
+                              x.Selected = false;
+                         }
+                         foreach (ListItem x in OrganizationsList.Items)
+                         {
+                              if (x.Value == BasePage.SelectedOrganization.Id.ToString())
+                              {
+                                   x.Selected = true;
+                                   break;
+                              }
+                         }
                     }
                }
           }
@@ -104,7 +127,6 @@ public partial class Controls_MasterHeader : WeavverUserControl
                           select x).First();
 
                OrganizationsList.Items.Add(new ListItem(org.Name, org.Id.ToString()));
-
           }
      }
 //-------------------------------------------------------------------------------------------
@@ -112,44 +134,24 @@ public partial class Controls_MasterHeader : WeavverUserControl
      {
           using (WeavverEntityContainer data = new WeavverEntityContainer())
           {
+               string selectedOrgId = OrganizationsList.SelectedValue;
                var org = (from x in data.Logistics_Organizations
-                              where x.Id == new Guid(OrganizationsList.SelectedValue)
+                              where x.Id == new Guid(selectedOrgId)
                               select x).First();
 
-               BasePage.SelectedOrganization = org;
-               Response.Redirect("~/");
-          }
-     }
-//-------------------------------------------------------------------------------------------
-     protected void Organizations_ItemSelected(string eventArgument)
-     {
-          // Response.Write("organization selected: " + eventArgument);
-          Guid selectedOrgId = new Guid(eventArgument);
-          if (BasePage.LoggedInUser.Id == new Guid("6bb552e9-debb-40d3-a5a9-60329aedeaac"))
-          {
-               using (WeavverEntityContainer data = new WeavverEntityContainer())
+               if (org == null)
                {
-                    var org = (from x in data.Logistics_Organizations
-                                   where x.Id == selectedOrgId
-                                   select x).First();
+                    Response.Redirect("~/");
+               }
+               else
+               {
+                    Session["SelectedOrganizationId"] = selectedOrgId;
+                    BasePage.SelectedOrganization = org;
 
-                    if (org == null)
-                    {
-                         Response.Redirect("~/company/logistics/organization?id=" + org.Id.ToString());
-                    }
-                    else
-                    {
-                         Session["SelectedOrganizationId"] = eventArgument;
-                         BasePage.SelectedOrganization = org;
-                         Response.Redirect(Request.Url.ToString(), true);
-                    }
+                    //string url = Request.Url.Scheme + "://" + Request.Url.Authority + "/" + Request.Url.PathAndQuery;
+                    Response.Redirect(Request.Url.AbsoluteUri, true);
                }
           }
-     }
-//-------------------------------------------------------------------------------------------
-     protected void OrganizationEdit_Click(object sender, EventArgs e)
-     {
-          Response.Redirect("/company/logistics/organization?id=" + BasePage.SelectedOrganization.Id.ToString());
      }
 //-------------------------------------------------------------------------------------------
 }

@@ -351,13 +351,10 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
 
      }
 //-------------------------------------------------------------------------------------------
-     public string GetLogoPath()
+     public string GetHomeLogoPath()
      {
           if (SelectedOrganization != null)
           {
-               if (SelectedOrganization.Id == new Guid("0baae579-dbd8-488d-9e51-dd4dd6079e95"))
-                    return "/images/logo.png";
-
                string filename = SelectedOrganization.Id.ToString();
                if (File.Exists(Server.MapPath("~/uploads/" + filename + ".png")))
                {
@@ -370,6 +367,23 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                //Response.Write(filename);
           }
           return "~/images/mycompany.png";
+     }
+//-------------------------------------------------------------------------------------------
+     public string GetPageContent(string contentId)
+     {
+          using (WeavverEntityContainer data = new WeavverEntityContainer())
+          {
+               var content = (from x in data.CMS_Pages
+                                   where x.Title == contentId &&
+                                   x.OrganizationId == SelectedOrganization.Id
+                                   select x).FirstOrDefault();
+
+               if (content != null)
+               {
+                    return content.Page;
+               }
+          }
+          return "";
      }
 //-------------------------------------------------------------------------------------------
      public void DynamicWebMethod_Click(object sender, EventArgs e)

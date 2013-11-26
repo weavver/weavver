@@ -7,5 +7,7 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="Banner" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
-     Sorry! The page could not be found, moved, or you don't have access to it!
+     <div style="padding: 25px;">
+          Sorry! The page could not be found, moved, or you don't have access to it!
+     </div>
 </asp:Content>

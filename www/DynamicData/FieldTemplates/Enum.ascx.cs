@@ -5,6 +5,8 @@ using System.Web.DynamicData;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Reflection;
+using System.ComponentModel;
 
 namespace DynamicData
 {
@@ -17,8 +19,24 @@ namespace DynamicData
                get
                {
                     string value = base.FieldValueString;
+                    string description = value;
                     if (ContainerType == ContainerType.List)
                     {
+                         var enumDataType = Column.GetEnumType();
+                         var values = Enum.GetValues(enumDataType);
+                         foreach (var value2 in values)
+                         {
+                              if (value2.ToString() == value)
+                              {
+                                   FieldInfo fi = value2.GetType().GetField(value2.ToString());
+
+                                   DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                                   if (attributes.Length > 0)
+                                        return attributes[0].Description;
+                                   break;
+                              }
+                         }
+
                          if (value != null && value.Length > MAX_DISPLAYLENGTH_IN_LIST)
                          {
                               value = value.Substring(0, MAX_DISPLAYLENGTH_IN_LIST - 3) + "...";

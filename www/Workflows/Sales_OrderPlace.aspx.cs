@@ -149,7 +149,7 @@ public partial class Sales_Order_Place : SkeletonPage
                     //   DatabaseHelper.Link(newOrder, billingAddress);
                     //   newOrder.BillingAddress = billingAddress;
 
-                    Sales_Order newOrder = new Sales_Order();
+                    Sales_Orders newOrder = new Sales_Orders();
                     newOrder.Id = Guid.NewGuid();
                     newOrder.OrganizationId = SelectedOrganization.Id;
                     if (LoggedInUser != null)
@@ -172,7 +172,7 @@ public partial class Sales_Order_Place : SkeletonPage
                     newOrder.BillingContactPhoneExt = BillingContact.PhoneExtension.Text;
                     newOrder.BillingContactAddress = billingAddress.Id;
                     newOrder.Notes = SpecialInstructions.Text;
-                    data.Sales_Order.AddObject(newOrder);
+                    data.Sales_Orders.AddObject(newOrder);
 
                     Accounting_CreditCards card = new Accounting_CreditCards();
                     card.Id = Guid.NewGuid();

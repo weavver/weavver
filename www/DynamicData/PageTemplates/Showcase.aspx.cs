@@ -55,7 +55,7 @@ namespace DynamicData
                WeavverMaster.FixedWidth = false;
                WeavverMaster.Width = "100%";
                WeavverMaster.FormTitle = table.DisplayName;
-               WeavverMaster.FormDescription = "If you need help or would like to discuss a custom project please call us at +1-714-872-5920.";
+               WeavverMaster.FormDescription = GetPageContent("Logistics/Products/Showcase_Description");
 
                //GridView1.SetMetaTable(table, table.GetColumnValuesFromRoute(Context));
                //GridView1.RowCreated += new GridViewRowEventHandler(GridView1_RowCreated);
@@ -68,24 +68,14 @@ namespace DynamicData
                          GridDataSource.WhereParameters.Add(new Parameter("IsPublic", DbType.Boolean, "True"));
                     }
                }
+               GridDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, SelectedOrganization.Id.ToString()));
 
                GridDataSource.OrderBy = "it.Name";
 
                WeavverMaster.FormTitle = table.DisplayName;
                GridDataSource.Include = table.ForeignKeyColumnsNames;
 
-               using (WeavverEntityContainer data = new WeavverEntityContainer())
-               {
-                    var specials = (from x in data.CMS_Pages
-                                    where x.Title == "Sales/Store Specials" &&
-                                    x.OrganizationId == SelectedOrganization.Id
-                                    select x).FirstOrDefault();
-
-                    if (specials != null)
-                    {
-                         StoreSpecials.Text = specials.Page;
-                    }
-               }
+               StoreSpecials.Text = GetPageContent("Sales/Store Specials");
           }
 //-------------------------------------------------------------------------------------------
           protected void Label_PreRender(object sender, EventArgs e)

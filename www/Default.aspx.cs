@@ -13,6 +13,7 @@ using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 
 using Weavver.Data;
+using System.IO;
 
 public partial class WeavverDefault : SkeletonPage
 {
@@ -39,7 +40,6 @@ public partial class WeavverDefault : SkeletonPage
           string msg = "querystring: " + System.Web.HttpUtility.UrlDecode(Request.QueryString.ToString());
           //Response.Write(msg + "<br />");
 
-          //Products.Visible = (LoggedInUser != null && LoggedInUser.OrganizationId == new Guid("0baae579-dbd8-488d-9e51-dd4dd6079e95"));
 
           using (WeavverEntityContainer containers = new WeavverEntityContainer())
           {
@@ -52,7 +52,7 @@ public partial class WeavverDefault : SkeletonPage
                NewsList.DataBind();
           }
 
-          //Logo.Src = GetLogoPath();
+          Logo.Src = GetHomeLogoPath();
 
           //if (Logo.Src.Contains("mycompany.png"))
           //     Logo.Style["max-width"] = "480px";
@@ -71,6 +71,19 @@ public partial class WeavverDefault : SkeletonPage
           //WeavverMaster.MaxWidth = "960px";
           }
           WeavverMaster.Width = "100%";
+     }
+//-------------------------------------------------------------------------------------------
+     public string GetHomeLogoPath()
+     {
+          if (SelectedOrganization != null)
+          {
+               string orgId = SelectedOrganization.Id.ToString();
+               if (File.Exists(Server.MapPath("~/uploads/" + orgId + "/homepage.png")))
+               {
+                    return "~/uploads/" + orgId + "/homepage.png";
+               }
+          }
+          return "~/images/mycompany.png";
      }
 //-------------------------------------------------------------------------------------------
      void regControl_AccountActivated(object sender, EventArgs e)
