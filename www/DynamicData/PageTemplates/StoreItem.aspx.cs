@@ -162,7 +162,7 @@ namespace DynamicData
 
                     Literal bNotes = new Literal();
                     bNotes.ID = "Notes";
-                    bNotes.Text = item.BillingNotes;
+                    bNotes.Text = HTMLPurifierLib.Sanitize(item.BillingNotes);
                     if (!String.IsNullOrEmpty(item.BillingNotes))
                     {
                          BillingNotes.Style.Add("padding-top", "10px");

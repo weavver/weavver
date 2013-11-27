@@ -9,7 +9,7 @@
      <asp:FormView runat="server" ID="FormView1" DataSourceID="DetailsDataSource" RenderOuterTable="false">
           <ItemTemplate>
                <div style="padding: 10px;">
-                    <%# DataBinder.Eval(Container.DataItem, "Page")%>
+                    <%# HTMLPurifierLib.Sanitize((string) DataBinder.Eval(Container.DataItem, "Page")) %>
                </div>
           </ItemTemplate>
           <EmptyDataTemplate>

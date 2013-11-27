@@ -41,7 +41,7 @@ namespace DynamicData
 
           protected override void ExtractValues(IOrderedDictionary dictionary)
           {
-               dictionary[Column.Name] = ConvertEditedValue(TextBox1.Text);
+               dictionary[Column.Name] = ConvertEditedValue(HTMLPurifierLib.Sanitize(TextBox1.Text));
           }
 
           public override Control DataControl

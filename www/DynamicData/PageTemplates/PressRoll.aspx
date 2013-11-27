@@ -58,10 +58,10 @@
                <ItemTemplate>
                      <div style="border: solid 0px black;">
                          <div title="<%# Eval("UpdatedAt") %>" style="padding: 3px; padding-bottom: 15px;">
-                              <h4><%# DataBinder.Eval(Container.DataItem, "Title") %></h4>
+                              <h4><%# HTMLPurifierLib.Sanitize((string) DataBinder.Eval(Container.DataItem, "Title")) %></h4>
                               Published on <%# Eval("PublishAt") %><br />
                               <br />
-                              <%# Eval("HTMLBody").ToString().Replace("\r\n", "\r\n<br />") %>
+                              <%# HTMLPurifierLib.Sanitize(Eval("HTMLBody").ToString().Replace("\r\n", "\r\n<br />")) %>
                          </div>
                          <div style="margin-left: 60px; margin-right: 20px; padding: 10px; padding-bottom: 0px;"></div>
                     </div>

@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" CodeFile="Code.ascx.cs" Inherits="DynamicData.Code" %>
 
-<%# HTMLPurifierLib.Purify(Server.HtmlDecode(FieldValueString))%><%-- //<asp:Literal runat="server" ID="Literal1" Text="" />--%>
+<%# HTMLPurifierLib.Sanitize(Server.HtmlDecode(FieldValueString)) %><%-- //<asp:Literal runat="server" ID="Literal1" Text="" />--%>
 
 <script type="text/javascript">
      window.onload = function () {

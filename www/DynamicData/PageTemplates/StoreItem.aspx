@@ -49,7 +49,7 @@
                <asp:FormView runat="server" ID="FormView1" DataSourceID="DetailsDataSource" RenderOuterTable="false">
                <ItemTemplate>
                     <!--<%# WeavverMaster.FormTitle = (string) DataBinder.Eval(Container.DataItem, "Name") %>-->
-                    <%# DataBinder.Eval(Container.DataItem, "Description") %>
+                    <%# HTMLPurifierLib.Sanitize((string) DataBinder.Eval(Container.DataItem, "Description")) %>
                </ItemTemplate>
                <EmptyDataTemplate>
                     <div class="DDNoItem">No such item.</div>

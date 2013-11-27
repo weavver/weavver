@@ -33,7 +33,8 @@ namespace DynamicData
                               value = value.Substring(0, value.IndexOf("\n")) + "...";
                          }
                     }
-                    return value.Replace("\r\n", "<br />").Replace("\n", "<br />");
+                    value = value.Replace("\r\n", "<br />").Replace("\n", "<br />");
+                    return HTMLPurifierLib.Sanitize(value);
                }
           }
 

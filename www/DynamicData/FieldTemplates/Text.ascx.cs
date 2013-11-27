@@ -24,7 +24,7 @@ namespace DynamicData
                               value = value.Substring(0, MAX_DISPLAYLENGTH_IN_LIST - 3) + "...";
                          }
                     }
-                    return value;
+                    return HTMLPurifierLib.Sanitize(value);
                }
           }
 

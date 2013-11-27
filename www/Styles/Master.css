@@ -123,10 +123,8 @@ h1,h2,h3,h4,h5,h6
 #ContentDiv
 {
      background-color: #FFFFFF;
-     padding: 15px;
      clear:both;
      overflow: auto;
-     margin: 5px;
 }
 
 .watermark
@@ -146,9 +144,7 @@ li
 
 #ContentTable
 {
-     margin-bottom: 75px;
-     clear: both;
-     background-color: #FFFFFF;
+     margin-bottom: 25px;
      background-color: #FFFFFF;
 }
 
@@ -195,11 +191,17 @@ li
 {
      margin: auto;
      width: 800px
+}       
+
+.orgList
+{
+     display: inline-block;
+     margin: 5px;
 }
 
 .sign-in
 {
-     float:right;
+     float: right;
      padding: 5px;
      text-align: center;
      width: 200px;
