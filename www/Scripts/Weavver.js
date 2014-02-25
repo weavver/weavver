@@ -1,4 +1,6 @@
-﻿var pageloading = true; // we use this so the test suite tests don't time out
+﻿var isPageLoaded = false; // we use this so the test suite tests don't time out
+var isDialogLoaded = false;
+
 //var pageX = 0;
 //var pageY = 0;
 
@@ -11,18 +13,20 @@ function getPseudoGuid() {
 
 function initializeRequest(sender, args)
 {
-     pageloading = true;
+     isPageLoaded = false;
      var orderForm = $('#Content_OrderForm');
      if (orderForm.length > 0)
         OrderFormLoading();
 }
 
 function pageLoaded(sender, args) {
-    pageloading = false;
     var orderForm = $('#Content_OrderForm');
     if (orderForm.length > 0)
-        OrderFormLoaded();
+         OrderFormLoaded();
+
+    isPageLoaded = true;
 }
+
 function getParameterByName(name) {
      name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -99,6 +103,8 @@ function checkKey() {
 document.onkeyup = checkKey;
 
 $(document).ready(function () {
+     // this apparently only fires on page load once so we use the following
+     // methods to set up the events for ajax functions
      var prm = Sys.WebForms.PageRequestManager.getInstance();
      prm.add_initializeRequest(initializeRequest);
      prm.add_pageLoaded(pageLoaded);
@@ -276,4 +282,5 @@ function showMessage($title, $body, $redirurl)
      $('#modalBox').dialog('option', 'title', $title);
      $("#modalBox").html($body);
      $("#modalBox").dialog("open");
+     dialogLoaded = true;
 }

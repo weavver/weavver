@@ -83,6 +83,16 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                }
 
 
+               DataAccess insertPermissions = table.EntityType.InsertPermissions();
+               if (insertPermissions.HasAnyRole(Roles.GetRolesForUser()))
+               {
+                    newObjectLink.Visible = true;
+                    newObjectLink.Title = "Accessible to: " + String.Join(", ", insertPermissions.AllowedRoles);
+
+                    string newLink = "javascript:createPopup('/{0}/Details.aspx', {1}, {2});";
+                    newObjectLink.HRef = String.Format(newLink, table.EntityType.Name, insertPermissions.Width, insertPermissions.Height);
+               }
+
                MethodInfo tableMenu = table.EntityType.GetMethod("GetTableMenu");
                if (tableMenu != null && tableMenu.IsStatic)
                {
@@ -248,15 +258,7 @@ public partial class DynamicData_DynamicList : WeavverUserControl
 
                          string[] userRoles = BasePage.GetUserRoles(); // cache database trips
 
-                         DataAccess insertPermissions = ((EntityObject)owner).InsertPermissions();
-                         if (insertPermissions.HasAnyRole(userRoles))
-                         {
-                              newObjectLink.Visible = true;
-                              newObjectLink.Title = "Accessible to: " + String.Join(", ", insertPermissions.AllowedRoles);
-
-                              string newLink = "javascript:createPopup('/{0}/Details.aspx', {1}, {2});";
-                              newObjectLink.HRef = String.Format(newLink, table.EntityType.Name, insertPermissions.Width, insertPermissions.Height);
-                         }
+                         DataAccess insertPermissions = owner.GetType().InsertPermissions();
 
                          DataAccess readPermissions = ((EntityObject)owner).ReadPermissions();
                          if (readPermissions.HasMatchingRole(userRoles))

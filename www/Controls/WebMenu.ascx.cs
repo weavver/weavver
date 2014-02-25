@@ -216,7 +216,8 @@ public partial class WeavverWebMenu : WeavverUserControl
           {
                if (DepartmentMenu[i].ToString() == DepartmentMenu[i].ToString().ToUpper()
                     && DepartmentMenu.Length > i + 1 && // ignore acronyms
-                    DepartmentMenu[i + 1].ToString() != DepartmentMenu[i + 1].ToString().ToUpper())
+                    DepartmentMenu[i + 1].ToString() != DepartmentMenu[i + 1].ToString().ToUpper()
+                    && i != 0)
                     formattedName += " ";
                formattedName += DepartmentMenu[i];
           }

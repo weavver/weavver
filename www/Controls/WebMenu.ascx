@@ -4,7 +4,7 @@
     {
         background-color: #414141;
     }
-    
+
      .menuContainer
      {
      }
@@ -173,6 +173,7 @@
      }
 
      function createPopup(url, width, height, myId) {
+          isDialogLoaded = true;
           if (width == 0) {
                width = $(document).width() - 10;
                if (width > 800)
@@ -184,6 +185,8 @@
           $('#ContentTable').remove();
 
           var windowId = getPseudoGuid();
+
+          frameDialogs.push(windowId);
 
           var newPopup = $('#TheIFrame').clone();
           newPopup.attr("id", windowId);
@@ -205,6 +208,10 @@
                     //$(this).parent().find('.ui-dialog-titlebar').append($('#ItemTitle'));
                     $(".ui-dialog-content").css("padding", 0);
                     $(this).css('overflow', 'hidden');
+                    isDialogLoaded = true;
+               },
+               close: function (event, ui) {
+                    frameDialogs.pop(myId);
                },
                title: "Loading..",
                dragStart: preventIFrameMouseEvents,
@@ -214,26 +221,29 @@
                position: [offsetX + 5, offsetY + 120],
                width: width,
                height: height
-          });
+          });    //.attr('id', 'dialogId').attr('name', 'dialogId');
+
+          //newPopup.draggable("option", "containment", [50, 50, 300, 300]);
 
           newPopup.resize(function () {
                clearTimeout(doit);
                doit = setTimeout(resizedw, 100);
           });
 
-          $('div', 'iframe').ready(function () {
-               $(this).dialog('option', 'title', $(this).attr('title'));
-          });
+//          $('div', 'iframe').ready(function () {
+//               $(this).dialog('option', 'title', $(this).attr('title'));
+//          });
 
           //$('#ContentDIV').append(newPopup);
 
           offsetX = (offsetX > 100) ? 0 : offsetX + 20;
           offsetY = (offsetY > 100) ? 0 : offsetY + 20;
      }
+     var frameDialogs = [];
 </script>
 
 <div id='TheIFrame' style='display:none;'>
-     <iframe id='detailsframe' style='height: 95%; width: 100%;' src=""></iframe>
+     <iframe style='height: 95%; width: 100%;' src=""></iframe>
 </div>
 
 <%--

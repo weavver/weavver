@@ -95,7 +95,7 @@
      </div>
      <div id="footer" runat="server" class="footer">
           <div style="padding-left: 25px; padding-right: 15px; text-decoration: none; float:left;">
-               &copy;Weavver&reg;, Inc. 2009-2013 |
+               &copy;Weavver&reg;, Inc. 2009-2014 |
                <a href="~/company/legal/privacy">Privacy</a> |
                <a href="~/company/legal/termsofservice">Terms of Service</a> |
                <a href="~/company/legal/trademarks">Trademarks</a> |
@@ -103,7 +103,7 @@
           </div>
           <div style="float:right; padding-right: 25px; text-decoration: none;">
                <wvvr:QRCode ID="QRGenerator" runat="server" /> |
-               <a class="footer-links" href="~/Sales_Leads/Insert.aspx?Source=Website%20Inquiry">Send Feedback</a>&nbsp;|
+               <a class="footer-links" href="~/Sales_Leads/Details.aspx?Source=Website%20Inquiry">Send Feedback</a>&nbsp;|
                &nbsp;<asp:Literal id="Version" runat="server" Text="Alpha"></asp:Literal>
           </div>
           <div style="clear: both;" />

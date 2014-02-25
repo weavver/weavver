@@ -143,7 +143,7 @@ namespace DynamicData
                     DataAccess updatePermissions = entityObject.UpdatePermissions();
                     bool canUpdate = updatePermissions.HasAnyRole(userRoles);
                     
-                    DataAccess insertPermissions = entityObject.InsertPermissions();
+                    DataAccess insertPermissions = entityObject.GetType().InsertPermissions();
                     bool canInsert = insertPermissions.HasAnyRole(userRoles);
 
                     if (FormView1.CurrentMode == FormViewMode.ReadOnly)

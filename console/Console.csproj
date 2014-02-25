@@ -42,9 +42,6 @@
     <Reference Include="MiscUtil, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d3c42c4bfacf7596, processorArchitecture=MSIL">
       <HintPath>..\vendors\micutil\MiscUtil.dll</HintPath>
     </Reference>
-    <Reference Include="OpenPop">
-      <HintPath>..\3rd Party\OpenPop.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">

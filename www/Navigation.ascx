@@ -7,7 +7,7 @@
      <a id="Products" runat="server" class="button" href="~/Logistics_Products/Showcase.aspx" onclick="this.blur();"><span>Products</span></a>
 </div>
 <div style="display: inline-block;">
-          <a id="Projects" class="button" href="~/Logistics_Projects/Showcase.aspx" onclick="this.blur();"><span>Projects</span></a>
+          <a id="Projects" runat="server" class="button" href="~/Logistics_Projects/Showcase.aspx" onclick="this.blur();"><span>Projects</span></a>
      </div>
 <div style="display: inline-block;">
           <a id="Forum" runat="server" class="button" href="~/forum/" onclick="this.blur();"><span>Forum</span></a>

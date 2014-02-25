@@ -22,38 +22,68 @@ namespace Weavver.Testing.Accounting
                //js.ExecuteScript("return $(\"a:contains('Accounting')\").next(':eq(1)').mouseover();");
                //webDriver.FindElement(By.LinkText("Recurring Billable")).Click();
 
-               webDriver.Navigate().GoToUrl(BaseURL + "/Accounting_RecurringBillables/Insert.aspx");
+               //webDriver.Navigate().GoToUrl(BaseURL + "/Accounting_RecurringBillables/Details.aspx");
                WaitForPageLoad();
 
-               SelectDDLOption(By.Id("Content_FormView1_ctl02___AccountFromData_DropDownList1"), "Company A");
-               SelectDDLOption(By.Id("Content_FormView1_ctl02___AccountToData_DropDownList1"), "Company B");
-               //webDriver.FindElement(By.Id("Content_FormView1_ctl03_ctl03___AccountToData_DropDownList1")).SendKeys("MyFax");
-               webDriver.FindElement(By.Id("Content_FormView1_ctl02___Memo_TextBox1")).SendKeys("Fax Service, %timespan%");
-               webDriver.FindElement(By.Id("Content_FormView1_ctl02___Amount_TextBox1")).SendKeys("5");
-               webDriver.FindElement(By.Id("Content_FormView1_ctl02___StartAt_TextBox1")).SendKeys("1/1/11");
-               webDriver.FindElement(By.Id("Content_FormView1_ctl02___Position_TextBox1")).SendKeys("1/1/11");
-               webDriver.FindElement(By.Id("Content_FormView1_ctl02___EndAt_TextBox1")).SendKeys("01/01/12\t");
 
-               ClickButton(By.Id("Content_FormView1_Button1"));
 
-               WaitForPageLoad();
-               Assert.IsTrue(webDriver.PageSource.Contains("Fax Service, 01/01/11 to 02/01/11"), "Text 'Fax Service, 01/01/11 to 02/01/11' is missing");
-               Assert.IsTrue(webDriver.PageSource.Contains("Fax Service, 01/01/12 to 02/01/12"), "Text 'Fax Service, 01/01/12 to 02/01/12' is missing");
-
-               webDriver.FindElement(By.Id("DynamicMethod_PushUnbilledItems")).Click();
+               ((IJavaScriptExecutor)webDriver).ExecuteScript("createPopup('/Accounting_RecurringBillables/List.aspx', '800', '500')");
                WaitForPageLoad();
 
-               Assert.IsTrue(webDriver.PageSource.Contains("Total periods billed: 13"), "Total periods billed: 13");
-               webDriver.FindElement(By.Id("modalBoxOK")).Click();
-               WaitForPageLoad();
+               IWebDriver listFrame = webDriver.SwitchTo().Frame(1);
 
-               Assert.AreEqual("02/01/12", webDriver.FindElement(By.Id("Content_FormView1_ctl02___Position_Date")).Text.Trim());
+               ClickButton(listFrame, By.Id("Content_DList_newObjectLink"));
+               WaitForPageLoad(listFrame);
 
-               webDriver.FindElement(By.Id("DynamicMethod_PushUnbilledItems")).Click();
-               WaitForPageLoad();
-               Assert.IsTrue(webDriver.PageSource.Contains("Total periods billed: 0"), "Total periods billed: 0");
+               listFrame.SwitchTo().DefaultContent();
 
-               webDriver.FindElement(By.Id("modalBoxOK")).Click();
+               IWebDriver insertFrame = webDriver.SwitchTo().Frame(2);
+               //Math.floor((Math.random() * 10) + 1);
+
+               //fill out the form
+               SelectDDLOption(insertFrame, By.Id("Content_FormView1_ctl01___AccountFromData_DropDownList1"), "Company A");
+               SelectDDLOption(insertFrame, By.Id("Content_FormView1_ctl01___AccountToData_DropDownList1"), "Company B");
+               //SendKeys(insertFrame, By.Id("Content_FormView1_ctl03_ctl03___AccountToData_DropDownList1")).SendKeys("MyFax");
+               SendKeys(insertFrame, By.Id("Content_FormView1_ctl01___Memo_TextBox1"), "Fax Service, %timespan%");
+               SendKeys(insertFrame, By.Id("Content_FormView1_ctl01___Amount_TextBox1"), "5");
+               SendKeys(insertFrame, By.Id("Content_FormView1_ctl01___StartAt_TextBox1"), "1/1/11");
+               SendKeys(insertFrame, By.Id("Content_FormView1_ctl01___Position_TextBox1"), "1/1/11");
+
+               SendKeys(insertFrame, By.Id("Content_FormView1_ctl01___EndAt_TextBox1"), "01/01/12\t");
+               ((IJavaScriptExecutor)insertFrame).ExecuteScript("isPageLoaded = false;");
+               ClickButton(insertFrame, By.Id("Content_FormView1_Button1"));
+
+               // check the projections are accurate
+               WaitForPageLoad(insertFrame);
+               WaitForTextExists2("a[href=\"#Projection\"]", "Projection");
+               // this is the line with the error
+               ClickButton(insertFrame, By.XPath("//a[@href='#Projection']")); //("Projection"));
+               Assert.IsTrue(insertFrame.PageSource.Contains("Fax Service, 01/01/11 to 02/01/11"), "Text 'Fax Service, 01/01/11 to 02/01/11' is missing");
+               Assert.IsTrue(insertFrame.PageSource.Contains("Fax Service, 01/01/12 to 02/01/12"), "Text 'Fax Service, 01/01/12 to 02/01/12' is missing");
+
+               // Push unbilled items
+               ((IJavaScriptExecutor)insertFrame).ExecuteScript("isPageLoaded = false;");
+               ((IJavaScriptExecutor)insertFrame).ExecuteScript("isDialogLoaded = false;");
+               ClickButton(insertFrame, By.Id("Content_DynamicWebMethod_PushUnbilledItems"));
+
+               // Check the unbilled items were processed correctly
+               WaitForPageLoad(insertFrame);
+               WaitForDialogLoaded(insertFrame);
+               Assert.IsTrue(insertFrame.PageSource.Contains("Total periods billed: 13"), "Total periods billed: 13");
+               WaitForTextExists(insertFrame, By.Id("modalBoxOK"), "OK");
+               ClickButton(insertFrame, By.Id("modalBoxOK"));
+
+               // 
+               WaitForDialogLoaded(insertFrame);
+               Assert.AreEqual("02/01/12", insertFrame.FindElement(By.Id("Content_FormView1_ctl01___Position_Date")).Text.Trim());
+               ClickButton(insertFrame, By.Id("Content_DynamicWebMethod_PushUnbilledItems"));
+
+               WaitForDialogLoaded(insertFrame);
+               Assert.IsTrue(insertFrame.PageSource.Contains("Total periods billed: 0"), "Total periods billed: 0");
+
+               WaitForTextExists(insertFrame, By.Id("modalBox"), "Total periods billed: 0");
+               WaitForTextExists(insertFrame, By.Id("modalBoxOK"), "OK");
+               ClickButton(By.Id("modalBoxOK"));
           }
 //-------------------------------------------------------------------------------------------
 //          [Test]
