@@ -66,7 +66,7 @@ public partial class WeavverDefault : SkeletonPage
           }
           else
           {
-               WeavverMaster.FormDescription = "Weavver&reg; is a free business management platform built on <a href=\"~/source/\" style=\"text-decoration: underline;\">open source</a> principles.  <a href='~/products/weavver/'>[learn more]</a>";
+               WeavverMaster.FormDescription = "Weavver&reg; is an <a href=\"~/source/\" style=\"text-decoration: underline;\">open source</a> biodigital organism. The intelligence is built in by humans and is being constantly updated and evolved. <a href='~/products/weavver/'>[learn more]</a>";
           //WeavverMaster.FixedWidth = true;
           //WeavverMaster.MaxWidth = "960px";
           }

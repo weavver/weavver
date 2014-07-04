@@ -48,5 +48,7 @@ public partial class System_Debug : SkeletonPage
           HttpIdentity.Text = HttpContext.Current.User.Identity.Name;
 
           RoleApplicationName.Text = Roles.ApplicationName;
+
+          Is64bit.Text = (Environment.Is64BitProcess) ? "64bit" : "32bit";
      }
 }

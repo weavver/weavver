@@ -26,6 +26,8 @@
                Organization Id: <asp:Label ID="SelectedUserOrganizationId" runat="server"></asp:Label><br />
                In Roles: <asp:Label ID="InRoles" runat="server"></asp:Label><br />
           </div>
+          <br />
+          Bitness: <asp:Literal ID="Is64bit" runat="server" Text="Unknown"></asp:Literal>
      </div>
 </asp:Content>
 
