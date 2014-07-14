@@ -37,6 +37,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
      private Logistics_Organizations _selectedOrganization = null;
      private bool _IsPublic = false;
      private bool _HasHeader = true;
+     public bool RequiresSelectedOrg = true;
      public bool ActivationRequired = true;
      private System_Users _LoggedInUser = null;
      public string BaseURL { get { return Request.Url.Scheme + "://" + Request.Url.Host; } }
@@ -198,31 +199,41 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
      {
           if (SelectedOrganization == null && ConfigurationManager.AppSettings["install_mode"] == "false")
           {
-               if (Session["SelectedOrganizationId"] == null)
+               //string path = Context.Request.Path; // path: /default.aspx OR /org/default/company/services/hosting/
+               //if (path != "/")
+               //{
+               //     int startIndex = (path.StartsWith("/")) ? 1 : 0; // starts with: /weavver/about/example/url
+               //     string orgName = path.Substring(startIndex); // grabs: weavver/about/example/url
+               //     if (orgName.Contains("/"))
+               //     {
+               //          string orgPath = orgName.Substring(orgName.IndexOf("/")); // grabs: about/example/url
+               //          orgName = (orgName.Contains("/")) ? orgName.Substring(0, orgName.IndexOf("/")) : "default"; // grabs: weavver
+
+               //          using (WeavverEntityContainer data = new WeavverEntityContainer())
+               //          {
+               //               var selectedOrg = (from y in data.Logistics_Organizations
+               //                                   where y.VanityURL == orgName
+               //                                   select y).FirstOrDefault();
+
+               //               if (selectedOrg != null)
+               //               {
+               //                    data.Detach(selectedOrg);
+               //                    SelectedOrganization = selectedOrg;
+               //               }
+               //          }
+               //     }
+               //}
+
+               string vanityurl = (Request["org"] == null) ? "default" : Request["org"];
+               if (vanityurl.Contains(","))
+                    vanityurl = vanityurl.Substring(0, vanityurl.IndexOf(','));
+               using (WeavverEntityContainer data = new WeavverEntityContainer())
                {
-                    string vanityurl = (Request["org"] == null) ? "default" : Request["org"];
-                    vanityurl = vanityurl.Replace("default,default", "default");
-                    using (WeavverEntityContainer data = new WeavverEntityContainer())
+                    var orgs = (from x in data.Logistics_Organizations where x.VanityURL == vanityurl select x);
+                    if (orgs.Count() > 0)
                     {
-                         var orgs = (from x in data.Logistics_Organizations where x.VanityURL == vanityurl select x);
-                         if (orgs.Count() > 0)
-                         {
-                              SelectedOrganization = orgs.First();
-                              data.Logistics_Organizations.Detach(_selectedOrganization);
-                         }
-                    }
-               }
-               else
-               {
-                    using (WeavverEntityContainer data = new WeavverEntityContainer())
-                    {
-                         Guid selectedOrgId = new Guid(Session["SelectedOrganizationId"].ToString());
-                         var orgs = (from x in data.Logistics_Organizations where x.Id == selectedOrgId select x);
-                         if (orgs.Count() > 0)
-                         {
-                              SelectedOrganization = orgs.First();
-                              data.Logistics_Organizations.Detach(_selectedOrganization);
-                         }
+                         SelectedOrganization = orgs.First();
+                         data.Logistics_Organizations.Detach(_selectedOrganization);
                     }
                }
           }
@@ -233,6 +244,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
      {
           if (Request.Cookies["TimeZoneName"] != null)
                BrowserTZI = DateTimeHelper.OlsonTimeZoneToTimeZoneInfo(Request.Cookies["TimeZoneName"].Value);
+
           if (ConfigurationManager.AppSettings["install_mode"] == "true" &&
              !Request.Path.ToLower().StartsWith("/install/") &&
              !Request.Path.ToLower().StartsWith("/system/maintenance"))
@@ -294,6 +306,11 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                {
                     headerLogo.Visible = HasHeader;
                }
+          }
+
+          if (SelectedOrganization == null && RequiresSelectedOrg)
+          {
+               Response.Redirect("~/");
           }
 
           if (!User.Identity.IsAuthenticated && !IsPublic)

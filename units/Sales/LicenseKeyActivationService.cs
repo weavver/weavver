@@ -15,7 +15,7 @@ using Weavver.Data;
 namespace Weavver.Testing.Sales
 {
 //-------------------------------------------------------------------------------------------
-     public partial class Sales_LicenseKeyActivationService
+     public partial class SoftwareLicenseKeyService
      {
           string LicenseKey;
           string ProductId;
@@ -24,7 +24,7 @@ namespace Weavver.Testing.Sales
           string RemoteMachineName;
           string weavverurl;
 //-------------------------------------------------------------------------------------------
-          public Sales_LicenseKeyActivationService()
+          public SoftwareLicenseKeyService()
           {
                SetDefaultVars();
           }
@@ -170,7 +170,7 @@ namespace Weavver.Testing.Sales
                doc.LoadXml(xml);
 
                var rsaKey = new RSACryptoServiceProvider();
-               rsaKey.FromXmlString(File.ReadAllText(Helper.GetAppSetting("sales_licensekeys_public")));
+               rsaKey.FromXmlString(File.ReadAllText(Helper.GetAppSetting("sales_licensekeyservice_publickey")));
                bool isNotTamperedWith = VerifyXml(doc, rsaKey);
                Assert.IsTrue(isNotTamperedWith, "The XML was tampered with or the signature does not match.");
 

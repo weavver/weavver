@@ -32,7 +32,7 @@ public partial class WeavverWebMenu : WeavverUserControl
      protected void Page_Load(object sender, EventArgs e)
      {
           if (Request.Url.PathAndQuery.StartsWith("/system/error") ||
-              (BasePage == null))
+              (BasePage == null) || BasePage.SelectedOrganization == null)
           {
                //BasePage.WeavverMaster.SetToolbarVisibility(false);
                Visible = false;
@@ -242,6 +242,8 @@ public partial class WeavverWebMenu : WeavverUserControl
                parentMenu = newDept;
                rootMenu.Items.Add(newDept);
           }
+
+          ItemLink = BasePage.WeavverMaster.FormatURLs(ItemLink);
 
           WeavverMenuItem item = new WeavverMenuItem();
           item.Name = ItemName;

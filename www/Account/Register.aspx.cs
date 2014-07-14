@@ -11,6 +11,7 @@ public partial class Register : SkeletonPage
 //-------------------------------------------------------------------------------------------
      protected void Page_Init(object sender, EventArgs e)
      {
+          RequiresSelectedOrg = false;
           IsPublic = true;
           ActivationRequired = false;
           WeavverMaster.FormTitle = "Register for your Weavver Account";

@@ -18,6 +18,7 @@ public partial class LogOut : SkeletonPage
           WeavverMaster.FixedWidth = true;
           ActivationRequired = false;
           IsPublic = true;
+          RequiresSelectedOrg = false; 
           Request.Cookies.Clear();
           FormsAuthentication.SignOut();
           Session.Clear();

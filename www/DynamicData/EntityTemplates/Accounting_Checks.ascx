@@ -2,7 +2,7 @@
 
 <div style="background-color: #EBFCF6; margin: auto; margin-top: 5px; border: outset 3px #CCCCCC; width: 800px; padding: 10px;clear: both;">
      <div style="float:left">
-          Funds from: <asp:DynamicControl ID="DynamicControl6" runat="server" DataField="Accounting_Accounts" OnInit="DynamicControl_Init" />
+          Funding Source: <asp:DynamicControl ID="DynamicControl6" runat="server" DataField="Accounting_Accounts" OnInit="DynamicControl_Init" />
      </div>
      <div style="float:right; clear: right; text-align: right;">
           Check #<asp:DynamicControl ID="DynamicControl3" runat="server" DataField="CheckNumber" OnInit="DynamicControl_Init" />

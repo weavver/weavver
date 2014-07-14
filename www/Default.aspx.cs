@@ -20,6 +20,7 @@ public partial class WeavverDefault : SkeletonPage
 //-------------------------------------------------------------------------------------------
      protected void Page_Init(object sender, EventArgs e)
      {
+          RequiresSelectedOrg = false;
           Master.SetChatVisibility(true);
           //Master.FindControlR<Control>("HeaderLogo").Visible = false;
           //Master.FindControlR<Control>("NavigationBox").Visible = false;
@@ -37,25 +38,25 @@ public partial class WeavverDefault : SkeletonPage
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)
      {
-          string msg = "querystring: " + System.Web.HttpUtility.UrlDecode(Request.QueryString.ToString());
-          //Response.Write(msg + "<br />");
+          //string msg = "querystring: " + System.Web.HttpUtility.UrlDecode(Request.QueryString.ToString());
+          ////Response.Write(msg + "<br />");s
 
 
-          using (WeavverEntityContainer containers = new WeavverEntityContainer())
-          {
-               var pressrelease = (from x in containers.Marketing_PressReleases
-                                   where x.OrganizationId == SelectedOrganization.Id
-                                   orderby x.PublishAt descending
-                                   select x).Take(10);
+          //using (WeavverEntityContainer containers = new WeavverEntityContainer())
+          //{
+          //     var pressrelease = (from x in containers.Marketing_PressReleases
+          //                         where x.OrganizationId == SelectedOrganization.Id
+          //                         orderby x.PublishAt descending
+          //                         select x).Take(10);
 
-               NewsList.DataSource = pressrelease;
-               NewsList.DataBind();
-          }
+          //     NewsList.DataSource = pressrelease;
+          //     NewsList.DataBind();
+          //}
 
-          Logo.Src = GetHomeLogoPath();
+          //Logo.Src = GetHomeLogoPath();
 
-          //if (Logo.Src.Contains("mycompany.png"))
-          //     Logo.Style["max-width"] = "480px";
+          if (Logo.Src.Contains("mycompany.png"))
+               Logo.Style["max-width"] = "480px";
 
           if (Request.Url.Host != "www.weavver.local" &&
               Request.Url.Host != "www.weavver.local" &&
@@ -67,8 +68,8 @@ public partial class WeavverDefault : SkeletonPage
           else
           {
                WeavverMaster.FormDescription = "Weavver&reg; is an <a href=\"~/source/\" style=\"text-decoration: underline;\">open source</a> biodigital organism. The intelligence is built in by humans and is being constantly updated and evolved. <a href='~/products/weavver/'>[learn more]</a>";
-          //WeavverMaster.FixedWidth = true;
-          //WeavverMaster.MaxWidth = "960px";
+               //WeavverMaster.FixedWidth = true;
+               //WeavverMaster.MaxWidth = "960px";
           }
           WeavverMaster.Width = "100%";
      }

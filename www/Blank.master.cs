@@ -99,4 +99,32 @@ public partial class Blank : MasterPage, WeavverMasterPageInterface
           }
      }
 //-------------------------------------------------------------------------------------------
+     public SkeletonPage BasePage
+     {
+          get
+          {
+               if (Page.GetType().IsSubclassOf(typeof(SkeletonPage)))
+               {
+                    return (SkeletonPage) Page;
+               }
+               else
+               {
+                    return null;
+               }
+          }
+     }
+//-------------------------------------------------------------------------------------------
+     public string FormatURLs(string str)
+     {
+          //string appPath = HttpContext.Current.Request.ApplicationPath;
+
+          //Ensure the app path ends w/ a slash
+          //if (!appPath.EndsWith("/"))
+          //   appPath += "/";
+
+          string basepath = (BasePage == null || BasePage.SelectedOrganization == null) ? "/" : "/" + BasePage.SelectedOrganization.VanityURL + "/";
+          //string orgname = (BasePage == null || BasePage.SelectedOrganization == null) ? BasePage.SelectedOrganization.VanityURL : "";
+          return str.Replace("~/", basepath); //.Replace("%orgname%", orgname);
+     }
+//-------------------------------------------------------------------------------------------
 }

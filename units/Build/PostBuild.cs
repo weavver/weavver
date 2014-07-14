@@ -16,17 +16,17 @@ namespace Weavver.Testing.Staging
                rb.RunTest();
                rb.TestFixtureTearDown();
 
-               Weavver.Testing.Sales.WebStore order = new Weavver.Testing.Sales.WebStore();
-               order.TestFixtureSetUp();
-               order.PlaceOrder();
-               order.TestFixtureTearDown();
+               Weavver.Testing.Sales.WebStore.ShoppingCart cart = new Weavver.Testing.Sales.WebStore.ShoppingCart();
+               cart.TestFixtureSetUp();
+               cart.PlaceOrder();
+               cart.TestFixtureTearDown();
 
                WeavverApp app = new WeavverApp();
                app.TestFixtureSetUp();
                app.RunTests();
                app.TestFixtureTearDown();
 
-               Weavver.Testing.Sales.Sales_LicenseKeyActivationService slkas = new Sales.Sales_LicenseKeyActivationService();
+               Weavver.Testing.Sales.SoftwareLicenseKeyService slkas = new Sales.SoftwareLicenseKeyService();
                slkas.RunTest();
 
                // VENDOR TESTS

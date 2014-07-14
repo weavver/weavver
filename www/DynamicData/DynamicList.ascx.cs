@@ -89,8 +89,9 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                     newObjectLink.Visible = true;
                     newObjectLink.Title = "Accessible to: " + String.Join(", ", insertPermissions.AllowedRoles);
 
-                    string newLink = "javascript:createPopup('/{0}/Details.aspx', {1}, {2});";
-                    newObjectLink.HRef = String.Format(newLink, table.EntityType.Name, insertPermissions.Width, insertPermissions.Height);
+                    string url = "~/{0}/Details.aspx";
+                    string newLink = "javascript:createPopup('{0}', {1}, {2});";
+                    newObjectLink.HRef = String.Format(BasePage.WeavverMaster.FormatURLs(newLink), table.EntityType.Name, insertPermissions.Width, insertPermissions.Height);
                }
 
                MethodInfo tableMenu = table.EntityType.GetMethod("GetTableMenu");
@@ -254,7 +255,7 @@ public partial class DynamicData_DynamicList : WeavverUserControl
 
                          var auditableRow = owner as IAuditable;
                          if (auditableRow != null)
-                              url = "/" + table.EntityType.Name + "/Details.aspx?id=" + auditableRow.Id;
+                              url = "~/" + table.EntityType.Name + "/Details.aspx?id=" + auditableRow.Id;
 
                          string[] userRoles = BasePage.GetUserRoles(); // cache database trips
 
@@ -267,7 +268,7 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                               Permissions.Text = "Accessible to: " + String.Join(", ", readPermissions.AllowedRoles);
 
                               if (url != null)
-                                   e.Row.Attributes["onClick"] = String.Format("javascript:createPopup('{0}', {1}, {2});", url, insertPermissions.Width, insertPermissions.Height); // old: "location.href='{0}'", url);
+                                   e.Row.Attributes["onClick"] = String.Format("javascript:createPopup('{0}', {1}, {2});", BasePage.WeavverMaster.FormatURLs(url), insertPermissions.Width, insertPermissions.Height); // old: "location.href='{0}'", url);
                          }
 
                          var columnStyle = owner as IColumnStyle;

@@ -9,6 +9,21 @@ public class SkeletonUserControl : System.Web.UI.UserControl
 {
      Guid SelectedOrganizationId;
 //--------------------------------------------------------------------------------------------
+     public SkeletonPage BasePage
+     {
+          get
+          {
+               if (Page.GetType().IsSubclassOf(typeof(SkeletonPage)))
+               {
+                    return (SkeletonPage)Page;
+               }
+               else
+               {
+                    return null;
+               }
+          }
+     }
+//--------------------------------------------------------------------------------------------
      public SkeletonUserControl()
      {
           Init += new EventHandler(SkeletonUserControl_Init);

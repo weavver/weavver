@@ -8,60 +8,29 @@ using System.Web.SessionState;
 using System.Web.DynamicData;
 
 using Weavver.Data;
+using Weavver.Data.ExtensionMethods;
 using Weavver.Vendors.ProcessOne;
 
-
-/// <summary>
-/// Summary description for WeavverHttpModule
-/// </summary>
 namespace Weavver.Web
 {
-     public class WeavverHttpModule : IHttpModule, IRequiresSessionState
+     public class WeavverHttpModule : IHttpModule, IReadOnlySessionState
      {
 //-------------------------------------------------------------------------------------------
           public void Init(HttpApplication application)
           {
-               application.PostAcquireRequestState += new EventHandler(Application_PostAcquireRequestState);
-               application.PostMapRequestHandler += new EventHandler(Application_PostMapRequestHandler);
+               application.BeginRequest += new EventHandler(application_BeginRequest);
           }
 //-------------------------------------------------------------------------------------------
-          void Application_PostMapRequestHandler(object source, EventArgs e)
+          void application_BeginRequest(object sender, EventArgs e)
           {
-               HttpApplication app = (HttpApplication)source;
-
-               if (app.Context.Handler is IReadOnlySessionState || app.Context.Handler is IRequiresSessionState)
-               {
-                    // no need to replace the current handler
-                    return;
-               }
-
-               // swap the current handler
-               app.Context.Handler = new MyHttpHandler(app.Context.Handler);
-          }
-//-------------------------------------------------------------------------------------------
-          void Application_PostAcquireRequestState(object source, EventArgs e)
-          {
-               HttpApplication app = (HttpApplication)source;
-
-               MyHttpHandler resourceHttpHandler = HttpContext.Current.Handler as MyHttpHandler;
-
-               if (resourceHttpHandler != null)
-               {
-                    // set the original handler back
-                    HttpContext.Current.Handler = resourceHttpHandler.OriginalHandler;
-               }
-
-               // -> at this point session state should be available
+               HttpApplication app = (HttpApplication)sender;
 
                string url = app.Context.Request.Url.ToString(); // url: http://www.weavver.local/default.aspx
                string path = app.Context.Request.Path; // path: /default.aspx OR /org/default/company/services/hosting/
                string exten = System.IO.Path.GetExtension(app.Context.Request.Path);
                string newpath = path;
-               string org = "default";
 
-               // protects autocomplete
-               if (url.Contains(".asmx/"))
-                    return;
+               string[] pathparts = path.Split('/');
 
                string query = "";
                if (HttpContext.Current.Request.QueryString.HasKeys())
@@ -69,115 +38,115 @@ namespace Weavver.Web
                     query += HttpUtility.UrlDecode(HttpContext.Current.Request.QueryString.ToString());
                }
 
-               // checks for dynamic urls (pages/content that only lives in the database)
-               if (app.Context.Session != null && app.Context.Session["SelectedOrganizationId"] != null)
+               // examples to process:
+               //        /system/http404.aspx
+               //        /images/x.jpg
+               //        /weavver/Marketing_PressReleases/
+               //        /weavver/Logistics_Organizations.aspx?id=
+               //        /Default.aspx
+               //        /
+               if (exten == ".axd" || System.IO.File.Exists(path))
                {
-                    Guid selectedOrganizationId = (Guid)app.Context.Session["SelectedOrganizationId"];
-                    if (ConfigurationManager.AppSettings["install_mode"] == "false")
-                    {
-                         using (WeavverEntityContainer data = new WeavverEntityContainer())
-                         {
-                              var dynamicUrl = (from x in data.System_URLs
-                                                where x.Path == path &&
-                                                     x.OrganizationId == selectedOrganizationId
-                                                select x).FirstOrDefault();
-
-                              if (dynamicUrl != null)
-                              {
-                                   query = "Id=" + dynamicUrl.ObjectId.ToString();
-                                   HttpContext.Current.RewritePath("/" + dynamicUrl.TableName + "/" + dynamicUrl.PageTemplate + ".aspx", null, query, false);
-                                   return;
-                              }
-                         }
-                    }
+                    return;
                }
 
-               if (exten == "" && !newpath.ToLower().Contains(".aspx/"))
+               if (path.StartsWith("_"))
                {
-                    //string filepath = HttpContext.Current.Server.MapPath("~" + path + ".aspx");
-                    //if (urlparts.Length >= 2)
+                    HttpContext.Current.RewritePath(newpath, null, query, false);
+                    newpath = path.Substring(1);
+                    return;
+               }
 
-                    if (path.Length > 5 && path.StartsWith("/org/"))
-                    {
-                         newpath = path.Substring(5);
-                         if (newpath.Contains("/"))
-                         {
-                              org = newpath.Substring(0, newpath.IndexOf("/"));
-                              newpath = newpath.Substring(newpath.IndexOf("/"));
-                         }
-                         if (newpath.Contains("?"))
-                         {
-                              newpath = newpath.Substring(0, newpath.IndexOf("?") + 1);
-                         }
-                    }
-
-                    if (String.IsNullOrEmpty(HttpContext.Current.Request.QueryString["org"]))
-                    {
-                         query = "org=" + org + "&" + query;
-                    }
-
-                    if (newpath.EndsWith("/"))
-                    {
-                         newpath += "Default.aspx";
-                    }
-                    else if (!newpath.ToLower().EndsWith(".aspx"))
+               if (newpath.EndsWith("/"))
+               {
+                    newpath += "Default.aspx";
+                    exten = ".aspx";
+               }
+               
+               if (exten == "")
+               {
+                    if (!newpath.ToLower().EndsWith(".aspx"))
                     {
                          newpath += ".aspx";
                     }
-
-                    if (ConfigurationManager.AppSettings["debug"] == "yes")
-                    {
-                         string logmsg = "WeavverHttpModule: Url: " + url + " Path: " + path + " New Path: " + newpath + " -- " + HttpContext.Current.Request.PathInfo;
-                         Weavver.Utilities.ErrorHandling.SendError(new Exception(logmsg));
-                    }
-
-                    string filePath = HttpContext.Current.Server.MapPath(newpath);
-                    if (!System.IO.File.Exists(filePath))
-                         newpath = "/System/HTTP404.aspx";
-
-                    HttpContext.Current.RewritePath(newpath, null, query, false);
                }
 
-               Debug.Assert(app.Session != null, "it did not work :(");
+               string filePath = HttpContext.Current.Server.MapPath(newpath);
+               if (System.IO.File.Exists(filePath))
+               {
+                    HttpContext.Current.RewritePath(newpath, null, query, false);
+                    return;
+               }
+
+               // if the url ends with no extension like so: http://weavver.local/this/page
+               // then we add the .aspx page extension so we can check if there is actually an aspx page we should forward to
+
+               if (System.Configuration.ConfigurationManager.AppSettings["debug"] == "yes")
+               {
+                    string logmsg = "WeavverHttpModule: Url: " + url + " Path: " + path + " New Path: " + newpath + " -- " + HttpContext.Current.Request.PathInfo;
+                    Weavver.Utilities.ErrorHandling.SendError(new Exception(logmsg));
+               }
+
+               if (pathparts.Length > 1)
+               {
+                    // checks for dynamic urls (pages/content that only lives in the database)
+                    using (Weavver.Data.WeavverEntityContainer data = new Weavver.Data.WeavverEntityContainer())
+                    {
+                         int startIndex = (newpath.NthIndexOf("/", 2) > 0) ? newpath.NthIndexOf("/", 2) : 0; // starts with: /weavver/about/example/url
+                         string orgName = pathparts[1]; // grabs: weavver/about/example/url
+                         string orgSubPath = newpath.Substring(startIndex); // grabs: about/example/url
+
+                         if (String.IsNullOrEmpty(query))
+                              query = "org=" + pathparts[1];
+                         else
+                              query = "org=" + pathparts[1] + "&" + query;
+
+                         // catch cases where the path could be:
+                         //        /weavver/ or
+                         //        /weavver/somefolder/
+                         if (orgSubPath.EndsWith("/"))
+                         {
+                              orgSubPath += "Default.aspx";
+                         }
+
+                         if (System.IO.File.Exists(HttpContext.Current.Server.MapPath(orgSubPath)))
+                         {
+                              HttpContext.Current.RewritePath(orgSubPath, null, query, false);
+                              return;
+                         }
+
+                         var selectedOrg = (from y in data.Logistics_Organizations
+                                             where y.VanityURL == orgName
+                                             select y).FirstOrDefault();
+
+                         if (selectedOrg != null)
+                         {
+                              var rawSubPath = path.Substring(path.NthIndexOf("/", 2));
+                              var dynamicUrl = (from x in data.System_URLs
+                                                where x.Path == rawSubPath &&
+                                                       x.OrganizationId == selectedOrg.Id
+                                                  select x).FirstOrDefault();
+
+                              if (dynamicUrl != null)
+                              {
+                                   query += "&Id=" + dynamicUrl.ObjectId.ToString();
+                                   HttpContext.Current.RewritePath("~/" + dynamicUrl.TableName + "/" + dynamicUrl.PageTemplate + ".aspx", null, query, false);
+                                   return;
+                              }
+                              else
+                              {
+                                   // might be a path into the DynamicData folder
+                                   HttpContext.Current.RewritePath("~"+ orgSubPath, null, query, false);
+                              }
+                         }
+                    }
+                    //newpath = "~/System/HTTP404.aspx";
+               }
           }
 //-------------------------------------------------------------------------------------------
           public void Dispose()
           {
 
-          }
-//-------------------------------------------------------------------------------------------
-          //void app_EndRequest(object sender, EventArgs e)
-          //{
-//               //send_message_chat message = new send_message_chat();
-//               //message.from = "weavver.com";
-//               //message.body = "WeavverHttpModule: EndRequest: " + HttpContext.Current.Items["vanityurl"];
-//               //message.to = System.Configuration.ConfigurationManager.AppSettings.Get("admin_address");
-//               //ejabberdRPC rpc = new ejabberdRPC();
-//               //rpc.SendMessageChat(message);
-//          }
-////-------------------------------------------------------------------------------------------
-          // from: http://stackoverflow.com/questions/276355/can-i-access-session-state-from-an-httpmodule/7400727
-          // a temp handler used to force the SessionStateModule to load session state
-          public class MyHttpHandler : IHttpHandler, IRequiresSessionState
-          {
-               internal readonly IHttpHandler OriginalHandler;
-
-               public MyHttpHandler(IHttpHandler originalHandler)
-               {
-                    OriginalHandler = originalHandler;
-               }
-
-               public void ProcessRequest(HttpContext context)
-               {
-                    // do not worry, ProcessRequest() will not be called, but let's be safe
-                    throw new InvalidOperationException("MyHttpHandler cannot process requests.");
-               }
-
-               public bool IsReusable
-               {
-                    // IsReusable must be set to false since class has a member!
-                    get { return false; }
-               }
           }
 //-------------------------------------------------------------------------------------------
      }

@@ -21,7 +21,22 @@ public partial class Controls_Log_In : WeavverUserControl
 //-------------------------------------------------------------------------------------------
      protected void Login1_LoggedIn(object sender, EventArgs e)
      {
-          Response.Redirect("/");
+          ProfileCommon profile = Profile.GetProfile(Login1.UserName);
+
+          if (profile.DefaultAccount == null || profile.DefaultAccount == Guid.Empty)
+               profile.DefaultAccount = new Guid(ConfigurationManager.AppSettings["default_organizationid"]);
+
+          using (Weavver.Data.WeavverEntityContainer data = new Weavver.Data.WeavverEntityContainer())
+          {
+               var orgs = from x in data.Logistics_Organizations
+                          where x.Id == profile.DefaultAccount
+                          select x;
+
+               string y = orgs.First().VanityURL;
+               Response.Redirect("~/" + y + "/");
+          }
+               
+          //Response.Redirect("~/");
      }
 //-------------------------------------------------------------------------------------------
      public void Show()

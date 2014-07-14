@@ -46,7 +46,7 @@ namespace Weavver.Testing.Vendors.FreeSwitch
                doc.LoadXml(response2);
                
                var userAttribute = doc.DocumentElement.SelectSingleNode("//user[@id = '" + sipusername + "']/@id");
-               Assert.AreEqual(sipusername, userAttribute.Value, "The sip ID passed back does not match.");
+               Assert.AreEqual(sipusername, userAttribute.Value, "The sip id passed back does not match.");
 
                var passAttribute = doc.DocumentElement.SelectSingleNode("//param[@name = 'a1-hash']/@value");
                Assert.AreEqual(sippasswordhash, passAttribute.Value, "The served up password does not match.");

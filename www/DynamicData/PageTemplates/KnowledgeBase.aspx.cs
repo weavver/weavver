@@ -22,6 +22,8 @@ namespace DynamicData
 //-------------------------------------------------------------------------------------------
           protected void Page_Init(object sender, EventArgs e)
           {
+               RequiresSelectedOrg = true;
+
                Navigation.SelectedNodeChanged += new EventHandler(Navigation_SelectedNodeChanged);
                FormView1.ItemCommand += new FormViewCommandEventHandler(FormView1_ItemCommand);
 

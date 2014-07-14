@@ -11,3 +11,4 @@ units/bin
 units/obj
 dist
 !units/Build
+console/bin/

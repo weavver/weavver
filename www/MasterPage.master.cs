@@ -162,7 +162,6 @@ using Weavver.Data;
                //if (!HttpContext.Current.User.Identity.IsAuthenticated)
                //     SetToolbarVisiblity(false);
 
-
                //<asp:TextBox ID="Organizations" runat="server" AutoPostBack="false" AutoCompleteType="Disabled"></asp:TextBox>
                //<cc1:AutoCompleteExtender
                //     ID="OrganizationsCompleter"
@@ -189,8 +188,9 @@ using Weavver.Data;
                     Session["rid"] = Request["rid"];
                }
 
-               if (!Request.UserAgent.Contains("iPhone")
-                    && !Request.UserAgent.Contains("Android"))
+               if (Request.UserAgent != null &&
+                   !Request.UserAgent.Contains("iPhone") &&
+                   !Request.UserAgent.Contains("Android"))
                {
                     footer.Style["position"] = "fixed";
                     footer.Style["bottom"] = "0px";
@@ -251,15 +251,16 @@ using Weavver.Data;
 
                TextReader tr = new StreamReader(ms);
                string output = tr.ReadToEnd();
-               string newOutput = ReplaceWithAppPath(output);
+               string newOutput = FormatURLs(output);
                writer.Write(newOutput);
 
                htw.Close();
                sw.Close();
                ms.Close();
           }
+          //DUPLICATED IN BLANK.MASTER - UPDATE THERE AS WELL 
 //-------------------------------------------------------------------------------------------
-          public string ReplaceWithAppPath(string str)
+          public string FormatURLs(string str)
           {
                //string appPath = HttpContext.Current.Request.ApplicationPath;
 
@@ -267,9 +268,9 @@ using Weavver.Data;
                //if (!appPath.EndsWith("/"))
                  //   appPath += "/";
 
-               string org = Request["org"];
-               string basepath = (org == null || org == "default") ? "/" : "/org/" + Request["org"] + "/";
-               return str.Replace("~/", basepath);
+               string basepath = (BasePage == null || BasePage.SelectedOrganization == null) ? "/" : "/" + BasePage.SelectedOrganization.VanityURL + "/";
+               //string orgname = (BasePage == null || BasePage.SelectedOrganization == null) ? BasePage.SelectedOrganization.VanityURL : "";
+               return str.Replace("~/", basepath); //.Replace("%orgname%", orgname);
           }
 //-------------------------------------------------------------------------------------------
      }

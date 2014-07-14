@@ -17,12 +17,12 @@
                <AnonymousTemplate>
                     <a id="SignInLink" runat="server" href="javascript:LoginOpen(this);">Log In</a>
                     <asp:Literal ID="RegisterLink" runat="server">
-                         or <a id="RegisterLink" href="~/account/register">Register</a>
+                         or <a id="RegisterLink" href="~/account/register.aspx">Register</a>
                     </asp:Literal>
                </AnonymousTemplate>
                <LoggedInTemplate>
                     <a class="account-link" style="color: #000000;" href="~/account/"><asp:Label ID="UsernameLabel" runat="server"></asp:Label></a>&nbsp;|&nbsp;
-                    <a class="sign-out-link" style="color: #000000;" href="~/account/logout">Sign Out</a>
+                    <a class="sign-out-link" style="color: #000000;" href="~/account/logout.aspx">Sign Out</a>
                </LoggedInTemplate>
                </asp:LoginView>
           </ContentTemplate>

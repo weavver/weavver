@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Web.Security;
 
 using Weavver.Sys;
+using System.Configuration;
 
 public partial class Account_LogIn : SkeletonPage
 {
@@ -14,6 +15,7 @@ public partial class Account_LogIn : SkeletonPage
      protected void Page_Init(object sender, EventArgs e)
      {
           IsPublic = true;
+          RequiresSelectedOrg = false;
 
           Master.FixedWidth = true;
           Master.SetToolbarVisibility(false);
@@ -22,17 +24,6 @@ public partial class Account_LogIn : SkeletonPage
           {
                Response.Redirect("~/account/");
           }
-
-          //AuthenticationProvider item = DatabaseHelper.Session.CreateCriteria(typeof(AuthenticationProvider))
-          //              .Add(NHibernate.Criterion.Restrictions.Eq("Url", Request.Url.Host.ToLower()))
-          //              .SetCacheable(true)
-          //              .UniqueResult<AuthenticationProvider>();
-
-          //if (item != null)
-          //{
-          //     Login1.MembershipProvider = item.AuthenticationType;
-          //     Session["Provider"] = item.AuthenticationType;
-          //}
      }
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)

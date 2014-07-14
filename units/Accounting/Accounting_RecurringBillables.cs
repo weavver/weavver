@@ -25,8 +25,6 @@ namespace Weavver.Testing.Accounting
                //webDriver.Navigate().GoToUrl(BaseURL + "/Accounting_RecurringBillables/Details.aspx");
                WaitForPageLoad();
 
-
-
                ((IJavaScriptExecutor)webDriver).ExecuteScript("createPopup('/Accounting_RecurringBillables/List.aspx', '800', '500')");
                WaitForPageLoad();
 

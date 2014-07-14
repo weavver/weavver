@@ -19,5 +19,7 @@ public partial class Account_Change_Password : SkeletonPage
 
           Master.FormTitle = "Change Password";
           Master.FixedWidth = true;
+
+          RequiresSelectedOrg = false;
      }
 }
