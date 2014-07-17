@@ -61,14 +61,17 @@ namespace Weavver.Vendors
                                         writer.Write(bbfalse);
                                    }
                               }
+                              Environment.Exit(0);
                               break;
 
                          case "isuser":
                               writer.Write(bbtrue);
+                              Environment.Exit(0);
                               break;
 
                          case "setpass":
                               writer.Write(bbfalse);
+                              Environment.Exit(0);
                               break;
                     }
                }
