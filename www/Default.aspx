@@ -8,8 +8,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">
      <div style="text-align: center;">
           <br />
-          <img id="Logo" runat="server" style="margin-bottom: 10px; border: outset 1px lightgrey; width: 100%; max-width: 550px;" alt="The photography of Michael Magoski." src="/images/art/burningman.png" />
-          <asp:LoginView ID="LoginView1" runat="server" Visible="false">
+          <img id="Logo" runat="server" border="0" style="margin-bottom: 10px; border: outset 1px lightgrey; margin: 10px; width: 100%; max-width: 550px;" alt="The photography of Michael Magoski." src="/images/art/burningman.png" />
+          <asp:LoginView ID="LoginView1" runat="server">
           <AnonymousTemplate>
                <div style="width: 100%; max-width: 350px; display:inline-block; vertical-align: top;margin-bottom: 10px;">
                     <wvvr:RegisterUser id="RegisterUser" runat="server"></wvvr:RegisterUser>
