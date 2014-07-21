@@ -45,7 +45,7 @@ namespace Weavver.Web
                //        /weavver/Logistics_Organizations.aspx?id=
                //        /Default.aspx
                //        /
-               if (exten == ".axd" || System.IO.File.Exists(path))
+               if (exten == ".axd" || System.IO.File.Exists(HttpContext.Current.Server.MapPath(path)))
                {
                     return;
                }

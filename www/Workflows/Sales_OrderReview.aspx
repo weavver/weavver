@@ -1,13 +1,11 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Sales_OrderReview.aspx.cs" Inherits="Company_Sales_Order" Title="Weavver Shopping Cart" %>
 <%@ MasterType VirtualPath="~/MasterPage.master" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
-<%@ Register src="~/Controls/Log In.ascx" tagname="LogIn" tagprefix="wvvr" %>
-<%@ Register src="~/Controls/Register.ascx" tagname="Register" tagprefix="wvvr" %>
 <%@ Register src="~/Controls/BillingMethod.ascx" tagname="BillingMethod" tagprefix="wvvr" %>
 <asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
      <asp:UpdatePanel ID="Update1" runat="server" ChildrenAsTriggers="true">
      <ContentTemplate>
-          <div style="float:right; padding-bottom: 10px;">
+          <div style="float:right; padding: 3px 10px 3px 10px;">
                <asp:TextBox ID="CouponCode" runat="server" Width="250px"></asp:TextBox>
                <asp:Button id="AddCode" runat="server" Text="Add Code" OnClick="CodeAdd_Click" />
                <cc1:TextBoxWatermarkExtender ID="Watermark1" runat="server" TargetControlID="CouponCode" WatermarkCssClass="watermark" WatermarkText="Discount or gift card code"></cc1:TextBoxWatermarkExtender>
@@ -32,7 +30,7 @@
           </asp:DataGrid>
           <table width="100%" style="margin-top: 10px;">
           <tr>
-               <td valign="top">
+               <td valign="top" style="padding-left: 10px;">
                     <asp:LinkButton id="TotalUpdate" runat="server" Text="Update Totals" OnClick="UpdateQuantity_Click"></asp:LinkButton><br />
                </td>
                <td style="text-align: right;">

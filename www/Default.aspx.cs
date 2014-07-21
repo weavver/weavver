@@ -38,20 +38,14 @@ public partial class WeavverDefault : SkeletonPage
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)
      {
-          //string msg = "querystring: " + System.Web.HttpUtility.UrlDecode(Request.QueryString.ToString());
-          ////Response.Write(msg + "<br />");s
+          if (LoggedInUser != null)
+          {
+               var orgURL = (from x in Data.Logistics_Organizations
+                          where x.OrganizationId == LoggedInUser.OrganizationId
+                          select x).First().VanityURL;
 
-
-          //using (WeavverEntityContainer containers = new WeavverEntityContainer())
-          //{
-          //     var pressrelease = (from x in containers.Marketing_PressReleases
-          //                         where x.OrganizationId == SelectedOrganization.Id
-          //                         orderby x.PublishAt descending
-          //                         select x).Take(10);
-
-          //     NewsList.DataSource = pressrelease;
-          //     NewsList.DataBind();
-          //}
+               //Response.Redirect("~/" + orgURL + "/dashboard.aspx");
+          }
 
           //Logo.Src = GetHomeLogoPath();
 
@@ -67,7 +61,7 @@ public partial class WeavverDefault : SkeletonPage
           }
           else
           {
-               WeavverMaster.FormDescription = "Weavver&reg; is an <a href=\"~/source/\" style=\"text-decoration: underline;\">open source</a> biodigital organism. The intelligence is built in by humans and is being constantly updated and evolved. <a href='~/weavver/products/weavver/'>[learn more]</a>";
+               WeavverMaster.FormDescription = "Weavver&reg; is an <a href=\"/weavver/source/\" style=\"text-decoration: underline;\">open source</a> biodigital organism. The intelligence is programmed in by you and is therefore constantly updated and evolved. <a href='/weavver/products/weavver/'>[learn more]</a>";
                //WeavverMaster.FixedWidth = true;
                //WeavverMaster.MaxWidth = "960px";
           }

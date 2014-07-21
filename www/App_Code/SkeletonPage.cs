@@ -41,6 +41,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
      public bool ActivationRequired = true;
      private System_Users _LoggedInUser = null;
      public string BaseURL { get { return Request.Url.Scheme + "://" + Request.Url.Host; } }
+     public WeavverEntityContainer Data = new WeavverEntityContainer();
 //-------------------------------------------------------------------------------------------
      public Sales_ShoppingCarts ShoppingCart
      {
@@ -197,45 +198,13 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
 //-------------------------------------------------------------------------------------------
      protected override void OnPreInit(EventArgs e)
      {
-          if (SelectedOrganization == null && ConfigurationManager.AppSettings["install_mode"] == "false")
+          string vanityurl = (Request["org"] == null) ? "default" : Request["org"];
+          if (vanityurl.Contains(","))
+               vanityurl = vanityurl.Substring(0, vanityurl.IndexOf(','));
+          var orgs = (from x in Data.Logistics_Organizations where x.VanityURL == vanityurl select x);
+          if (orgs.Count() > 0)
           {
-               //string path = Context.Request.Path; // path: /default.aspx OR /org/default/company/services/hosting/
-               //if (path != "/")
-               //{
-               //     int startIndex = (path.StartsWith("/")) ? 1 : 0; // starts with: /weavver/about/example/url
-               //     string orgName = path.Substring(startIndex); // grabs: weavver/about/example/url
-               //     if (orgName.Contains("/"))
-               //     {
-               //          string orgPath = orgName.Substring(orgName.IndexOf("/")); // grabs: about/example/url
-               //          orgName = (orgName.Contains("/")) ? orgName.Substring(0, orgName.IndexOf("/")) : "default"; // grabs: weavver
-
-               //          using (WeavverEntityContainer data = new WeavverEntityContainer())
-               //          {
-               //               var selectedOrg = (from y in data.Logistics_Organizations
-               //                                   where y.VanityURL == orgName
-               //                                   select y).FirstOrDefault();
-
-               //               if (selectedOrg != null)
-               //               {
-               //                    data.Detach(selectedOrg);
-               //                    SelectedOrganization = selectedOrg;
-               //               }
-               //          }
-               //     }
-               //}
-
-               string vanityurl = (Request["org"] == null) ? "default" : Request["org"];
-               if (vanityurl.Contains(","))
-                    vanityurl = vanityurl.Substring(0, vanityurl.IndexOf(','));
-               using (WeavverEntityContainer data = new WeavverEntityContainer())
-               {
-                    var orgs = (from x in data.Logistics_Organizations where x.VanityURL == vanityurl select x);
-                    if (orgs.Count() > 0)
-                    {
-                         SelectedOrganization = orgs.First();
-                         data.Logistics_Organizations.Detach(_selectedOrganization);
-                    }
-               }
+               SelectedOrganization = orgs.First();
           }
           base.OnPreInit(e);
      }

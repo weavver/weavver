@@ -1,31 +1,27 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Contact.ascx.cs" Inherits="Controls_Contact" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
-<table style="border-left: solid 1px #CCCCCC; height: 280px; width: 100%;" cellpadding="0" cellspacing="0">
-<tr style="background-color: #d4e2e2; text-align: left; padding: 5px; margin-bottom: 5px; color: #000000; height: 25px;">
-     <td style="padding-left: 8px;">
-          <h3><asp:Literal ID="lTitle" runat="server"></asp:Literal></h3>
-     </td>
-     <td>
-          <div style="float:right;">
-               <asp:UpdateProgress ID="UpdateProgress" runat="server" AssociatedUpdatePanelID="">
-               <ProgressTemplate><span style="font-style: italic;">Refreshing..&nbsp;</span></ProgressTemplate>
-               </asp:UpdateProgress>
-          </div>
-     </td>
-</tr>
-<tr>
-     <td colspan="2" style="background-color: #FFFFFF; width: 280px; border: none 1px; padding: 8px;" valign="top">
-          <table style="width: 280px; margin-top: 0px;">
+<div style="background-color: #d4e2e2; text-align: left; padding: 5px; margin-bottom: 5px; color: #000000; height: 25px;padding-left: 12px;" cellpadding="0" cellspacing="0">
+     <div style="float:right;">
+          <asp:UpdateProgress ID="UpdateProgress" runat="server" AssociatedUpdatePanelID="">
+          <ProgressTemplate><span style="font-style: italic;">Refreshing..&nbsp;</span></ProgressTemplate>
+          </asp:UpdateProgress>
+     </div>
+     <h3><asp:Literal ID="lTitle" runat="server"></asp:Literal></h3>
+</div>
+<table style="height: 280px; width: 100%;" cellpadding="0" cellspacing="0">
+<tr style="text-align: left; padding: 5px; margin-bottom: 5px; color: #000000; height: 25px;">
+     <td colspan="2" style="border: none 1px; padding: 8px;" valign="top">
+          <table style="">
           <tr>
-               <td style="width:120px;">
+               <td style="width:120px; vertical-align: top">
                     <asp:TextBox ID="tbFirstName" runat="server" Width="110px"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="tbFirstName" ErrorMessage="*" ToolTip="First name is required." ValidationGroup="OrderForm"></asp:RequiredFieldValidator><br />
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="tbFirstName" ErrorMessage="*" ToolTip="First name is required." ValidationGroup="OrderForm"></asp:RequiredFieldValidator>
                     <cc1:FilteredTextBoxExtender ID="filteredFirstName" runat="server" TargetControlID="tbFirstName" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" />
                     <cc1:TextBoxWatermarkExtender ID="FirstNameWatermark" runat="server" TargetControlID="tbFirstName" WatermarkText="first name" WatermarkCssClass="WatermarkedField"></cc1:TextBoxWatermarkExtender>
                </td>
-               <td style="">
-                    <asp:TextBox ID="tbLastName" runat="server" Width="130px"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="tbLastName" ErrorMessage="*" ToolTip="Last name is required." ValidationGroup="OrderForm"></asp:RequiredFieldValidator><br />
+               <td style="width:120px; vertical-align: top">
+                    <asp:TextBox ID="tbLastName" runat="server" Width="110px"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="tbLastName" ErrorMessage="*" ToolTip="Last name is required." ValidationGroup="OrderForm"></asp:RequiredFieldValidator>
                     <cc1:FilteredTextBoxExtender ID="filteredLastName" runat="server" TargetControlID="tbLastName" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" />
                     <cc1:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender1" runat="server" TargetControlID="tbLastName" WatermarkText="last name" WatermarkCssClass="WatermarkedField"></cc1:TextBoxWatermarkExtender>
                </td>

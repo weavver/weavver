@@ -175,7 +175,7 @@ public partial class Company_Sales_Order : SkeletonPage
      {
           if (LoggedInUser == null && ShoppingCart.RequiresOrganizationId)
           {
-               string redirect = "~/account/register?checkingout=true";
+               string redirect = "~/account/register?checkingout=true&redirecturl=/" + SelectedOrganization.VanityURL + "/workflows/sales_orderplace.aspx";
                if (Request["IFrame"] == "true")
                {
                     redirect += "&IFrame=true";

@@ -17,37 +17,32 @@
                          <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="FirstName" ErrorMessage="First name is required." ToolTip="First name is required." ValidationGroup="RegisterInfo">*</asp:RequiredFieldValidator><br />
                          <cc1:FilteredTextBoxExtender ID="filteredFirstName" runat="server" TargetControlID="FirstName" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' " />
                     </div>
-                    <div style="float:left; max-width: 175px">
+                    <div style="float:left; max-width: 175px; padding-bottom: 10px;">
                          <cc1:TextBoxWatermarkExtender ID="LastNameWatermark" runat="server" TargetControlID="LastName" WatermarkText="last name" WatermarkCssClass="watermark"></cc1:TextBoxWatermarkExtender>
                          <asp:TextBox ID="LastName" runat="server" Visible="true" ValidationGroup="RegisterInfo"></asp:TextBox>
                          <asp:RequiredFieldValidator ID="LastNameValidator" runat="server" ControlToValidate="LastName" ErrorMessage="Last name is required." ToolTip="Last name is required." ValidationGroup="RegisterInfo">*</asp:RequiredFieldValidator><br />
                          <cc1:FilteredTextBoxExtender ID="filteredLastName" runat="server" TargetControlID="LastName" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' " />
                     </div><br />
-                    <br />
-                    <br />
-                    <div style="float:left; max-width: 175px">
+                    <div style="padding-bottom: 10px;">
                          <asp:TextBox ID="OrganizationName" runat="server" Visible="true"></asp:TextBox>
                          <cc1:TextBoxWatermarkExtender ID="OrganizationWatermark" runat="server" TargetControlID="OrganizationName" WatermarkText="organization name" WatermarkCssClass="watermark"></cc1:TextBoxWatermarkExtender>
                          <cc1:FilteredTextBoxExtender ID="filteredOrganization" runat="server" TargetControlID="OrganizationName" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz. 0123456789" />
-                    </div><br />
-                    <br />
-                    <br />
-                    <div style="float:left; max-width: 175px">
+                    </div>
+                    <div>
                          <asp:TextBox ID="EmailAddress" runat="server"></asp:TextBox>
                          <cc1:TextBoxWatermarkExtender ID="EmailAddressWatermark" runat="server" TargetControlID="EmailAddress" WatermarkText="e-mail address" WatermarkCssClass="watermark"></cc1:TextBoxWatermarkExtender>
                          <asp:RequiredFieldValidator ID="EmailRequired" runat="server" ControlToValidate="EmailAddress" ErrorMessage="E-mail address is required." ToolTip="E-mail address is required." ValidationGroup="RegisterInfo">*</asp:RequiredFieldValidator><br />
                          <cc1:FilteredTextBoxExtender ID="filteredEmailAddress" runat="server" TargetControlID="EmailAddress" ValidChars="0123456789abcdefghijklmnopqrstuvwxyz.@-_" />
                          <asp:CustomValidator ID="EmailAddressValidator" runat="server" ControlToValidate="EmailAddress" ValidationGroup="RegisterInfo" OnServerValidate="EmailValidation" ErrorMessage="Please enter a valid e-mail address." ForeColor="Red"></asp:CustomValidator>
-                    </div><br />
-                    <br />
-                    <div style="float:left; max-width: 175px">
+                    </div>
+                    <div>
                          <asp:TextBox ID="UserName" runat="server" Visible="true" ValidationGroup="RegisterInfo"></asp:TextBox>
                          <cc1:TextBoxWatermarkExtender ID="UserNameWatermark" runat="server" TargetControlID="UserName" WatermarkText="username" WatermarkCssClass="watermark"></cc1:TextBoxWatermarkExtender>
-                         <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName" ErrorMessage="Username is required." ToolTip="Username is required." ValidationGroup="RegisterInfo">*</asp:RequiredFieldValidator><br />
+                         <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName" ErrorMessage="Username is required." ToolTip="Username is required." ValidationGroup="RegisterInfo">*</asp:RequiredFieldValidator>
                          <cc1:FilteredTextBoxExtender ID="filteredUsername" runat="server" TargetControlID="UserName" ValidChars="0123456789abcdefghijklmnopqrstuvwxyz." />
                          <asp:RegularExpressionValidator ID="UsernameMinimumLength" runat="server" ControlToValidate="UserName" ErrorMessage="Username needs to be more then 6 characters" ValidationExpression=".{6}.*" ValidationGroup="RegisterInfo" />
                     </div>
-                    <div style="float:left; max-width: 175px">
+                    <div>
                          <asp:TextBox ID="Password" runat="server" TextMode="Password" ValidationGroup="RegisterInfo"></asp:TextBox>
                          <cc1:TextBoxWatermarkExtender ID="PasswordWatermark" runat="server" TargetControlID="Password" WatermarkText=" " WatermarkCssClass="watermarkPW"></cc1:TextBoxWatermarkExtender>
                          <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password" ErrorMessage="Password is required." ToolTip="Password is required." ValidationGroup="RegisterInfo">*</asp:RequiredFieldValidator>

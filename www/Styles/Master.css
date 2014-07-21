@@ -982,7 +982,12 @@ div.DDBottomHyperLink img
 
 .orderplace_box
 {
-        float: left;
-        width: 280px;
-        margin: 0px 10px 10px 0px;
+     display: inline-block;
+     max-width: 280px;
+     text-align: left;
+     vertical-align: top;
+     border-left: 1px solid #eeeeee;
+     border-top: 1px solid #eeeeee;
+     margin-top: 10px;
+     margin-bottom: 5px;
 }

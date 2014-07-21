@@ -396,7 +396,7 @@ namespace DynamicData
                     string reviewurl = "~/workflows/sales_orderreview";
                     if (Request["IFrame"] == "true")
                          reviewurl += "?IFrame=true";
-                    Response.Redirect(reviewurl);
+                    Response.Redirect(WeavverMaster.FormatURLs(reviewurl));
                }
           }
 //-------------------------------------------------------------------------------------------

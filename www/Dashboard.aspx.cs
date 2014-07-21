@@ -10,8 +10,16 @@ using System.Configuration;
 
 public partial class Dashboard : SkeletonPage
 {
-    protected void Page_Load(object sender, EventArgs e)
-    {
+//-------------------------------------------------------------------------------------------
+     protected void Page_Init(object sender, EventArgs e)
+     {
+          WeavverMaster.FixedWidth = true;
+          WeavverMaster.Width = "100%";
+          IsPublic = true;
+     }
+//-------------------------------------------------------------------------------------------
+     protected void Page_Load(object sender, EventArgs e)
+     {
          // Request
          // do dns check to see if www.weavver.internal resolves to this server...
          // http://192.168.5.31/weavverweb
@@ -21,41 +29,53 @@ public partial class Dashboard : SkeletonPage
               if (SelectedOrganization != null)
                    UpdatePage(null);
 
-              // Get host name
-              string strHostName = Dns.GetHostName();
-              Console.WriteLine("Host Name: " + strHostName);
+              //// Get host name
+              //string strHostName = Dns.GetHostName();
+              //Console.WriteLine("Host Name: " + strHostName);
 
-              // Find host by name
-              IPHostEntry iphostentry = Dns.GetHostByName(strHostName);
+              //// Find host by name
+              //IPHostEntry iphostentry = Dns.GetHostByName(strHostName);
 
-              // Enumerate IP addresses
-              int nIP = 0;
+              //// Enumerate IP addresses
+              //int nIP = 0;
 
-              Self_URL.Text = "";
-              foreach (IPAddress ipaddress in iphostentry.AddressList)
-              {
-                   Self_URL.Text += "http://" + ipaddress.ToString() + ", ";
-              }
-              char[] charsToTrim = { ',', ' ' };
-              Self_URL.Text = Self_URL.Text.TrimEnd(charsToTrim);
+              //Self_URL.Text = "";
+              //foreach (IPAddress ipaddress in iphostentry.AddressList)
+              //{
+              //     Self_URL.Text += "http://" + ipaddress.ToString() + ", ";
+              //}
+              //char[] charsToTrim = { ',', ' ' };
+              //Self_URL.Text = Self_URL.Text.TrimEnd(charsToTrim);
          }
 
-         ReceivablesLink.HRef = String.Format("~/Accounting_LedgerItems/List.aspx?AccountId={0}&LedgerType={1}", LoggedInUser.OrganizationId.ToString(), LedgerType.Receivable.ToString());
-         PayablesLink.HRef = String.Format("~/Accounting_LedgerItems/List.aspx?AccountId={0}&LedgerType={1}", LoggedInUser.OrganizationId.ToString(), LedgerType.Payable.ToString());
-         TasksLink.HRef = String.Format("~/HR_Tasks/List.aspx?AssignedTo={0}", LoggedInUser.Id.ToString());
 
-         //using (WeavverEntityContainer data = new WeavverEntityContainer())
-         //{
-         //     var accountContent = (from x in data.CMS_Pages
-         //                     where x.Title == "Account/Default" &&
-         //                     x.OrganizationId == SelectedOrganization.Id
-         //                     select x).First();
+          if (LoggedInUser != null)
+          {
+               AccountLinks.Visible = true;
+               ReceivablesLink.HRef = String.Format("javascript:createPopup('~/Accounting_LedgerItems/List.aspx?AccountId={0}&LedgerType={1}', '600', '400');", LoggedInUser.OrganizationId.ToString(), LedgerType.Receivable.ToString());
+               PayablesLink.HRef = String.Format("javascript:createPopup('~/Accounting_LedgerItems/List.aspx?AccountId={0}&LedgerType={1}', '500', '400');", LoggedInUser.OrganizationId.ToString(), LedgerType.Payable.ToString());
+               TasksLink.HRef = String.Format("javascript:createPopup('~/HR_Tasks/List.aspx?AssignedTo={0}', '500', '400');", LoggedInUser.Id.ToString());
+          }
 
-         //     if (accountContent != null)
-         //     {
-         //          AccountContent.Text = accountContent.Page;
-         //     }
-         //}
+
+          var pressrelease = (from x in Data.Marketing_PressReleases
+                              where x.OrganizationId == SelectedOrganization.Id
+                              orderby x.PublishAt descending
+                              select x).Take(10);
+
+          NewsList.DataSource = pressrelease;
+          NewsList.DataBind();
+
+
+          var accountContent = (from x in Data.CMS_Pages
+                                where x.Title == "Account/Default" &&
+                                x.OrganizationId == SelectedOrganization.Id
+                                select x).First();
+
+          if (accountContent != null)
+          {
+               AccountContent.Text = accountContent.Page;
+          }
 
 
          //Response.Write(HttpContext.Current.Items["rawurl"]);

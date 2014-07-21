@@ -1,31 +1,25 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Sales_OrderPlace.aspx.cs" Inherits="Sales_Order_Place" Title="Weavver: Web Store Order Form" %>
 <%@ MasterType VirtualPath="~/MasterPage.master" %>
-<%@ Register src="~/Controls/Log In.ascx" tagname="LogIn" tagprefix="wvvr" %>
-<%@ Register src="~/Controls/Register.ascx" tagname="Register" tagprefix="wvvr" %>
 <%@ Register src="~/Controls/PaymentMethod.ascx" tagname="PaymentMethod" tagprefix="wvvr" %>
 <%@ Register src="~/Controls/Contact.ascx" tagname="Contact" tagprefix="wvvr" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="Head" Runat="Server">
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="NavigationHolder" Runat="Server">
-</asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="Banner" Runat="Server">
-</asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
      <div style="width:100%; background-color: #414141; color: White;">
-          <div style="padding: 10px;">
-               <div style="float:left; color: White;">
-                    <h2><asp:Literal ID="OrderFormTitle" runat="server" Text="Order Form"></asp:Literal></h2>
+          <div style="border: 1px solid white; padding: 10px;">
+               <div style="vertical-align: middle;">
+                    <div style="float:right; color: White; padding-top: 4px;">
+                         <a href="~/workflows/sales_orderreview" style="color: White;">Back to your Shopping Cart</a>
+                    </div>
+                    <div style="float:left; color: White;">
+                         <h2><asp:Literal ID="OrderFormTitle" runat="server" Text="Order Form"></asp:Literal></h2>
+                    </div>
+                    <div style='clear: both;'></div>
                </div>
-               <div style="float:right; color: White;">
-                    <a href="~/workflows/sales_orderreview" style="color: White;">Back to your Shopping Cart</a>
-               </div>
-               <div style='clear: both;'></div>
           </div>
      </div>
      <asp:Panel ID="Message" runat="server" style="padding: 30px;">
           You don't have any items in your cart.
      </asp:Panel>
-     <div id='CustomerInfo' runat="server" style="padding-bottom: 105px;">
+     <div id='CustomerInfo' runat="server" style="padding-bottom: 10px; text-align: center;">
           <div class="orderplace_box">
                <wvvr:Contact ID="PrimaryContact" runat="server" />
           </div>

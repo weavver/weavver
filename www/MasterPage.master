@@ -87,7 +87,7 @@
                </div>
                <div style="clear: both;"></div>
                <asp:ContentPlaceHolder id="NavigationHolder" runat="server" Visible="false"></asp:ContentPlaceHolder>
-               <div id="ContentDIV" runat="server" style="padding: 10px;">
+               <div id="ContentDIV" runat="server" style="">
                     <asp:ContentPlaceHolder id="Content" runat="server"></asp:ContentPlaceHolder>
                </div>
           </div>
@@ -95,9 +95,9 @@
      <div id="footer" runat="server" class="footer">
           <div style="padding-left: 25px; padding-right: 15px; text-decoration: none; float:left;">
                &copy;Weavver&reg;, Inc. 2009-2014 |
-               <a href="~/company/legal/privacy">Privacy</a> |
-               <a href="~/company/legal/termsofservice">Terms of Service</a> |
-               <a href="~/company/legal/trademarks">Trademarks</a> |
+               <a href="/weavver/company/legal/privacy">Privacy</a> |
+               <a href="/weavver/company/legal/termsofservice">Terms of Service</a> |
+               <a href="/weavver/company/legal/trademarks">Trademarks</a> |
                &nbsp;<asp:Literal ID="Source" runat="server">Source</asp:Literal>
           </div>
           <div style="float:right; padding-right: 25px; text-decoration: none;">

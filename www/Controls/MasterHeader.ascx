@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="MasterHeader.ascx.cs" Inherits="Controls_MasterHeader" %>
 <%@ Register src="~/Controls/WebMenu.ascx" tagname="WebMenu" tagprefix="wvvr" %>
 <%@ Register src="~/Navigation.ascx" tagname="Navigation" tagprefix="uc1" %>
-<%@ Register src="~/Controls/Log In.ascx" tagname="LogIn" tagprefix="wvvr" %>
+<%@ Register src="~/Controls/LogIn.ascx" tagname="LogIn" tagprefix="wvvr" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
 <div id="topbar" style='background-color: #59b8ee; border-bottom: 0px solid black; z-index: 100000; clear: both;'>

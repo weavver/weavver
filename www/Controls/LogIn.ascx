@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Log In.ascx.cs" Inherits="Controls_Log_In" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="LogIn.ascx.cs" Inherits="Controls_LogIn" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <div id="LogInBox" class="LogInBox" runat="server" style="display: none;">
      <div style="background-color: #f6f8e8; padding: 10px 10px 10px 10px; margin-bottom: 5px;">
@@ -9,7 +9,7 @@
      </div>
      <asp:UpdatePanel ID="UpdatePanel2" runat="server">
      <ContentTemplate>
-          <asp:Login ID="Login1" runat="server" TextLayout="TextOnTop" Orientation="Horizontal" RememberMeSet="True" Font-Names="Verdana" Font-Size="0.8em" onloggedin="Login1_LoggedIn" FailureText="<span style='color: red; margin: 4px;'>Please try again.</span>" RenderOuterTable="false">
+          <asp:Login ID="Login1" runat="server" TextLayout="TextOnTop" Orientation="Horizontal" RememberMeSet="True" Font-Names="Verdana" Font-Size="0.8em" FailureText="<span style='color: red; margin: 4px;'>Please try again.</span>" RenderOuterTable="false">
           <LayoutTemplate>
                <div style="margin: auto; text-align: center; padding-bottom: 5px;">
                     <asp:TextBox ID="UserName" runat="server" Font-Size="1.25em" Width="150px" ValidationGroup="LogInControl" Height="30px"></asp:TextBox>

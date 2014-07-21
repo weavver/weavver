@@ -39,7 +39,7 @@ We accept Master Card, Lady Visa, and American Express:<br />
           Card #:
      </td>
      <td>
-          <asp:TextBox ID="CreditCard" runat="server" Width="200px" MaxLength="16"></asp:TextBox>
+          <asp:TextBox ID="CreditCard" runat="server" Width="150px" MaxLength="16"></asp:TextBox>
           <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="CreditCard" ErrorMessage="*" ToolTip="Card is required." ValidationGroup="OrderForm"></asp:RequiredFieldValidator>
           <cc1:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server" TargetControlID="CreditCard" ValidChars="0123456789" />
           <cc1:TextBoxWatermarkExtender ID="CCWatermark" runat="server" TargetControlID="CreditCard" WatermarkText="1234567891234567" WatermarkCssClass="WatermarkedField"></cc1:TextBoxWatermarkExtender>
