@@ -393,7 +393,7 @@ namespace DynamicData
                     data.Sales_ShoppingCartItems.AddObject(shoppingCartItem);
                     data.SaveChanges();
 
-                    string reviewurl = "~/workflows/sales_orderreview";
+                    string reviewurl = "~/workflows/sales_orderreview.aspx";
                     if (Request["IFrame"] == "true")
                          reviewurl += "?IFrame=true";
                     Response.Redirect(WeavverMaster.FormatURLs(reviewurl));
