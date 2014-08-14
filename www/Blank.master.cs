@@ -14,9 +14,11 @@ public partial class Blank : MasterPage, WeavverMasterPageInterface
           string js = "<script type='text/javascript'>var windowId = '{0}'; var parentId = '{1}';</script>";
           ScriptVars.Text = String.Format(js, Request["WindowId"], Request["ParentId"]);
 
-          string url = Request.Url.ToString().Replace("?IFrame=true&", "?");
+          string url = Request.Url.PathAndQuery.ToString().Replace("?IFrame=true&", "?");
           PageLink.HRef = url;
-          PageLink.HRef = url.Replace("&IFrame=true", "");
+          PageLink.HRef = FormatURLs("~" + url.Replace("&IFrame=true", ""));
+
+          Page.Header.DataBind();
      }
 //-------------------------------------------------------------------------------------------
      public string FormTitle
@@ -114,6 +116,12 @@ public partial class Blank : MasterPage, WeavverMasterPageInterface
           }
      }
 //-------------------------------------------------------------------------------------------
+     /// <summary>
+     /// Only call this instead of ResolveUrl if we want to make sure the organization name is in the url
+     /// </summary>
+     /// <param name="str"></param>
+     /// <returns></returns>
+     //DUPLICATED IN BLANK.MASTER - UPDATE THERE AS WELL 
      public string FormatURLs(string str)
      {
           //string appPath = HttpContext.Current.Request.ApplicationPath;
@@ -122,9 +130,9 @@ public partial class Blank : MasterPage, WeavverMasterPageInterface
           //if (!appPath.EndsWith("/"))
           //   appPath += "/";
 
-          string basepath = (BasePage == null || BasePage.SelectedOrganization == null) ? "/" : "/" + BasePage.SelectedOrganization.VanityURL + "/";
+          string basepath = (BasePage == null || BasePage.SelectedOrganization == null) ? "~/" : "~/" + BasePage.SelectedOrganization.VanityURL + "/";
           //string orgname = (BasePage == null || BasePage.SelectedOrganization == null) ? BasePage.SelectedOrganization.VanityURL : "";
-          return str.Replace("~/", basepath); //.Replace("%orgname%", orgname);
+          return str.Replace("~/", Page.ResolveUrl(basepath)); //.Replace("%orgname%", orgname);
      }
 //-------------------------------------------------------------------------------------------
 }

@@ -16,7 +16,7 @@ namespace Weavver.Testing.Staging
                rb.RunTest();
                rb.TestFixtureTearDown();
 
-               Weavver.Testing.Sales.WebStore.ShoppingCart cart = new Weavver.Testing.Sales.WebStore.ShoppingCart();
+               Weavver.Testing.Sales.WebStore cart = new Weavver.Testing.Sales.WebStore();
                cart.TestFixtureSetUp();
                cart.PlaceOrder();
                cart.TestFixtureTearDown();

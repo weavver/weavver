@@ -8,7 +8,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">
      <div style="text-align: center;">
           <br />
-          <img id="Logo" runat="server" style="margin-bottom: 10px; border: outset 1px lightgrey; width: 100%; max-width: 550px;" alt="The photography of Michael Magoski." src="/images/art/burningman.png" />
+          <img id="Logo" runat="server" style="margin-bottom: 10px; border: outset 1px lightgrey; width: 100%; max-width: 550px;" alt="The photography of Michael Magoski." src="~/images/art/burningman.png" />
           <div style="display:inline-block; width: 25px;">
                &nbsp;
           </div>

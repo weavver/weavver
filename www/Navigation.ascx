@@ -1,5 +1,4 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Navigation.ascx.cs" Inherits="Navigation" %>
-<%@ Register src="NavigationButton.ascx" tagname="NavigationButton" tagprefix="uc1" %>
 
 <!-- <a runat="server" id="DefaultButton" class="button" href="/Default.aspx" onclick="this.blur();"><span>Home</span></a>
 -->

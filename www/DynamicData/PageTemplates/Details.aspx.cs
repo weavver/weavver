@@ -34,12 +34,13 @@ namespace DynamicData
 
                WeavverMaster.FixedWidth = true;
                WeavverMaster.Width = "100%";
-               ScriptManager.RegisterStartupScript(UpdatePanel1, typeof(string), "RunScripts", "run();", true);
+               
+               //ScriptManager.RegisterStartupScript(UpdatePanel1, typeof(string), "RunScripts", "run();", true);
 
                table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
                
                if (LoggedInUser != null &&
-                    LoggedInUser.OrganizationId != new Guid(ConfigurationManager.AppSettings["default_organizationid"]))
+                   LoggedInUser.OrganizationId != new Guid(ConfigurationManager.AppSettings["default_organizationid"]))
                     DetailsDataSource.WhereParameters.Add(new Parameter("OrganizationId", DbType.Guid, SelectedOrganization.Id.ToString()));
                DetailsDataSource.EntityTypeFilter = table.EntityType.Name;
 

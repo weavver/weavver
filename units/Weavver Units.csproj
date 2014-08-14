@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Weavver.Units</RootNamespace>
     <AssemblyName>Weavver.Units</AssemblyName>
-    <TargetFrameworkVersion>v4.0.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -84,7 +84,7 @@
       <Name>Weavver.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\moksha\interface\Weavver Moksha Interface.csproj">
-      <Project>{8E71554E-8184-40C7-8CBC-8955C7627A04}</Project>
+      <Project>{8e71554e-8184-40c7-8cbc-8955c7627a04}</Project>
       <Name>Weavver Moksha Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\net\src\Weavver.Net.csproj">

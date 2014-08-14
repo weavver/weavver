@@ -25,7 +25,7 @@ public partial class Company_Human_Resources_Kiosk : SkeletonPage
           {
                ResetForm();
           }
-          Logo.Src = GetLogoPath();
+          //Logo.Src = GetLogoPath();
           OrgName.Text = SelectedOrganization.Name;
      }
 //-------------------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ public partial class Company_Human_Resources_Kiosk : SkeletonPage
           return false;
      }
 //-------------------------------------------------------------------------------------------
-     public bool LogIn_byPhoneNumber(string phonenumber, string passcode, out System_User user)
+     public bool LogIn_byPhoneNumber(string phonenumber, string passcode, out System_Users user)
      {
           //Weavver.Sys.User item = DatabaseHelper.Session.CreateCriteria(typeof(Weavver.Sys.User))
           //    .Add(NHibernate.Criterion.Restrictions.Eq("PhoneNumber", phonenumber))

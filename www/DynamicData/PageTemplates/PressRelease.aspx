@@ -59,7 +59,7 @@
                               &nbsp;<span style="font-size: 14pt; margin-bottom: 10px; color: blue;"><%# DataBinder.Eval(Container.DataItem, "Name") %></span>
                               <div style="padding-top: 10px;padding-right: 5px; text-align: center;"><%# GetLogo(new Guid(DataBinder.Eval(Container.DataItem, "Id").ToString())) %></div>
                          </a> 
-                         <div style="text-align: left;">HTMLPurifierLib.Sanitize(<%# DataBinder.Eval(Container.DataItem, "Brief")) %></div>
+                         <div style="text-align: left;"><%# HTMLPurifierLib.Sanitize(DataBinder.Eval(Container.DataItem, "Brief").ToString()) %></div>
                     </div>
                </ItemTemplate>
             </asp:DataList>

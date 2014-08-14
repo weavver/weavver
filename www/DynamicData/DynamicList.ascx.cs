@@ -90,8 +90,10 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                     newObjectLink.Title = "Accessible to: " + String.Join(", ", insertPermissions.AllowedRoles);
 
                     string url = "~/{0}/Details.aspx";
+                    url = String.Format(url, table.EntityType.Name);
+                    url = BasePage.WeavverMaster.FormatURLs(url);
                     string newLink = "javascript:createPopup('{0}', {1}, {2});";
-                    newObjectLink.HRef = String.Format(BasePage.WeavverMaster.FormatURLs(newLink), table.EntityType.Name, insertPermissions.Width, insertPermissions.Height);
+                    newObjectLink.HRef = String.Format(newLink, url, insertPermissions.Width, insertPermissions.Height);
                }
 
                MethodInfo tableMenu = table.EntityType.GetMethod("GetTableMenu");

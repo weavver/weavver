@@ -28,9 +28,11 @@ namespace Weavver.Web
                string url = app.Context.Request.Url.ToString(); // url: http://www.weavver.local/default.aspx
                string path = app.Context.Request.Path; // path: /default.aspx OR /org/default/company/services/hosting/
                string exten = System.IO.Path.GetExtension(app.Context.Request.Path);
-               string newpath = path;
+               int virtualPathLength = HttpRuntime.AppDomainAppVirtualPath.Length; // support cases like: localhost/weavver
+               string newpath = path.Substring(virtualPathLength);
+               newpath = newpath.StartsWith("/") ? "~" + newpath : "~/" + newpath;
 
-               string[] pathparts = path.Split('/');
+               string[] pathparts = newpath.Substring(2).Split('/');
 
                string query = "";
                if (HttpContext.Current.Request.QueryString.HasKeys())
@@ -55,6 +57,13 @@ namespace Weavver.Web
                     HttpContext.Current.RewritePath(newpath, null, query, false);
                     newpath = path.Substring(1);
                     return;
+               }
+
+               // if is hosted as localhost/weavver
+               if (path.Split('/').Length - 1 <= 1 &&
+                    !path.EndsWith("/"))
+               {
+                    newpath = newpath + "/";
                }
 
                if (newpath.EndsWith("/"))
@@ -87,31 +96,35 @@ namespace Weavver.Web
                     Weavver.Utilities.ErrorHandling.SendError(new Exception(logmsg));
                }
 
-               if (pathparts.Length > 1)
+               if (pathparts.Length > 0)
                {
                     // checks for dynamic urls (pages/content that only lives in the database)
                     using (Weavver.Data.WeavverEntityContainer data = new Weavver.Data.WeavverEntityContainer())
                     {
-                         int startIndex = (newpath.NthIndexOf("/", 2) > 0) ? newpath.NthIndexOf("/", 2) : 0; // starts with: /weavver/about/example/url
-                         string orgName = pathparts[1]; // grabs: weavver/about/example/url
-                         string orgSubPath = newpath.Substring(startIndex); // grabs: about/example/url
+                         string rawPathWithOrg = path.Substring(virtualPathLength);
+                         // stripping out the starting slash helps when since it's there sometimes
+                         // when hosted as localhost/ vs localhost/weavver
+                         rawPathWithOrg = (rawPathWithOrg.StartsWith("/")) ? rawPathWithOrg.Substring(1) : rawPathWithOrg;
+                         int startIndex = (rawPathWithOrg.NthIndexOf("/", 1) > 0) ? rawPathWithOrg.NthIndexOf("/", 1) : 0; // starts with: /weavver/about/example/url
+                         string orgName = pathparts[0]; // grabs: weavver/about/example/url
+                         string orgSubPath = rawPathWithOrg.Substring(startIndex); // grabs: about/example/url
 
                          if (String.IsNullOrEmpty(query))
-                              query = "org=" + pathparts[1];
+                              query = "org=" + pathparts[0];
                          else
-                              query = "org=" + pathparts[1] + "&" + query;
+                              query = "org=" + pathparts[0] + "&" + query;
 
                          // catch cases where the path could be:
                          //        /weavver/ or
                          //        /weavver/somefolder/
-                         if (orgSubPath.EndsWith("/"))
+                         if (newpath.EndsWith("/"))
                          {
-                              orgSubPath += "Default.aspx";
+                              newpath = orgSubPath + "Default.aspx";
                          }
 
-                         if (System.IO.File.Exists(HttpContext.Current.Server.MapPath(orgSubPath)))
+                         if (System.IO.File.Exists(HttpContext.Current.Server.MapPath(newpath)))
                          {
-                              HttpContext.Current.RewritePath(orgSubPath, null, query, false);
+                              HttpContext.Current.RewritePath(newpath, null, query, false);
                               return;
                          }
 
@@ -121,9 +134,8 @@ namespace Weavver.Web
 
                          if (selectedOrg != null)
                          {
-                              var rawSubPath = path.Substring(path.NthIndexOf("/", 2));
                               var dynamicUrl = (from x in data.System_URLs
-                                                where x.Path == rawSubPath &&
+                                                where x.Path == orgSubPath &&
                                                        x.OrganizationId == selectedOrg.Id
                                                   select x).FirstOrDefault();
 

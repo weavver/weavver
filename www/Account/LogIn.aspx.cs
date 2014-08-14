@@ -17,6 +17,7 @@ public partial class Account_LogIn : SkeletonPage
           IsPublic = true;
           RequiresSelectedOrg = false;
 
+          WeavverMaster.MaxWidth = "100%";
           Master.FixedWidth = true;
           Master.SetToolbarVisibility(false);
 

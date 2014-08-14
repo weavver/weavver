@@ -232,6 +232,8 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
           {
                string actionpath = Request.PathInfo.Replace(".aspx", "");
                Form.Action = (actionpath.ToLower().EndsWith("default")) ? actionpath.Substring(0, actionpath.ToLower().IndexOf("default")) : actionpath;
+
+               Form.Action = Request.Url.PathAndQuery;
           }
           string query = "";
           for (int i = 0; i < Request.QueryString.Keys.Count; i++)
@@ -248,8 +250,8 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                }
           }
           // append the query string
-          if (Form != null && query != "")
-               Form.Action += "?" + query;
+          //if (Form != null && query != "")
+          //     Form.Action += "?" + query;
 
           if (RunCustomValidationJs)
           {
@@ -476,7 +478,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
      protected override void OnError(EventArgs e)
      {
           Session["error"] = Server.GetLastError();
-          Session["errorurl"] = Request.Url.ToString();
+          Session["errorurl"] = WeavverMaster.FormatURLs("~" + Request.Url.PathAndQuery.ToString());
           Response.Redirect("~/system/error.aspx");
 
           base.OnError(e);

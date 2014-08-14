@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="LogIn.aspx.cs" Inherits="Account_LogIn" %>
 <%@ MasterType VirtualPath="~/MasterPage.master" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
-<%@ Register src="~/Controls/Log In.ascx" tagname="LogIn" tagprefix="wvvr" %>
+<%@ Register src="~/Controls/LogIn.ascx" tagname="LogIn" tagprefix="wvvr" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">
      <div style="width: auto; max-width: 400px; margin: auto; z-index: -10; text-align: center; padding: 5px; border: solid 1px lightgrey; text-align: center; padding-bottom: 15px;">
           <asp:MultiView ID="MultiView1" runat="server" ActiveViewIndex="0">

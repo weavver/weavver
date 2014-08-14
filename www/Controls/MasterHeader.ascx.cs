@@ -12,6 +12,8 @@ public partial class Controls_MasterHeader : WeavverUserControl
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)
      {
+          HeaderLogoLink.HRef = Page.ResolveUrl("~/");
+
           OrganizationsList.SelectedIndexChanged += new EventHandler(OrganizationsList_SelectedIndexChanged);
 
           ////// This prevents additional errors from occuring if the error page is triggered (possibly due to the database being unavailable.)

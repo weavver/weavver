@@ -247,7 +247,7 @@ public partial class WeavverWebMenu : WeavverUserControl
 
           WeavverMenuItem item = new WeavverMenuItem();
           item.Name = ItemName;
-          item.Link = "createPopup('" + ItemLink + "', '" + Width + "', '" + Height + "')";
+          item.Link = "createPopup('" + BasePage.WeavverMaster.FormatURLs(ItemLink) + "', '" + Width + "', '" + Height + "')";
           item.parent = parentMenu;
           parentMenu.Items.Add(item);
           return item;

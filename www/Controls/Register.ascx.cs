@@ -31,7 +31,9 @@ public partial class RegisterControl : WeavverUserControl
           si.TagName = "script";
           si.Attributes.Add("type", @"text/javascript");
           si.Attributes.Add("src", "http://www.google.com/recaptcha/api/js/recaptcha_ajax.js");
-          this.Page.Header.Controls.Add(si);
+
+          Page.ClientScript.RegisterClientScriptInclude("recaptcha", "http://www.google.com/recaptcha/api/js/recaptcha_ajax.js");
+          //this.Page.Header.Controls.Add(si);
 
           // <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
      }

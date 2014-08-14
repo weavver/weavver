@@ -16,13 +16,13 @@
                <asp:LoginView ID="LoginView1" runat="server">
                <AnonymousTemplate>
                     <a id="SignInLink" runat="server" href="javascript:LoginOpen(this);">Log In</a>
-                    <asp:Literal ID="RegisterLink" runat="server">
-                         or <a id="RegisterLink" href="~/account/register.aspx">Register</a>
-                    </asp:Literal>
+                    <asp:PlaceHolder ID="RegisterLink" runat="server">
+                         or <a id="RegisterLinkAnchor" href="<%= Page.ResolveUrl("~/account/register.aspx") %>">Register</a>
+                    </asp:PlaceHolder>
                </AnonymousTemplate>
                <LoggedInTemplate>
-                    <a class="account-link" style="color: #000000;" href="~/account/"><asp:Label ID="UsernameLabel" runat="server"></asp:Label></a>&nbsp;|&nbsp;
-                    <a class="sign-out-link" style="color: #000000;" href="~/account/logout.aspx">Sign Out</a>
+                    <a class="account-link" style="color: #000000;" href="<%= Page.ResolveUrl("~/account/") %>"><asp:Label ID="UsernameLabel" runat="server"></asp:Label></a>&nbsp;|&nbsp;
+                    <a class="sign-out-link" style="color: #000000;" href="<%= Page.ResolveUrl("~/account/logout.aspx") %>">Sign Out</a>
                </LoggedInTemplate>
                </asp:LoginView>
           </ContentTemplate>
@@ -33,7 +33,7 @@
      </div>
      <wvvr:LogIn ID="LogIn" runat="server" />
      <div style="float:left; max-width: 300px; vertical-align: middle; height: 63px; margin-top: 5px; margin-bottom: 5px;">
-          <a style="vertical-align: middle;" href="~/">
+          <a id="HeaderLogoLink" runat="server" style="vertical-align: middle;" href="~/">
                <img alt="" id="HeaderLogo" runat="server" src="~/images/logo.png" style="border: none; display:block; float:left; max-width: 100%;" />
           </a>
      </div>

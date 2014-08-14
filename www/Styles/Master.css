@@ -20,7 +20,7 @@ body
 .header
 {
      background-position: top;
-     background-image: url('/images/header-background.png');
+     background-image: url('../images/header-background.png');
      background-repeat: repeat-x;
      /*margin-left: 0px;*/
      background-color: #CCCCCC;
@@ -255,7 +255,7 @@ li
 }
 
 a.button {
-    background: transparent url('/images/button-nav-right.png') no-repeat scroll top right;
+    background: transparent url('../images/button-nav-right.png') no-repeat scroll top right;
     color: #444;
     display: inline-block;
     font: normal 12px arial, sans-serif;
@@ -274,7 +274,7 @@ a.button {
 }
 
 a.button span {
-    background: transparent url('/images/button-nav-span.png') no-repeat;
+    background: transparent url('../images/button-nav-span.png') no-repeat;
     display: block;
     line-height: 14px;
     padding: 12px 0 5px 24px;

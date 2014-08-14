@@ -96,7 +96,7 @@
           </style>
      </head>
      <body>
-          <div id="top" style="text-align: left;background-color: #3b3b3b;background-image: url('/images/header-background.png');margin-bottom: 10">
+          <div id="top" style="text-align: left;background-color: #3b3b3b;background-image: url('<%= Page.ResolveUrl("~/images/header-background.png") %>');margin-bottom: 10">
                <table><tr>
                     <td>
                          <img src="/images/logo.png" style="height: 55px" />

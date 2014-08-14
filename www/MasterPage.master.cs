@@ -197,10 +197,11 @@ using Weavver.Data;
                     footer.Style["width"] = "100%";
                     // style="position: fixed;bottom: -55px;"
                }
-
                GoogleAnalytics.Visible = (Request.Url.Host.ToLower().Contains("weavver.com"));
-               Style.Href = HttpContext.Current.Request.ApplicationPath + "Styles/Master.css";
-               Source.Text = "<a href='~/Source?File=" + Request.FilePath + ".cs'>Source</a>";
+               string srcTxt = "<a href='{0}?File={1}.cs'>Source</a>";
+               Source.Text = String.Format(srcTxt, Page.ResolveUrl("~/Source"), Page.ResolveUrl(Request.FilePath));
+
+               Page.Header.DataBind();
           }
 //-------------------------------------------------------------------------------------------
           protected void Page_PreRender(object sender, EventArgs e)
@@ -239,25 +240,25 @@ using Weavver.Data;
                Response.Redirect("/system/link?linkto=" + Request["id"].ToString());
           }
 //-------------------------------------------------------------------------------------------
-          protected override void Render(HtmlTextWriter writer)
-          {
-               MemoryStream ms = new MemoryStream();
-               StreamWriter sw = new StreamWriter(ms);
-               HtmlTextWriter htw = new HtmlTextWriter(sw);
+          //protected override void Render(HtmlTextWriter writer)
+          //{
+          //     MemoryStream ms = new MemoryStream();
+          //     StreamWriter sw = new StreamWriter(ms);
+          //     HtmlTextWriter htw = new HtmlTextWriter(sw);
 
-               base.Render(htw);
-               htw.Flush();
-               ms.Position = 0;
+          //     base.Render(htw);
+          //     htw.Flush();
+          //     ms.Position = 0;
 
-               TextReader tr = new StreamReader(ms);
-               string output = tr.ReadToEnd();
-               string newOutput = FormatURLs(output);
-               writer.Write(newOutput);
+          //     TextReader tr = new StreamReader(ms);
+          //     string output = tr.ReadToEnd();
+          //     string newOutput = FormatURLs(output);
+          //     writer.Write(newOutput);
 
-               htw.Close();
-               sw.Close();
-               ms.Close();
-          }
+          //     htw.Close();
+          //     sw.Close();
+          //     ms.Close();
+          //}
           //DUPLICATED IN BLANK.MASTER - UPDATE THERE AS WELL 
 //-------------------------------------------------------------------------------------------
           public string FormatURLs(string str)
@@ -268,9 +269,9 @@ using Weavver.Data;
                //if (!appPath.EndsWith("/"))
                  //   appPath += "/";
 
-               string basepath = (BasePage == null || BasePage.SelectedOrganization == null) ? "/" : "/" + BasePage.SelectedOrganization.VanityURL + "/";
+               string basepath = (BasePage == null || BasePage.SelectedOrganization == null) ? "~/" : "~/" + BasePage.SelectedOrganization.VanityURL + "/";
                //string orgname = (BasePage == null || BasePage.SelectedOrganization == null) ? BasePage.SelectedOrganization.VanityURL : "";
-               return str.Replace("~/", basepath); //.Replace("%orgname%", orgname);
+               return str.Replace("~/", Page.ResolveUrl(basepath)); //.Replace("%orgname%", orgname);
           }
 //-------------------------------------------------------------------------------------------
      }
