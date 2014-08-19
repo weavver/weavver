@@ -443,7 +443,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                          }
                          else if (ret.RedirectRequest)
                          {
-                              string js = String.Format("<script type='text/javascript'>createPopup('{0}', {1}, {2});</script>", VirtualPathUtility.ToAbsolute(ret.RedirectURL), ret.RedirectWidth, ret.RedirectHeight);
+                              string js = String.Format("<script type='text/javascript'>createPopup('{0}', {1}, {2});</script>", WeavverMaster.FormatURLs(ret.RedirectURL), ret.RedirectWidth, ret.RedirectHeight);
                               ScriptManager.RegisterStartupScript(Page, this.GetType(), "redirectUrl", js, false);
                          }
                     }

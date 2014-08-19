@@ -34,7 +34,7 @@
      </asp:UpdatePanel>
      <br />
      <div style="text-align: center; padding-bottom: 10px;">
-          <a href="~/account/login?action=reset">Reset Password</a>
+          <a href="<%= Page.ResolveUrl("~/account/login?action=reset") %>">Reset Password</a>
      </div>
 </div>
 <asp:HiddenField ID="MPERequiredButton" runat="server" Value="Ignore" />

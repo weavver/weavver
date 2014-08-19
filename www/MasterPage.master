@@ -117,7 +117,7 @@
           </div>
           <div style="float:right; padding-right: 25px; text-decoration: none;">
                <wvvr:QRCode ID="QRGenerator" runat="server" /> |
-               <a class="footer-links" href="~/Sales_Leads/Details.aspx?Source=Website%20Inquiry">Send Feedback</a>&nbsp;|
+               <a class="footer-links" href="<%= Page.ResolveUrl("~/weavverinc/Sales_Leads/Details.aspx?Source=Website%20Inquiry") %>">Send Feedback</a>&nbsp;|
                &nbsp;<asp:Literal id="Version" runat="server" Text="Alpha"></asp:Literal>
           </div>
           <div style="clear: both;" />
