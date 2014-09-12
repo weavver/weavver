@@ -273,7 +273,7 @@ public partial class Company_Accounting_Import_Default : SkeletonPage
                          item.LedgerItem.Memo = memoField.Text;
                     }                         
 
-                    data.Accounting_LedgerItems.AddObject(item.LedgerItem);
+                    data.Accounting_LedgerItems.Add(item.LedgerItem);
                }
                ClearError();
                decimal successCount = data.SaveChanges();
