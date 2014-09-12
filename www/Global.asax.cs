@@ -15,6 +15,7 @@ using System.Workflow.Runtime;
 
 using Weavver.Workflows;
 using Weavver.Data;
+using System.Data.Entity.Infrastructure;
 
 public partial class Global : System.Web.HttpApplication
 {
@@ -99,8 +100,13 @@ public partial class Global : System.Web.HttpApplication
      {
           DefaultModel.FieldTemplateFactory = new SecureFieldTemplateFactory();
           ContextConfiguration config = new ContextConfiguration() { ScaffoldAllTables = true };
-          DefaultModel.RegisterContext(typeof(Weavver.Data.WeavverEntityContainer), config);
-          DefaultModel.RegisterContext(typeof(Weavver.Workflows.WorkflowContainer), config);
+          //DefaultModel.RegisterContext(typeof(Weavver.Data.WeavverEntityContainer), config);
+
+          DefaultModel.RegisterContext(
+                                        new Microsoft.AspNet.DynamicData.ModelProviders.EFDataModelProvider(() => new WeavverEntityContainer()),
+                                        config
+                                      );
+          //DefaultModel.RegisterContext(typeof(Weavver.Workflows.WorkflowContainer), config);
 
           // separate page mode
           routes.Add(new DynamicDataRoute("{table}/{action}.aspx")
@@ -157,7 +163,7 @@ public partial class Global : System.Web.HttpApplication
 
                     foreach (Sales_ShoppingCartItems item in cartItems)
                     {
-                         data.Sales_ShoppingCartItems.DeleteObject(item);
+                         data.Sales_ShoppingCartItems.Remove(item);
                     }
                     data.SaveChanges();
                }

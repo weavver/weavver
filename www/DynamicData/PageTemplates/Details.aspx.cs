@@ -30,12 +30,13 @@ namespace DynamicData
 //-------------------------------------------------------------------------------------------
           protected void Page_Init(object sender, EventArgs e)
           {
-               DetailsDataSource.Inserted += new EventHandler<EntityDataSourceChangedEventArgs>(DetailsDataSource_Inserted);
+               DetailsDataSource.Inserted += new EventHandler<Microsoft.AspNet.EntityDataSource.EntityDataSourceChangedEventArgs>(DetailsDataSource_Inserted);
 
                WeavverMaster.FixedWidth = true;
                WeavverMaster.Width = "100%";
                
-               //ScriptManager.RegisterStartupScript(UpdatePanel1, typeof(string), "RunScripts", "run();", true);
+               // runs the initializing javascript in Blank.master to handle mouse events
+               ScriptManager.RegisterStartupScript(this, typeof(string), "RunScripts", "$(document).ready(function () { run(); } );", true);
 
                table = DynamicDataRouteHandler.GetRequestMetaTable(Context);
                
@@ -45,17 +46,19 @@ namespace DynamicData
                DetailsDataSource.EntityTypeFilter = table.EntityType.Name;
 
                if (!IsPostBack)
-               FormView1.SetMetaTable(table);
-
+                    FormView1.SetMetaTable(table);
 
                IsPublic = true;
 
                bool canListData = table.Provider.EntityType.CanListData().HasMatchingRole(GetUserRoles());
                if (Request["IFrame"] != "true")
                {
-                    DynamicHyperLink control = this.FindControlR<DynamicHyperLink>("BackToTheList");
+                    HtmlAnchor control = this.FindControlR<HtmlAnchor>("BackToTheList");
                     if (control != null)
+                    {
+                         control.HRef = WeavverMaster.FormatURLs("~/" + table.EntityType.Name + "/List.aspx");
                          control.Visible = canListData;
+                    }
                }
 
                AttachmentsList.Visible = false;
@@ -104,7 +107,7 @@ namespace DynamicData
           {
           }
 //-------------------------------------------------------------------------------------------
-          void DetailsDataSource_Inserted(object sender, EntityDataSourceChangedEventArgs e)
+          void DetailsDataSource_Inserted(object sender, Microsoft.AspNet.EntityDataSource.EntityDataSourceChangedEventArgs e)
           {
                if (!String.IsNullOrEmpty(Request["ParentId"]))
                {
@@ -130,7 +133,7 @@ namespace DynamicData
                ICustomTypeDescriptor descriptor = FormView1.DataItem as ICustomTypeDescriptor;
                if (descriptor != null)
                {
-                    EntityObject entityObject = (EntityObject)descriptor.GetPropertyOwner(null);
+                    object entityObject = descriptor.GetPropertyOwner(null);
 
                     string[] userRoles = GetUserRoles();
 
@@ -235,7 +238,7 @@ namespace DynamicData
                ICustomTypeDescriptor descriptor = FormView1.DataItem as ICustomTypeDescriptor;
                if (descriptor != null)
                {
-                    EntityObject owner = (EntityObject)descriptor.GetPropertyOwner(null);
+                    object owner = (object)descriptor.GetPropertyOwner(null);
                     if (typeof(INavigationActions).IsAssignableFrom(owner.GetType()))
                     {
                          var NavActions = owner as INavigationActions;
@@ -314,7 +317,7 @@ namespace DynamicData
                ICustomTypeDescriptor descriptor = FormView1.DataItem as ICustomTypeDescriptor;
                if (descriptor != null)
                {
-                    EntityObject owner = (EntityObject)descriptor.GetPropertyOwner(null);
+                    object owner = descriptor.GetPropertyOwner(null);
 
                     //Response.Redirect("http://www.yahoo.com");
                     string[] userRoles = GetUserRoles();
@@ -340,7 +343,7 @@ namespace DynamicData
                string[] userRoles = GetUserRoles();
 
                ICustomTypeDescriptor descriptor = FormView1.DataItem as ICustomTypeDescriptor;
-               EntityObject entityObject = (EntityObject)descriptor.GetPropertyOwner(null);
+               object entityObject = (object)descriptor.GetPropertyOwner(null);
                DataAccess deletePermissions = entityObject.DeletePermissions();
                if (deletePermissions.HasMatchingRole(userRoles))
                {
@@ -354,7 +357,7 @@ namespace DynamicData
                ICustomTypeDescriptor descriptor = FormView1.DataItem as ICustomTypeDescriptor;
                if (descriptor != null)
                {
-                    EntityObject owner = (EntityObject) descriptor.GetPropertyOwner(null);
+                    object owner = (object)descriptor.GetPropertyOwner(null);
                     var NavActions = owner as INavigationActions;
                     if (NavActions == null)
                          RedirectURL = table.ListActionPath;

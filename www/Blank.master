@@ -1,9 +1,9 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Blank.master.cs" Inherits="Blank" %>
 <%@ Register src="~/Controls/WebMenu.ascx" tagname="WebMenu" tagprefix="wvvr" %>
 <%@ Register src="~/Controls/MasterHeader.ascx" tagname="MasterHeader" tagprefix="wvvr" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
      <title>Weavver&reg; :: Abre Los Ojos.&#0153;</title>
@@ -45,29 +45,20 @@
                }
           }
 
-          function run() {
-               $('.menuLink').hover(function () {
-                         $(this).css('background-color', 'white');
-                         $(this).css('color', 'black');
-                    }, function () {
-                         $(this).css('background-color', '');
-                         $(this).css('color', '#FFFFFF');
-                    });
-          }
-
           function preventIFrameMouseEvents() { }
           function allowIFrameMouseEvents() { }
      </script>
      <form id="form1" runat="server">
-               <div id="modalBox" style="">
-               </div>
+          <ajaxToolkit:ToolkitScriptManager runat="server" ID="ScriptManager1" ScriptMode="Release" EnablePageMethods="true" CombineScripts="true"></ajaxToolkit:ToolkitScriptManager>
+          <div id="modalBox" style="">
+          </div>
           <div id="DescriptionLayer" runat="server" class="banner" style="margin: 10px; padding: 10px;" Visible="false">
                <asp:Label ID="Description" runat="server"></asp:Label>
           </div>
           <div id="ErrorLayer" runat="server" visible="false" style="background-color: #f3eaea; border: solid 1px lightgrey; padding: 5px; margin: 10px; margin-bottom: 10px;">
                <asp:Literal ID="ErrorMessage" runat="server" ViewStateMode="Disabled"></asp:Literal>
           </div>
-          <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" EnablePartialRendering="true"></asp:ScriptManager>
+          
           <asp:ContentPlaceHolder id="Content" runat="server"></asp:ContentPlaceHolder>
           <div style='clear: both; float: right;margin: 10px;'><a id='PageLink' runat="server" href='#' target="_blank">Direct Link</a></div>
      </form>

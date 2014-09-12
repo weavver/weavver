@@ -87,11 +87,11 @@ namespace DynamicData
                }
           }
 //-------------------------------------------------------------------------------------------
-          //protected void Label_Init(object sender, EventArgs e)
-          //{
-          //     Label label = (Label)sender;
-          //     label.Text = this.currentColumn.DisplayName;
-          //}
+          protected void Label_Init(object sender, EventArgs e)
+          {
+               Label label = (Label)sender;
+               label.Text = this.currentColumn.DisplayName;
+          }
 //-------------------------------------------------------------------------------------------
           protected void Label_PreRender(object sender, EventArgs e)
           {

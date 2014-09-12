@@ -80,7 +80,7 @@ public partial class DynamicData_QuickAdd_Accounting_Accounts_QuickTransfer : We
                debitAccount1.Code = CodeType.Withdrawal.ToString();
                debitAccount1.Memo = String.Format("Transfer to {0}", accountTo.Name);
                debitAccount1.Amount = Decimal.Parse(Amount.Text) * -1.0m;
-               data.Accounting_LedgerItems.AddObject(debitAccount1);
+               data.Accounting_LedgerItems.Add(debitAccount1);
 
                Accounting_LedgerItems creditAccount2 = new Accounting_LedgerItems();
                creditAccount2.OrganizationId = BasePage.SelectedOrganization.Id;
@@ -91,7 +91,7 @@ public partial class DynamicData_QuickAdd_Accounting_Accounts_QuickTransfer : We
                creditAccount2.Code = CodeType.Deposit.ToString();
                creditAccount2.Memo = String.Format("Transfer from {0}", accountFrom.Name);
                creditAccount2.Amount = Decimal.Parse(Amount.Text);
-               data.Accounting_LedgerItems.AddObject(creditAccount2);
+               data.Accounting_LedgerItems.Add(creditAccount2);
 
                data.SaveChanges();
                // Response.Redirect("~/Accounting_LedgerItems/List.aspx?TransactionId=" + transactionId.ToString());

@@ -390,7 +390,7 @@ namespace DynamicData
                     {
                          customForm.BeforeAddingToCart(shoppingCartItem);
                     }
-                    data.Sales_ShoppingCartItems.AddObject(shoppingCartItem);
+                    data.Sales_ShoppingCartItems.Add(shoppingCartItem);
                     data.SaveChanges();
 
                     string reviewurl = "~/workflows/sales_orderreview.aspx";

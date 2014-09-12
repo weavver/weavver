@@ -154,7 +154,7 @@
           <br />
           <asp:ValidationSummary ID="ValidationSummary1" runat="server" EnableClientScript="true" HeaderText="List of validation errors" CssClass="DDValidator" />
           <asp:DynamicValidator runat="server" ID="GridViewValidator" ControlToValidate="GridView1" Display="None" CssClass="DDValidator" />
-          <asp:EntityDataSource ID="GridDataSource" runat="server" EnableDelete="true" />
+          <ef:EntityDataSource ID="GridDataSource" runat="server" EnableDelete="true" />
           <asp:QueryExtender ID="GridQueryExtender" runat="server" TargetControlID="GridDataSource">
                <asp:DynamicFilterExpression ControlID="FilterRepeater" />
           </asp:QueryExtender>

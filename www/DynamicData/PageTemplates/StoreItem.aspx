@@ -60,7 +60,7 @@
                          <asp:DataControlReference ControlID="FormView1" />
                     </DataControls>
                </asp:DynamicDataManager>
-               <asp:EntityDataSource ID="DetailsDataSource" runat="server" EnableDelete="true" />
+               <ef:EntityDataSource ID="DetailsDataSource" runat="server" EnableDelete="true" />
                <asp:QueryExtender TargetControlID="DetailsDataSource" ID="DetailsQueryExtender" runat="server">
                     <asp:DynamicRouteExpression />
                </asp:QueryExtender>

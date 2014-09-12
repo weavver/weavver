@@ -46,7 +46,7 @@
                     <asp:LinkButton ID="BeginEdit" runat="server" Text="Edit" OnClick="Edit_Link" ForeColor="White" CssClass="menuLink"></asp:LinkButton>
                     <asp:LinkButton ID="CancelEdit" runat="server" Text="Cancel" OnClick="Cancel_Link" CausesValidation="false" Visible="false" CssClass="menuLink"></asp:LinkButton>
                     <asp:LinkButton ID="DeleteItem" runat="server" OnClick="Delete_Link" Text="Delete" OnClientClick='return confirm("Are you sure you want to delete this item?");' CssClass="menuLink" CausesValidation="false" Visible="false" />
-                    <asp:DynamicHyperLink ID="BackToTheList" runat="server" Action="List" Text="Back to the List" CssClass="menuLink" Visible="false" />
+                    <a href="#" ID="BackToTheList" runat="server" class="menuLink" Visible="false">Back to the List</a>
                </div>
                <%--<h2><asp:Literal ID="ItemTitle" runat="server"></asp:Literal></h2>--%>
                <div style="clear:both;"></div>
@@ -83,7 +83,7 @@ RenderOuterTable="false" OnModeChanged="FormView1_ModeChanged" OnDataBound="Form
           <div id="attachmentsDiv" style="display: none; position: absolute; left: 0px; top: 0px; min-width: 150px; padding: 5px; background-color: #FFFFFF; border: 1px solid black;">
                <asp:PlaceHolder ID="Attachments" runat="server">Empty placeholder</asp:PlaceHolder>
           </div>
-          <asp:EntityDataSource ID="DetailsDataSource" runat="server" EnableInsert="true" EnableDelete="true" EnableUpdate="true" />
+          <ef:EntityDataSource ID="DetailsDataSource" runat="server" EnableInsert="true" EnableDelete="true" EnableUpdate="true" />
           <asp:QueryExtender TargetControlID="DetailsDataSource" ID="DetailsQueryExtender" runat="server">
                <asp:DynamicRouteExpression />
           </asp:QueryExtender>

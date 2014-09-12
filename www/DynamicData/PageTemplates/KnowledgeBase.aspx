@@ -93,7 +93,7 @@
                </td>
           </tr>
           </table>
-          <asp:EntityDataSource ID="TreeDataSource" runat="server" EnableDelete="true" EnableInsert="true" EnableUpdate="true" />
+          <ef:EntityDataSource ID="TreeDataSource" runat="server" EnableDelete="true" EnableInsert="true" EnableUpdate="true" />
           <asp:QueryExtender TargetControlID="TreeDataSource" runat="server">
                <asp:ControlFilterExpression ControlID="Navigation" />
           </asp:QueryExtender>

@@ -22,7 +22,7 @@
      <tr>
           <td style="width: 75px;">Pay to the order of:</td>
           <td style="border-bottom: solid 1px black;">
-               <asp:DynamicControl ID="DynamicControl4" runat="server" DataField="PayeeAccount" OnInit="DynamicControl_Init" />
+               <asp:DynamicControl ID="DynamicControl4" runat="server" DataField="PayeeName" OnInit="DynamicControl_Init" />
           </td>
           <td style="text-align: right;">
                <span style="height:25px; width: 170px;display: inline-block; text-align:left;">

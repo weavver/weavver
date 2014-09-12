@@ -25,7 +25,7 @@
                     </div>
                 </InsertItemTemplate>
             </asp:FormView>
-            <asp:EntityDataSource ID="DetailsDataSource" runat="server" EnableInsert="true" />
+            <ef:EntityDataSource ID="DetailsDataSource" runat="server" EnableInsert="true" />
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>

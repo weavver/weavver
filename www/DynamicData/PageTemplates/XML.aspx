@@ -6,7 +6,7 @@
                <asp:DataControlReference ControlID="GridView1" />
           </DataControls>
      </asp:DynamicDataManager>
-     <asp:EntityDataSource ID="GridDataSource" runat="server" EnableDelete="true" />
+     <ef:EntityDataSource ID="GridDataSource" runat="server" EnableDelete="true" />
 
      <asp:ListView ID="GridView1" runat="server" DataSourceID="GridDataSource"
                          EnablePersistedSelection="true"

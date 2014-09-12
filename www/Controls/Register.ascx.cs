@@ -155,7 +155,7 @@ public partial class RegisterControl : WeavverUserControl
                          newOrg.CreatedBy = newUser.Id;
                          newOrg.UpdatedAt = DateTime.UtcNow;
                          newOrg.UpdatedBy = newUser.Id;
-                         data.Logistics_Organizations.AddObject(newOrg);
+                         data.Logistics_Organizations.Add(newOrg);
 
                          data.System_Users.Attach(newUser);
                          newUser.OrganizationId = newOrg.Id;

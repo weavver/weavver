@@ -381,7 +381,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                DataForm.DataBind();
 
           LinkButton lButton = (LinkButton) sender;
-          var obj = Weavver.Data.EntityDataSourceExtensions.GetItemObject<EntityObject>(DataForm.DataItem);
+          var obj = EntityDataSourceExtensions.GetEntity(DataForm.DataItem);
           MethodInfo method = obj.GetType().GetMethod(lButton.CommandName);
           var methodDefinition = (DynamicDataWebMethod) method.GetCustomAttributes(true)[0]; // typeof(DynamicDataWebMethod));
           bool authorized = false;
@@ -463,8 +463,8 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
 
           if (!String.IsNullOrEmpty(messageTitle))
           {
-               string escapedTitle = messageTitle.Replace("'", @"\'");
-               string escapedBody = messageBody.Replace("'", @"\'");
+               string escapedTitle = HttpUtility.JavaScriptStringEncode(messageTitle);
+               string escapedBody = HttpUtility.JavaScriptStringEncode(messageBody);
                string escapedURL = (String.IsNullOrEmpty(redirectUrl)) ? "null" : (redirectUrl == "refresh") ? "'refresh'" : "'" + VirtualPathUtility.ToAbsolute(redirectUrl) + "'";
 
                string popUpJS = "<script type='text/javascript'>"

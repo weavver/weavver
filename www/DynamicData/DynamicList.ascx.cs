@@ -43,7 +43,7 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                GridView1.RowDataBound += new GridViewRowEventHandler(GridView1_RowDataBound);
                GridView1.RowCreated += new GridViewRowEventHandler(GridView1_RowCreated);
 
-               GridDataSource.Selected += new EventHandler<EntityDataSourceSelectedEventArgs>(GridDataSource_Selected);
+               GridDataSource.Selected += new EventHandler<Microsoft.AspNet.EntityDataSource.EntityDataSourceSelectedEventArgs>(GridDataSource_Selected);
 
                GridView1.SetMetaTable(table, table.GetColumnValuesFromRoute(Context));
                //if (!IsPostBack)
@@ -170,7 +170,7 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                Response.Redirect("http://yahoo.com");
           }
 //-------------------------------------------------------------------------------------------
-          void GridDataSource_Selected(object sender, EntityDataSourceSelectedEventArgs e)
+          void GridDataSource_Selected(object sender, Microsoft.AspNet.EntityDataSource.EntityDataSourceSelectedEventArgs e)
           {
                int x = e.TotalRowCount;
                SetResults(x);
@@ -238,7 +238,11 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                     ICustomTypeDescriptor descriptor = e.Row.DataItem as ICustomTypeDescriptor;
                     if (descriptor != null)
                     {
-                         EntityObject owner = (EntityObject) descriptor.GetPropertyOwner(null);
+                         var x = descriptor.GetPropertyOwner(null);
+
+                         //Response.Write(x.GetType().BaseType.ToString());
+
+                         object owner = descriptor.GetPropertyOwner(null);
                          var rowStyle = owner as IRowStyle;
                          if (rowStyle != null)
                               rowStyle.GetRowStyle(out rowCss, out hoverCss);
@@ -263,7 +267,7 @@ public partial class DynamicData_DynamicList : WeavverUserControl
 
                          DataAccess insertPermissions = owner.GetType().InsertPermissions();
 
-                         DataAccess readPermissions = ((EntityObject)owner).ReadPermissions();
+                         DataAccess readPermissions = owner.ReadPermissions();
                          if (readPermissions.HasMatchingRole(userRoles))
                          {
                               //perms = "Public";

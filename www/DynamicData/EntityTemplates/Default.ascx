@@ -1,12 +1,12 @@
 ﻿<%@ Control Language="C#" CodeFile="Default.ascx.cs" Inherits="DynamicData.DefaultEntityTemplate" %>
 
 <script type="text/javascript">
-     $(document).ready(function () {
-          //$('#EntityWindow').dialog();
-     });
+     //$(document).ready(function () {
+     //     $('#EntityWindow').dialog();
+     //});
 </script>
 <div id='EntityWindow'>
-     <%--
+     
      <%// This is not rendered here, it's added to each tab content area. %>
      <asp:EntityTemplate ID="EntityTemplate1" runat="server">
      <ItemTemplate>
@@ -19,7 +19,7 @@
                </td>
           </tr>
      </ItemTemplate>
-     </asp:EntityTemplate>--%>
+     </asp:EntityTemplate>
 
      <div id="tableControl" style="margin: 0px; padding: 0px;clear:both;">
          <ul id="tabheader" runat="server">

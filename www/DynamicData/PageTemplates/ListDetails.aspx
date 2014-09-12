@@ -50,7 +50,7 @@
                 </EmptyDataTemplate>
             </asp:GridView>
 
-            <asp:EntityDataSource ID="GridDataSource" runat="server" EnableDelete="true" EnableUpdate="true" />
+            <ef:EntityDataSource ID="GridDataSource" runat="server" EnableDelete="true" EnableUpdate="true" />
             
             <asp:QueryExtender ID="GridQueryExtender" TargetControlID="GridDataSource" runat="server">
                 <asp:DynamicFilterExpression ControlID="FilterRepeater" />
@@ -99,7 +99,7 @@
                     </FooterTemplate>
                 </asp:FormView>
 
-                <asp:EntityDataSource ID="DetailsDataSource" runat="server" EnableDelete="true" EnableInsert="true" EnableUpdate="true" />
+                <ef:EntityDataSource ID="DetailsDataSource" runat="server" EnableDelete="true" EnableInsert="true" EnableUpdate="true" />
                 <asp:QueryExtender TargetControlID="DetailsDataSource" runat="server">
                     <asp:ControlFilterExpression ControlID="GridView1" />
                 </asp:QueryExtender>

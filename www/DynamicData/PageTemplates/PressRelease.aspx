@@ -67,8 +67,7 @@
                 AllowPaging="True" AllowSorting="True" CssClass="DDGridView"
                 RowStyle-CssClass="td" HeaderStyle-CssClass="th" CellPadding="3" PageSize="50" Visible="false">
             </asp:GridView>
-            <asp:EntityDataSource ID="GridDataSource" runat="server" EnableDelete="true" />
-
+            <ef:EntityDataSource ID="GridDataSource" runat="server" EnableDelete="true" />
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>

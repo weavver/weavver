@@ -82,7 +82,7 @@ public partial class DynamicData_QuickAdd_Accounting_LedgerItems : WeavverUserCo
                item.Memo = LedgerItemName.Text;
                item.Amount = Decimal.Parse(LedgerItemAmount.Text);
 
-               data.Accounting_LedgerItems.AddObject(item);
+               data.Accounting_LedgerItems.Add(item);
 
                try
                {

@@ -284,3 +284,13 @@ function showMessage($title, $body, $redirurl)
      $("#modalBox").dialog("open");
      dialogLoaded = true;
 }
+
+function run() {
+     $('.menuLink').hover(function () {
+          $(this).css('background-color', 'white');
+          $(this).css('color', 'black');
+     }, function () {
+          $(this).css('background-color', '');
+          $(this).css('color', '#FFFFFF');
+     });
+}

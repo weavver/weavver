@@ -136,20 +136,8 @@ public partial class WeavverWebMenu : WeavverUserControl
                AddLinkToTable(menuDepartments, "System", "Roles", "/System/Roles", 650, 500);
                AddLinkToTable(menuDepartments, "System", "Settings", "/Logistics_Organizations/Details.aspx?id=" + BasePage.LoggedInUser.OrganizationId.ToString(), 500, 500, false);
           }
-     }
-//-------------------------------------------------------------------------------------------
-     public WeavverMenuItem AddMenuItem(WeavverMenuItem topMenu, string name, string link)
-     {
-          WeavverMenuItem item = new WeavverMenuItem();
-          item.Name = name;
-          item.Link = link;
-          item.parent = topMenu;
-          topMenu.Items.Add(item);
-          return item;
-     }
-//-------------------------------------------------------------------------------------------
-     protected void Page_PreRender(object sender, EventArgs e)
-     {
+
+
           MenuItems.Text = "";
           //if (menuDepartments.Items.Count > 0)
           if (menuMy.Items.Count > 0)
@@ -167,6 +155,20 @@ public partial class WeavverWebMenu : WeavverUserControl
           if (menuReports.Items.Count > 0)
                MenuItems.Text += RenderMenuLink(menuReports);
           MenuItems.Text += "";
+     }
+//-------------------------------------------------------------------------------------------
+     public WeavverMenuItem AddMenuItem(WeavverMenuItem topMenu, string name, string link)
+     {
+          WeavverMenuItem item = new WeavverMenuItem();
+          item.Name = name;
+          item.Link = link;
+          item.parent = topMenu;
+          topMenu.Items.Add(item);
+          return item;
+     }
+//-------------------------------------------------------------------------------------------
+     protected void Page_PreRender(object sender, EventArgs e)
+     {
      }
 //-------------------------------------------------------------------------------------------
      private string RenderMenuLink(WeavverMenuItem menuItem)
