@@ -352,7 +352,7 @@ namespace DynamicData
                     int idPos = 0;
                     Sales_ShoppingCartItems shoppingCartItem = Sales_ShoppingCartItems.GetInstance(Server.MapPath("~/bin"), item.PluginURL);
                     int i = 0;
-                    foreach (Logistics_Features feature in features)
+                    foreach (Logistics_Features feature in features.ToList())
                     {
                          DropDownList ddl = (DropDownList)UpdatePanel1.ContentTemplateContainer.FindControl("OrderFormControls").FindControl("feature-" + i.ToString());
                          Guid featureOptionId = new Guid(ddl.SelectedValue);

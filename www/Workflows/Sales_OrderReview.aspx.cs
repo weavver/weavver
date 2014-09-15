@@ -81,7 +81,7 @@ public partial class Company_Sales_Order : SkeletonPage
                foreach (DataGridItem dataitem in List.Items)
                {
                     Guid key = (Guid)List.DataKeys[dataitem.ItemIndex];
-                    foreach (Sales_ShoppingCartItems item in ShoppingCart.Items)
+                    foreach (Sales_ShoppingCartItems item in ShoppingCart.Items.ToList())
                     {
                          if (item.Id == key)
                          {
@@ -94,7 +94,7 @@ public partial class Company_Sales_Order : SkeletonPage
                               {
                                    data.Sales_ShoppingCartItems.Attach(item);
                                    ShoppingCart.Items.Remove(item);
-                                   data.Sales_ShoppingCartItems.DeleteObject(item);
+                                   data.Sales_ShoppingCartItems.Remove(item);
                                    continue;
                               }
                               else if (quantity != item.Quantity)
@@ -147,7 +147,7 @@ public partial class Company_Sales_Order : SkeletonPage
 
                if (cartItem != null)
                {
-                    data.Sales_ShoppingCartItems.DeleteObject(cartItem);
+                    data.Sales_ShoppingCartItems.Remove(cartItem);
                     data.SaveChanges();
                }
           }

@@ -33,13 +33,19 @@ public partial class Controls_LogIn : WeavverUserControl
           }
           else
           {
-               ProfileCommon profile = Profile.GetProfile(Login1.UserName);
-
-               if (profile.DefaultAccount == null || profile.DefaultAccount == Guid.Empty)
-                    profile.DefaultAccount = new Guid(ConfigurationManager.AppSettings["default_organizationid"]);
-
                using (Weavver.Data.WeavverEntityContainer data = new Weavver.Data.WeavverEntityContainer())
                {
+                    ProfileCommon profile = Profile.GetProfile(Login1.UserName);
+                    if (profile.DefaultAccount == null || profile.DefaultAccount == Guid.Empty)
+                    {
+                         var user = (from users in data.System_Users
+                                     where users.Username == Login1.UserName
+                                     select users).First();
+
+                         profile.DefaultAccount = user.OrganizationId;
+                         profile.Save();
+                    }
+
                     var orgs = from x in data.Logistics_Organizations
                                where x.Id == profile.DefaultAccount
                                select x;
@@ -48,7 +54,6 @@ public partial class Controls_LogIn : WeavverUserControl
 
                     Response.Redirect("~/" + y + "/");
                }
-                    //FormsAuthentication.RedirectFromLoginPage(LoggedInUser.Username, Login1.RememberMeSet);
           }
      }
 //-------------------------------------------------------------------------------------------
@@ -59,7 +64,6 @@ public partial class Controls_LogIn : WeavverUserControl
 //-------------------------------------------------------------------------------------------
      void Login1_LoginError(object sender, EventArgs e)
      {
-          //Login1.FindControl("ResetPass").Visible = true;
      }
 //-------------------------------------------------------------------------------------------
 }

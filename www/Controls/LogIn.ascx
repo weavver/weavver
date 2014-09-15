@@ -19,7 +19,7 @@
                <div style="margin: auto; text-align: center; padding-bottom: 5px;">
                     <asp:TextBox ID="Password" runat="server" Font-Size="1.25em" Width="150px" TextMode="Password" ValidationGroup="LogInControl" Height="30px"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password" ErrorMessage="Password is required." ToolTip="Password is required." ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
-                    <cc1:TextBoxWatermarkExtender ID="PasswordWatermark" runat="server" TargetControlID="Password" WatermarkCssClass="watermarkPW" WatermarkText=" "></cc1:TextBoxWatermarkExtender>
+                    <cc1:TextBoxWatermarkExtender ID="PasswordWatermark" runat="server" TargetControlID="Password" WatermarkCssClass="watermarkPW" WatermarkText="Password"></cc1:TextBoxWatermarkExtender>
                </div>
                <div style="margin: auto; text-align: center; padding-bottom: 25px;">
                     <asp:CheckBox ID="RememberMe" runat="server" Checked="True" Text="Remember me" /><br />

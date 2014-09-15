@@ -301,7 +301,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                {
                     if (!Request.Path.ToLower().StartsWith("/logistics_organizations")) //(LoggedInUser.Id != new Guid("6bb552e9-debb-40d3-a5a9-60329aedeaac") 
                     {
-                         Response.Redirect("~/logistics_organizations", true);
+                         //Response.Redirect("~/logistics_organizations", true);
                     }
                }
           }
@@ -316,19 +316,11 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
 
 
 
-          if (Request.UrlReferrer != null)
-          {
-               DebugOut(Request.UrlReferrer.AbsoluteUri);
-          }
-
-          if (LoggedInUser != null &&
-              LoggedInUser.Id == new Guid("6bb552e9-debb-40d3-a5a9-60329aedeaac"))
-          {
-               if (Session["ReferredBy"] != null)
-               {
-                    DebugOut("ReferredBy: " + Session["ReferredBy"]);
-               }
-          }
+          // Code block used for debugging purposes
+          // if (Request.UrlReferrer != null)
+          // {
+          //     DebugOut(Request.UrlReferrer.AbsoluteUri);
+          // }
 
           if (Session["ReferredBy"] == null &&
               Request.UrlReferrer != null)

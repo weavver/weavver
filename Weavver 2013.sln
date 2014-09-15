@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weavver Moksha Interface", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weavver Moksha", "..\moksha\src\Weavver Moksha.csproj", "{63ED51CC-7639-4665-8B56-4097D9AF7052}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "..\data\database\Database.sqlproj", "{8B692406-94D3-401E-89D1-99E317CE8253}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "console\Console.csproj", "{6A35698D-3B77-4F91-B56B-2849255D456F}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "weavver", "http://localhost/weavver", "{2AF1D201-0C8D-4EE9-833B-113D01EB5C70}"
@@ -48,6 +46,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "weavver", "http://localhost
 		SlnRelativePath = "www\"
 	EndProjectSection
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "..\Data\database\Database.sqlproj", "{340D4FF9-66D5-445C-8D6D-6B7172BAAD93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,14 +68,18 @@ Global
 		{8E71554E-8184-40C7-8CBC-8955C7627A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63ED51CC-7639-4665-8B56-4097D9AF7052}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B692406-94D3-401E-89D1-99E317CE8253}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B692406-94D3-401E-89D1-99E317CE8253}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A35698D-3B77-4F91-B56B-2849255D456F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A35698D-3B77-4F91-B56B-2849255D456F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AF1D201-0C8D-4EE9-833B-113D01EB5C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2AF1D201-0C8D-4EE9-833B-113D01EB5C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AF1D201-0C8D-4EE9-833B-113D01EB5C70}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{2AF1D201-0C8D-4EE9-833B-113D01EB5C70}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{340D4FF9-66D5-445C-8D6D-6B7172BAAD93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{340D4FF9-66D5-445C-8D6D-6B7172BAAD93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{340D4FF9-66D5-445C-8D6D-6B7172BAAD93}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{340D4FF9-66D5-445C-8D6D-6B7172BAAD93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{340D4FF9-66D5-445C-8D6D-6B7172BAAD93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{340D4FF9-66D5-445C-8D6D-6B7172BAAD93}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
