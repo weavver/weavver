@@ -9,6 +9,7 @@ using Weavver.Data;
 using Weavver.Units;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Data.Entity.Infrastructure;
 
 namespace Weavver.Testing.Staging
 {
@@ -80,7 +81,7 @@ namespace Weavver.Testing.Staging
                     );
                using (WeavverEntityContainer db = new WeavverEntityContainer())
                {
-                    string createScript = db.CreateDatabaseScript() + "\r\n";
+                    string createScript = ((IObjectContextAdapter)db).ObjectContext.CreateDatabaseScript() + "\r\n";
                     createScript += File.ReadAllText(Path.Combine(dataPath, @"database\aspnet_regsql.sql")) + "\r\n";
                     createScript += File.ReadAllText(Path.Combine(dataPath, @"database\Database.sql")) + "\r\n";
                     DirectoryInfo fkScripts = new DirectoryInfo(Path.Combine(dataPath, @"database\ForeignKeys\"));
