@@ -29,6 +29,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "weavver", "http://localhost
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "false"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{4d558303-3db5-4004-91ba-9db658199b7b}|Weavver.Data.dll;{8E71554E-8184-40C7-8CBC-8955C7627A04}|Weavver.MokshaInterface.dll;{0D3C5390-5651-4B71-B165-E5C72A55281C}|Weavver.Net.dll;{01490A61-F803-41A3-89D4-D6CAC7A97DA6}|Weavver.Vendors.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/weavver"
 		Debug.AspNetCompiler.PhysicalPath = "www\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\weavver\"

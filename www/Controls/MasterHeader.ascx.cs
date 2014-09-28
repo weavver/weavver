@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using Weavver.Data;
+using System.Web.Security;
 
 public partial class Controls_MasterHeader : WeavverUserControl
 {
@@ -80,8 +81,10 @@ public partial class Controls_MasterHeader : WeavverUserControl
      public void UpdatePage()
      {
           // hide it in case the user is not logged in
-          OrganizationsList.Visible = false;
-          if (BasePage != null && BasePage.SelectedOrganization != null && !Request.Path.ToLower().EndsWith("/account/logout.aspx"))
+          OrganizationsList.Visible = (HttpContext.Current.User.Identity.IsAuthenticated && !Request.Path.ToLower().EndsWith("/account/logout.aspx"));
+
+          if (BasePage != null &&
+              !Request.Path.ToLower().EndsWith("/account/logout.aspx"))
           {
                // User is Logged In
                if (BasePage.LoggedInUser != null)
@@ -96,13 +99,10 @@ public partial class Controls_MasterHeader : WeavverUserControl
                     if (BasePage.LoggedInUser.OrganizationId != orgId)
                     {
                          AddOrganizationListChoice(BasePage.LoggedInUser.OrganizationId);
-                         OrganizationsList.SelectedValue = BasePage.LoggedInUser.OrganizationId.ToString();
                     }
 
-                    if (OrganizationsList.Items.Count > 1)
+                    if (BasePage.SelectedOrganization != null)
                     {
-                         OrganizationsList.Visible = true;
-
                          foreach (ListItem x in OrganizationsList.Items)
                          {
                               x.Selected = false;
@@ -134,6 +134,12 @@ public partial class Controls_MasterHeader : WeavverUserControl
 //-------------------------------------------------------------------------------------------
      void OrganizationsList_SelectedIndexChanged(object sender, EventArgs e)
      {
+          if (OrganizationsList.SelectedValue == "Choose")
+          {
+               Response.Redirect("~/");
+               return;
+          }
+
           using (WeavverEntityContainer data = new WeavverEntityContainer())
           {
                string selectedOrgId = OrganizationsList.SelectedValue;
@@ -150,8 +156,8 @@ public partial class Controls_MasterHeader : WeavverUserControl
                     Session["SelectedOrganizationId"] = selectedOrgId;
                     BasePage.SelectedOrganization = org;
 
-                    //string url = Request.Url.Scheme + "://" + Request.Url.Authority + "/" + Request.Url.PathAndQuery;
-                    Response.Redirect(Request.Url.AbsoluteUri, true);
+                    string url = Request.Url.Scheme + "://" + Request.Url.Authority + "/" + org.VanityURL + "/";
+                    Response.Redirect(url, true);
                }
           }
      }

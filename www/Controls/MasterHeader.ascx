@@ -9,7 +9,9 @@
      <div style='clear: both;'></div>
 </div>
 <div style="margin: auto; text-align: right;">
-     <asp:DropDownList ID="OrganizationsList" runat="server" AutoPostBack="true" Width="150px" Visible="true" CssClass="orgList"></asp:DropDownList>&nbsp;&nbsp;
+     <asp:DropDownList ID="OrganizationsList" runat="server" AutoPostBack="true" Width="150px" Visible="true" CssClass="orgList">
+          <asp:ListItem Value="Choose">Choose..</asp:ListItem>
+     </asp:DropDownList>&nbsp;&nbsp;
      <div id="SignInArea" runat="server" class="sign-in" style="color: #000000;display:inline-block;">
           <asp:UpdatePanel ID="RegisterLogInPanel" runat="server">
           <ContentTemplate>
