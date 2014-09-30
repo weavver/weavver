@@ -30,7 +30,9 @@ namespace DynamicData
 //-------------------------------------------------------------------------------------------
           protected void Page_Init(object sender, EventArgs e)
           {
+               DetailsDataSource.Inserting += DetailsDataSource_Inserting;
                DetailsDataSource.Inserted += new EventHandler<Microsoft.AspNet.EntityDataSource.EntityDataSourceChangedEventArgs>(DetailsDataSource_Inserted);
+
 
                WeavverMaster.FixedWidth = true;
                WeavverMaster.Width = "100%";
@@ -107,6 +109,13 @@ namespace DynamicData
           {
           }
 //-------------------------------------------------------------------------------------------
+          void DetailsDataSource_Inserting(object sender, Microsoft.AspNet.EntityDataSource.EntityDataSourceChangingEventArgs e)
+          {
+               var x = e.Entity as IAuditable;
+               x.OrganizationId = SelectedOrganization.Id;
+               AuditUtility.UpdateAuditFields(x, true);
+          }
+//-------------------------------------------------------------------------------------------
           void DetailsDataSource_Inserted(object sender, Microsoft.AspNet.EntityDataSource.EntityDataSourceChangedEventArgs e)
           {
                if (!String.IsNullOrEmpty(Request["ParentId"]))
@@ -114,24 +123,31 @@ namespace DynamicData
                     ScriptManager.RegisterStartupScript(Page, this.GetType(), "refreshParent", "<script type='text/javascript'>parent.refreshParent('" + Request["ParentId"] + "');</script>", false);
                }
 
-               IAuditable auditData = e.Entity as IAuditable;
-               string url = "Details.aspx?Id={0}&WindowId={1}&ParentId={2}&IFrame={3}";
-               url = String.Format(url, auditData.Id, Request["WindowId"], Request["ParentId"], Request["IFrame"]);
-
-               if (Request["IFrame"] == "true")
-               { 
-                    ScriptManager.RegisterStartupScript(Page, this.GetType(), "refreshParent2", "<script type='text/javascript'>document.location.href = '" + url + "';</script>", false);
+               if (e.Entity == null)
+               {
+                    throw e.Exception;
                }
                else
                {
-                    Response.Redirect(url);
+                    IAuditable auditData = e.Entity as IAuditable;
+                    string url = "Details.aspx?Id={0}&WindowId={1}&ParentId={2}&IFrame={3}";
+                    url = String.Format(url, auditData.Id, Request["WindowId"], Request["ParentId"], Request["IFrame"]);
+
+                    if (Request["IFrame"] == "true")
+                    {
+                         ScriptManager.RegisterStartupScript(Page, this.GetType(), "refreshParent2", "<script type='text/javascript'>document.location.href = '" + url + "';</script>", false);
+                    }
+                    else
+                    {
+                         Response.Redirect(url);
+                    }
                }
           }
 //-------------------------------------------------------------------------------------------
           protected void FormView1_DataBound(object sender, EventArgs e)
           {
                ICustomTypeDescriptor descriptor = FormView1.DataItem as ICustomTypeDescriptor;
-               if (descriptor != null)
+               if (descriptor != null && FormView1.DataItemCount > 0)
                {
                     object entityObject = descriptor.GetPropertyOwner(null);
 
