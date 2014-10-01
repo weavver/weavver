@@ -28,7 +28,7 @@ namespace DynamicData
                          if (attributes.Length > 0)
                          {
                               var description = ((DescriptionAttribute)attributes[0]).Description;
-                              DropDownList1.Items.Add(new ListItem(description, description));
+                              DropDownList1.Items.Add(new ListItem(description, value.ToString()));
                          }
                          else
                          {
