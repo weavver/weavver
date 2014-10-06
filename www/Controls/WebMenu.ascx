@@ -221,9 +221,24 @@
                position: [offsetX + 5, offsetY + 120],
                width: width,
                height: height
-          });    //.attr('id', 'dialogId').attr('name', 'dialogId');
-
+          })    //.attr('id', 'dialogId').attr('name', 'dialogId');
+          .dialogExtend({
+               "closable": true,
+               "maximizable": true,
+               "minimizable": true,
+               "collapsable": true,
+               "dblclick": "collapse",
+               "minimizeLocation": "right",
+               "icons": {
+                    "close": "ui-icon-circle-close",
+                    "maximize": "ui-icon-circle-plus",
+                    "minimize": "ui-icon-circle-minus",
+                    "collapse": "ui-icon-triangle-1-s",
+                    "restore": "ui-icon-bullet"
+               }
+          });
           //newPopup.draggable("option", "containment", [50, 50, 300, 300]);
+          
 
           newPopup.resize(function () {
                clearTimeout(doit);

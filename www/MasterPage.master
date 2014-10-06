@@ -28,6 +28,8 @@
      <script type="text/javascript" src="<%# Page.ResolveUrl("~/vendors/jquery/jquery-1.8.3.min.js") %>"></script>
      <script type="text/javascript" src="<%# Page.ResolveUrl("~/vendors/jquery/jquery-ui-1.9.2.custom.min.js") %>"></script>
      <script type="text/javascript" src="<%# Page.ResolveUrl("~/vendors/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js") %>"></script>
+     <script type="text/javascript" src="<%# Page.ResolveUrl("~/vendors/jquery-dialogextend/jquery-dialogextend.js") %>"></script>
+
      <script type="text/javascript" src="<%# Page.ResolveUrl("~/scripts/weavver.js") %>"></script>
      <%--<script type="text/javascript" src="/SmartTags/Dialer.js"></script>--%>
      <script type="text/javascript">
