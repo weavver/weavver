@@ -12,58 +12,77 @@
           }
      </script>
      <div style="padding-left: 10px; padding-right: 10px;">
-          <table border="0" cellpadding="0" cellspacing="0" style="margin: 10px; margin-left:auto; margin-right:auto;">
-          <tr>
-               <td style="background-color: #b8e1f4; padding-top: 5px; padding-bottom: 5px; padding: 5px;"><h3>Download direct from your bank/credit card company:</h3></td>
-               <td></td>
-               <td style="background-color: #b8e1f4; padding-top: 5px; padding-bottom: 5px; padding: 5px;"><h3>From a File:</h3></td>
-          </tr>
+          <table style="border: 1px solid #cfcece; background-color: #f2f2f2; width: 100%;" cellpadding="5" cellspacing="0">
           <tr>
                <td>
-                    <table style="border: 1px solid #cfcece; background-color: #f2f2f2; width: 100%; height: 100px;">
+                    Financial Account
+               </td>
+               <td style="text-align: right;">
+                    <asp:DropDownList ID="AccountsList" runat="server" Width="300px" EnableViewState="true" Height="30px" AutoPostBack="true" OnSelectedIndexChanged="AccountsList_SelectedIndexChanged"></asp:DropDownList>
+               </td>
+          </tr>
+          <tr>
+               <td colspan="2">
+                    <table style="margin: auto;">
                     <tr>
-                         <td style="width: 150px;">Financial Account:</td>
-                         <td colspan="3">
-                              <asp:DropDownList ID="OFXAccounts" runat="server" Width="300px" EnableViewState="true"></asp:DropDownList>
+                         <td id="OFXDownload" runat="server" visible="false">
+                              <table style="width: 100%; border: 1px solid #e3e3e3; background-color: #e3e3e3" cellpadding="4" cellspacing="0">
+                              <tr>
+                                   <td colspan="4">
+                                        Download direct from your bank/credit card company
+                                   </td>
+                              </tr>
+                              <tr>
+                                   <td style="padding: 2px;">Start Date:</td>
+                                   <td style="text-align:right;">
+                                        <asp:TextBox ID="OFXStartDate" runat="server" Width="100px"></asp:TextBox>
+                                        <cc1:CalendarExtender ID="StartDateExtender" runat="server" TargetControlID="OFXStartDate"></cc1:CalendarExtender>
+                                   </td>
+                                   <td style="padding: 2px;">End Date:</td>
+                                   <td style="text-align:right;">
+                                        <asp:TextBox ID="OFXEndDate" runat="server" Width="100px"></asp:TextBox>
+                                        <cc1:CalendarExtender ID="EndDateExtender" runat="server" TargetControlID="OFXEndDate"></cc1:CalendarExtender>     
+                                   </td>
+                              </tr>
+                              <tr>
+                                   <td style="text-align: right; padding-right: 15px;" colspan="4">
+                                        <asp:Button ID="OFXPreview" runat="server" Text="Preview" Height="30px" Width="75px" OnClick="OFXPreview_Click" />
+                                   </td>
+                              </tr>
+                              </table>
                          </td>
-                    </tr>
-                    <tr>
-                         <td>Start Date:</td>
+                         <td id="OFXOR" runat="server" visible="false">OR</td>
                          <td>
-                              <asp:TextBox ID="OFXStartDate" runat="server" Width="100px"></asp:TextBox>
-                              <cc1:CalendarExtender ID="StartDateExtender" runat="server" TargetControlID="OFXStartDate"></cc1:CalendarExtender>
+                              <table>
+                              <tr>
+                                   <td>
+                                        <table style="width: 100%; border: 1px solid #e3e3e3; background-color: #e3e3e3" cellpadding="4" cellspacing="0">
+                                        <tr>
+                                             <td colspan="2">From a File:</td>
+                                        </tr>
+                                        <tr>
+                                             <td>
+                                                  <asp:FileUpload ID="FileUpload1" runat="server" />
+                                             </td>
+                                             <td style="text-align: right; padding-right: 15px;">
+                                                  <asp:Button ID="Load" runat="server" Text="Preview" Height="30px" Width="75px" OnClick="Load_Click" /><br />
+                                             </td>
+                                        </tr>
+                                        <tr>
+                                             <td colspan="2">
+                                                  (Currently only the QIF format from CitiCards.com is supported)
+                                             </td>
+                                        </tr>
+                                        </table>
+                                   </td>
+                              </tr>
+                              </table>
                          </td>
-                         <td>End Date:</td>
-                         <td>
-                              <asp:TextBox ID="OFXEndDate" runat="server" Width="100px"></asp:TextBox>
-                              <cc1:CalendarExtender ID="EndDateExtender" runat="server" TargetControlID="OFXEndDate"></cc1:CalendarExtender>     
-                         </td>
-                    </tr>
-                    <tr>
-                         <td colspan="4" style="text-align: right; padding-right: 15px;"><asp:Button ID="OFXPreview" runat="server" Text="Preview" Height="30px" Width="75px" OnClick="OFXPreview_Click" /></td>
                     </tr>
                     </table>
                </td>
-               <td style="padding: 15px;">Or</td>
-               <td valign="top">
-                    <table style="border: 1px solid #cfcece; background-color: #f2f2f2; width: 100%; height: 100px;">
-                    <tr>
-                         <td style="width: 200px;">Choose your file:</td>
-                         <td><asp:FileUpload ID="FileUpload1" runat="server" /></td>
-                    </tr>
-                    <tr>
-                         <td></td>
-                         <td>
-                              <asp:Button ID="Load" runat="server" Text="Preview" Height="30px" Width="75px" OnClick="Load_Click" /><br />
-                         </td>
-                    </tr>
-                    <tr>
-                         <td colspan="2" style="text-align: right; font-size: 9pt;">
-                              (Currently only the QIF format from CitiCards.com is supported)
-                         </td>
-                    </tr>
-                    </table>
-               </td>
+          </tr>
+          <tr>
           </tr>
           </table>
      </div>

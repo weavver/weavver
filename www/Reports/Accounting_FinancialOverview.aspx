@@ -6,6 +6,8 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="Content" Runat="Server">
      <div style="padding-bottom: 10px; float:right;">
           <asp:DropDownList ID="YearFilter" runat="server" Width="100px" AutoPostBack="true">
+               <asp:ListItem>2014</asp:ListItem>
+               <asp:ListItem>2013</asp:ListItem>
                <asp:ListItem>2012</asp:ListItem>
                <asp:ListItem>2011</asp:ListItem>
                <asp:ListItem>2010</asp:ListItem>

@@ -126,9 +126,10 @@ public partial class Company_Accounting_Reports_FinancialOverview : SkeletonPage
           using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["weavver"].ConnectionString))
           {
                SqlCommand command = new SqlCommand(sums, connection);
-               command.Parameters.AddWithValue("OrganizationId", LoggedInUser.OrganizationId);
+               command.Parameters.AddWithValue("OrganizationId", SelectedOrganization.Id);
                command.Parameters.AddWithValue("Year", Int32.Parse(YearFilter.Text));
                command.Parameters.AddWithValue("LedgerType", LedgerType.Receivable.ToString());
+               command.CommandTimeout = 90;
                connection.Open();
                SqlDataReader reader = command.ExecuteReader();
                ARList.DataSource = reader;
@@ -164,6 +165,7 @@ public partial class Company_Accounting_Reports_FinancialOverview : SkeletonPage
           using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["weavver"].ConnectionString))
           {
                SqlCommand command = new SqlCommand(sums, connection);
+               command.CommandTimeout = 90;
                command.Parameters.AddWithValue("OrganizationId", LoggedInUser.OrganizationId);
                command.Parameters.AddWithValue("Year", Int32.Parse(YearFilter.Text));
                command.Parameters.AddWithValue("LedgerType", LedgerType.Payable.ToString());
@@ -207,6 +209,7 @@ public partial class Company_Accounting_Reports_FinancialOverview : SkeletonPage
                command.Parameters.AddWithValue("Year", Int32.Parse(YearFilter.Text));
                command.Parameters.AddWithValue("LedgerType1", LedgerType.Checking.ToString());
                command.Parameters.AddWithValue("LedgerType2", LedgerType.Savings.ToString());
+               command.CommandTimeout = 90;
                connection.Open();
                SqlDataReader reader = command.ExecuteReader();
                CashFlow.DataSource = reader;
@@ -232,6 +235,7 @@ public partial class Company_Accounting_Reports_FinancialOverview : SkeletonPage
                SqlCommand command = new SqlCommand(sql, connection);
                command.Parameters.AddWithValue("OrganizationId", LoggedInUser.OrganizationId);
                command.Parameters.AddWithValue("Year", Int32.Parse(YearFilter.Text));
+               command.CommandTimeout = 90;
                connection.Open();
                SqlDataReader reader = command.ExecuteReader();
                Net.DataSource = reader;
@@ -300,7 +304,9 @@ public partial class Company_Accounting_Reports_FinancialOverview : SkeletonPage
                          string startDate = month + "/01/" + year;
                          string endDate = month + "/" + DateTime.DaysInMonth(year, month) + "/" + year;
                          // int ledgerTypeNum = (int) (LedgerType) Enum.Parse(typeof(LedgerType), ledgerType);
-                         e.Item.Cells[i].Text = "<a href=\"javascript:createPopup('/Accounting_LedgerItems/List.aspx?LedgerType=" + ledgerType + "&PostAt_Start=" + startDate + "&PostAt_End=" + endDate + "&Code=" + code + "')\">" + text + "</a>";
+                         string url = "~/Accounting_LedgerItems/List.aspx?LedgerType=" + ledgerType + "&PostAt_Start=" + startDate + "&PostAt_End=" + endDate + "&Code=" + code;
+                         url = WeavverMaster.FormatURLs(url);
+                         e.Item.Cells[i].Text = "<a href=\"javascript:createPopup('" + url + "')\">" + text + "</a>";
                     }
                }
           }

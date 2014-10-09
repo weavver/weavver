@@ -62,17 +62,6 @@ public partial class WeavverWebMenu : WeavverUserControl
           menuViews.Name = "Views";
           menuViews.Link = "#";
 
-          if (Roles.IsUserInRole("Accountants"))
-          {
-               //AddMenuItem(accountingReports, "Financial Overview", "/Reports/Accounting_FinancialOverview");
-               //AddMenuItem(accountingReports, "Expenses", "/reports/accounting_expenses");
-
-               //WeavverMenuItem humanresourcesReports = AddMenuItem(menuReports, "Human Resources", null);
-               //AddMenuItem(humanresourcesReports, "Labor Overview", "/Reports/HR_LaborOverview");
-
-               // AddLinkToTable(menuTools, "Accounting", "Enter Payment", "/workflows/accounting_enterpayment");
-          }
-
           if (Global.DefaultModel == null || Global.DefaultModel.Tables.Count <= 0)
                return;
 

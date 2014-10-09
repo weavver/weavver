@@ -57,16 +57,15 @@ public partial class Company_Accounting_Import_Default : SkeletonPage
           using (WeavverEntityContainer data = new WeavverEntityContainer())
           {
                var financialAccounts = from x in data.Accounting_Accounts
-                                       from y in data.Accounting_OFXSettings
                                        where x.OrganizationId == SelectedOrganization.Id
-                                           && x.Id == y.AccountId
                                        orderby x.Name ascending
                                        select x;
 
-               OFXAccounts.Items.Clear();
+               AccountsList.Items.Clear();
                foreach (Accounting_Accounts account in financialAccounts)
                {
-                    OFXAccounts.Items.Add(new ListItem(account.Name, account.Id.ToString()));
+
+                    AccountsList.Items.Add(new ListItem(account.Name, account.Id.ToString()));
                }
           }
 
@@ -96,13 +95,13 @@ public partial class Company_Accounting_Import_Default : SkeletonPage
           using (WeavverEntityContainer data = new WeavverEntityContainer())
           {
                Accounting_OFXSettings ofxSettings = (from x in data.Accounting_OFXSettings
-                                                     where x.AccountId == new Guid(OFXAccounts.SelectedValue)
+                                                     where x.AccountId == new Guid(AccountsList.SelectedValue)
                                                      select x).FirstOrDefault();
 
                if (ofxSettings != null)
                {
                     Accounting_Accounts acct = (from x in data.Accounting_Accounts
-                                                where x.Id == new Guid(OFXAccounts.SelectedValue)
+                                                where x.Id == new Guid(AccountsList.SelectedValue)
                                                 select x).FirstOrDefault();
 
                     List<Accounting_OFXLedgerItem> items = ofxSettings.GetRemoteLedgerItems(DateTime.Parse(OFXStartDate.Text), DateTime.Parse(OFXEndDate.Text));
@@ -160,17 +159,29 @@ public partial class Company_Accounting_Import_Default : SkeletonPage
      {
           if (file.EndsWith("qif"))
           {
-               //NonInvestmentAccount account = QifParser.ParseNonInvestmentAccountFile(file);
-               //foreach (NonInvestmentAccountTransaction transaction in account.Transactions)
-               //{
-               //     DataRow row = Accounting.transactions.NewRow();
-               //     row[0] = Weavver.Utilities.Common.MD5(transaction.Date + transaction.Payee + transaction.Amount);
-               //     row[1] = transaction.Date;
-               //     row[2] = transaction.Payee;
-               //     row[3] = Convert.ToDecimal(transaction.Amount);
-               //     row[4] = Accounting.MatchAndLog((DateTime)row[1], row[2].ToString(), (decimal)row[3]);
-               //     Accounting.transactions.Rows.Add(row);
-               //}
+               List<Accounting_OFXLedgerItem> LedgerItemsData = new List<Accounting_OFXLedgerItem>();
+               NonInvestmentAccount account = QifParser.ParseNonInvestmentAccountFile(file);
+               foreach (NonInvestmentAccountTransaction transaction in account.Transactions)
+               {
+                    Accounting_OFXLedgerItem ofxLedgerItem = new Accounting_OFXLedgerItem();
+                    ofxLedgerItem.LedgerItem = new Accounting_LedgerItems();
+                    ofxLedgerItem.LedgerItem.ExternalId = Weavver.Utilities.Common.MD5(transaction.Date + transaction.Payee + transaction.Amount);
+                    ofxLedgerItem.LedgerItem.PostAt = transaction.Date;
+                    ofxLedgerItem.LedgerItem.Memo = transaction.Payee;
+                    ofxLedgerItem.LedgerItem.Amount = Convert.ToDecimal(transaction.Amount);
+                    ofxLedgerItem.LedgerItem.Code = (ofxLedgerItem.LedgerItem.Amount < 0) ? CodeType.Purchase.ToString() : CodeType.Payment.ToString();
+                   // row[4] = Accounting.MatchAndLog((DateTime)row[1], row[2].ToString(), (decimal)row[3]);
+
+                    LedgerItemsData.Add(ofxLedgerItem);
+               }
+
+               Session["Import_Transactions"] = LedgerItemsData;
+
+               var sortedItems = LedgerItemsData.OrderByDescending(x => x.LedgerItem.PostAt).Select(y => y.LedgerItem);
+               TransactionsDetected.DataSource = sortedItems;
+               TransactionsDetected.DataBind();
+               
+               LedgerItems.Visible = true;
           }
           else if (file.EndsWith("qbo") || file.EndsWith("ofx") || file.EndsWith("qfx"))
           {
@@ -298,5 +309,18 @@ public partial class Company_Accounting_Import_Default : SkeletonPage
      //     OFXFinancialInstituationName.Text = bank.FinancialInstitutionName;
      //     OFXBankId.Text = bank.BankId;
      //}
+//-------------------------------------------------------------------------------------------
+     protected void AccountsList_SelectedIndexChanged(object sender, EventArgs e)
+     {
+          using (WeavverEntityContainer data = new WeavverEntityContainer())
+          {
+               var ofxItem = from y in data.Accounting_OFXSettings
+                             where y.AccountId == new Guid(AccountsList.SelectedValue)
+                             select y;
+
+               OFXDownload.Visible = (ofxItem.Count() > 0);
+               OFXOR.Visible = OFXDownload.Visible;
+          }
+     }
 //-------------------------------------------------------------------------------------------
 }

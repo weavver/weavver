@@ -115,6 +115,16 @@ public partial class DynamicData_DynamicList : WeavverUserControl
                                         AvailableActions.Controls.Add(customControl);
                                    }
                               }
+                              else if (item.Link.StartsWith("url://"))
+                              {
+                                   string urlLink = "javascript:createPopup('{0}', {1}, {2});";
+                                   HtmlAnchor webAnchor = new HtmlAnchor();
+                                   //webAnchor.ID = "DynamicWebMethod_" + item.Name;
+                                   webAnchor.InnerText = item.Name;
+                                   webAnchor.HRef = String.Format(urlLink, BasePage.WeavverMaster.FormatURLs(item.Link.Substring(6)), "400", "300");
+                                   webAnchor.Attributes["class"] = "attachmentLink";
+                                   AvailableActions.Controls.Add(webAnchor);
+                              }
                               else
                               {
                                    LinkButton webMethod = new LinkButton();

@@ -13,9 +13,6 @@ public partial class DynamicData_QuickAdd_Accounting_Accounts_QuickTransfer : We
 //-------------------------------------------------------------------------------------------
      protected void Page_Load(object sender, EventArgs e)
      {
-          Visible = false;
-          return;
-
           if (!Roles.IsUserInRole("Administrators") ||
               !Roles.IsUserInRole("Accountants"))
           {
@@ -36,7 +33,7 @@ public partial class DynamicData_QuickAdd_Accounting_Accounts_QuickTransfer : We
                                         orderby orgs.Name
                                         select orgs);
 
-                    FromAccount.DataSource = fAccounts;
+                    FromAccount.DataSource = fAccounts.ToList();
                     FromAccount.DataTextField = "Name";
                     FromAccount.DataValueField = "Id";
                     FromAccount.DataBind();
@@ -45,7 +42,7 @@ public partial class DynamicData_QuickAdd_Accounting_Accounts_QuickTransfer : We
                                      where accounts.OrganizationId == BasePage.SelectedOrganization.Id
                                         select accounts);
 
-                    ToAccount.DataSource = cAccounts;
+                    ToAccount.DataSource = cAccounts.ToList();
                     ToAccount.DataTextField = "Name";
                     ToAccount.DataValueField = "Id";
                     ToAccount.DataBind();
