@@ -2,7 +2,7 @@
 
 <div style="background-color: #EBFCF6; margin: auto; margin-top: 5px; border: outset 3px #CCCCCC; width: 800px; padding: 10px;clear: both;">
      <div style="float:left">
-          Funding Source: <asp:DynamicControl ID="DynamicControl6" runat="server" DataField="Accounting_Accounts" OnInit="DynamicControl_Init" />
+          Funding Source: <asp:DynamicControl ID="DynamicControl6" runat="server" DataField="FundingSourceData" OnInit="DynamicControl_Init" />
      </div>
      <div style="float:right; clear: right; text-align: right;">
           Check #<asp:DynamicControl ID="DynamicControl3" runat="server" DataField="CheckNumber" OnInit="DynamicControl_Init" />
@@ -22,7 +22,7 @@
      <tr>
           <td style="width: 75px;">Pay to the order of:</td>
           <td style="border-bottom: solid 1px black;">
-               <asp:DynamicControl ID="DynamicControl4" runat="server" DataField="PayeeName" OnInit="DynamicControl_Init" />
+               <asp:DynamicControl ID="DynamicControl4" runat="server" DataField="PayeeData" OnInit="DynamicControl_Init" />
           </td>
           <td style="text-align: right;">
                <span style="height:25px; width: 170px;display: inline-block; text-align:left;">

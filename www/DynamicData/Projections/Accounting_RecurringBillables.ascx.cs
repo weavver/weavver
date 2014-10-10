@@ -26,7 +26,7 @@ public partial class DynamicData_Projections_Accounting_RecurringBillables : Wea
 
                     if (billable != null)
                     {
-                         var billables = billable.ProjectLedgerItems(24);
+                         var billables = billable.ProjectLedgerItems(billable.UnbilledPeriods.Value);
                          ProjectionList.ItemDataBound += new DataGridItemEventHandler(ProjectionList_ItemDataBound);
                          ProjectionList.DataSource = billables;
                          ProjectionList.DataBind();
