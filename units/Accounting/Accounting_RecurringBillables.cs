@@ -25,7 +25,7 @@ namespace Weavver.Testing.Accounting
                //webDriver.Navigate().GoToUrl(BaseURL + "/Accounting_RecurringBillables/Details.aspx");
                WaitForPageLoad();
 
-               ((IJavaScriptExecutor)webDriver).ExecuteScript("createPopup('/Accounting_RecurringBillables/List.aspx', '800', '500')");
+               ((IJavaScriptExecutor)webDriver).ExecuteScript("createPopup('/weavvertest/Accounting_RecurringBillables/List.aspx', '800', '500')");
                WaitForPageLoad();
 
                IWebDriver listFrame = webDriver.SwitchTo().Frame(1);
@@ -60,19 +60,17 @@ namespace Weavver.Testing.Accounting
                Assert.IsTrue(insertFrame.PageSource.Contains("Fax Service, 01/01/12 to 02/01/12"), "Text 'Fax Service, 01/01/12 to 02/01/12' is missing");
 
                // Push unbilled items
-               ((IJavaScriptExecutor)insertFrame).ExecuteScript("isPageLoaded = false;");
                ((IJavaScriptExecutor)insertFrame).ExecuteScript("isDialogLoaded = false;");
                ClickButton(insertFrame, By.Id("Content_DynamicWebMethod_PushUnbilledItems"));
 
                // Check the unbilled items were processed correctly
-               WaitForPageLoad(insertFrame);
                WaitForDialogLoaded(insertFrame);
                Assert.IsTrue(insertFrame.PageSource.Contains("Total periods billed: 13"), "Total periods billed: 13");
                WaitForTextExists(insertFrame, By.Id("modalBoxOK"), "OK");
+               ((IJavaScriptExecutor)insertFrame).ExecuteScript("isPageLoaded = false;");
                ClickButton(insertFrame, By.Id("modalBoxOK"));
 
-               // 
-               WaitForDialogLoaded(insertFrame);
+               WaitForPageLoad(insertFrame);
                Assert.AreEqual("02/01/12", insertFrame.FindElement(By.Id("Content_FormView1_ctl01___Position_Date")).Text.Trim());
                ClickButton(insertFrame, By.Id("Content_DynamicWebMethod_PushUnbilledItems"));
 

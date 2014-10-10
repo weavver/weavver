@@ -11,20 +11,22 @@ function getPseudoGuid() {
      });
 }
 
-function initializeRequest(sender, args)
+function prm_initializeRequest(sender, args)
 {
      isPageLoaded = false;
+     isDialogLoaded = false;
+
      var orderForm = $('#Content_OrderForm');
      if (orderForm.length > 0)
-        OrderFormLoading();
+          OrderFormLoading();
 }
 
-function pageLoaded(sender, args) {
-    var orderForm = $('#Content_OrderForm');
-    if (orderForm.length > 0)
-         OrderFormLoaded();
+function prm_EndRequest(sender, args) {
+     var orderForm = $('#Content_OrderForm');
+     if (orderForm.length > 0)
+          OrderFormLoaded();
 
-    isPageLoaded = true;
+     isPageLoaded = true;
 }
 
 function getParameterByName(name) {
@@ -105,9 +107,10 @@ document.onkeyup = checkKey;
 $(document).ready(function () {
      // this apparently only fires on page load once so we use the following
      // methods to set up the events for ajax functions
-     var prm = Sys.WebForms.PageRequestManager.getInstance();
-     prm.add_initializeRequest(initializeRequest);
-     prm.add_pageLoaded(pageLoaded);
+     Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(prm_initializeRequest);
+     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(prm_EndRequest);
+
+     isPageLoaded = true;
 });
 
 
@@ -259,6 +262,7 @@ function showMessage($title, $body, $redirurl)
           show: "blind",
           title: "[untitled]",
           modal: true,
+          open: function () { isDialogLoaded = true; },
           buttons: {
                OK: {
                     text: "OK",
@@ -282,7 +286,6 @@ function showMessage($title, $body, $redirurl)
      $('#modalBox').dialog('option', 'title', $title);
      $("#modalBox").html($body);
      $("#modalBox").dialog("open");
-     dialogLoaded = true;
 }
 
 function run() {

@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <project name="Weavver" default="rebuild">
-     <property name="nant.settings.currentframework" value="net-4.0" />
-	<property name="build.dir" value="${directory::get-current-directory()}/build" unless="${property::exists('build.dir')}" />
+     <!--<property name="nant.settings.currentframework" value="net-4.5" />-->
+     <property name="MSBuildPath" value="C:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"/>
+     <property name="devenv" value="C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.com" />
      <property name="debug" value="true"/>
      <target name="clean" description="remove all generated files">
 		<delete dir="${directory::get-current-directory()}/build" />
@@ -13,8 +14,9 @@
           <delete dir="units\obj" />
      </target>
      <target name="build">
-		<mkdir dir="${build.dir}" />
-          <exec program="Build.bat" />
+          <exec program="${devenv}">
+               <arg line='"Weavver 2013.sln" /build Release' />
+          </exec>
 	</target>
      <target name="rebuild" depends="clean, build" />
      <target name="run" depends="build">
@@ -23,7 +25,7 @@
      <target name="test">
           <!--<nant target="build" buildfile="../moksha/nant.build"></nant>-->
           <exec program="../moksha/build/moksha.exe">
-               <arg line="/testlib=${directory::get-current-directory()}\build\tests\Weavver.Units.dll" />
+               <arg line="/testlib=${directory::get-current-directory()}\units\Bin\Release\Weavver.Units.dll" />
           </exec>
      </target>
 </project>
