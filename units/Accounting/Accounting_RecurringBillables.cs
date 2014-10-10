@@ -57,7 +57,7 @@ namespace Weavver.Testing.Accounting
                // this is the line with the error
                ClickButton(insertFrame, By.XPath("//a[@href='#Projection']")); //("Projection"));
                Assert.IsTrue(insertFrame.PageSource.Contains("Fax Service, 01/01/11 to 02/01/11"), "Text 'Fax Service, 01/01/11 to 02/01/11' is missing");
-               Assert.IsTrue(insertFrame.PageSource.Contains("Fax Service, 01/01/12 to 02/01/12"), "Text 'Fax Service, 01/01/12 to 02/01/12' is missing");
+               Assert.IsTrue(insertFrame.PageSource.Contains("Fax Service, 11/01/11 to 12/01/11"), "Text 'Fax Service, 11/01/11 to 12/01/11' is missing");
 
                // Push unbilled items
                ((IJavaScriptExecutor)insertFrame).ExecuteScript("isDialogLoaded = false;");
@@ -65,7 +65,7 @@ namespace Weavver.Testing.Accounting
 
                // Check the unbilled items were processed correctly
                WaitForDialogLoaded(insertFrame);
-               Assert.IsTrue(insertFrame.PageSource.Contains("Total periods billed: 13"), "Total periods billed: 13");
+               Assert.IsTrue(insertFrame.PageSource.Contains("Total periods billed: 12"), "Total periods billed: 12");
                WaitForTextExists(insertFrame, By.Id("modalBoxOK"), "OK");
                ((IJavaScriptExecutor)insertFrame).ExecuteScript("isPageLoaded = false;");
                ClickButton(insertFrame, By.Id("modalBoxOK"));
