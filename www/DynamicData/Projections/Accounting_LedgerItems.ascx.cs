@@ -33,30 +33,30 @@ public partial class DynamicData_Projections_Accounting_LedgerItems : WeavverUse
                     DateTime endAt2;
 
                     if (DateTime.TryParse(dateStart.Text, out startAt2))
-                         startAt = startAt2;
+                         startAt = startAt2.ToUniversalTime();
 
                     if (DateTime.TryParse(dateEnd.Text, out endAt2))
-                         endAt = endAt2;
+                         endAt = endAt2.ToUniversalTime();
 
                     string x = data.GetName(Guid.Empty);
-                    decimal credits = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, false, false, null, null);
-                    decimal debits = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, false, true, false, null, null);
-                    decimal balance = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, false, null, null);
+                    decimal credits = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, false, false, null, null, true);
+                    decimal debits = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, false, true, false, null, null, true);
+                    decimal balance = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, false, null, null, true);
                     FundsIn.Text = String.Format("{0,10:C}", credits);
                     FundsOut.Text = String.Format("{0,10:C}", debits);
                     Balance.Text = String.Format("{0,10:C}", balance);
 
-                    AvailableBalance.Text = String.Format("{0,10:C}", data.Total_ForLedger(BasePage.SelectedOrganization.OrganizationId, accountId, ledgerType, true, true, true, null, null));
-                         
+                    AvailableBalance.Text = String.Format("{0,10:C}", data.Total_ForLedger(BasePage.SelectedOrganization.OrganizationId, accountId, ledgerType, true, true, true, null, null, true));
+
                     if (startAt != null || endAt != null)
                     {
                          FilteredTotals.Visible = true;
 
-                         decimal filteredStartingBalance = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, true, null, startAt);
-                         decimal filteredCredits = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, false, true, startAt, endAt);
-                         decimal filteredDebits = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, false, true, true, startAt, endAt);
-                         decimal filteredBalance = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, true, startAt, endAt);
-                         decimal filteredEndingBalance = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, true, null, endAt);
+                         decimal filteredStartingBalance = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, true, null, startAt, false);
+                         decimal filteredCredits = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, false, true, startAt, endAt.Value, true);
+                         decimal filteredDebits = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, false, true, true, startAt, endAt, true);
+                         decimal filteredBalance = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, true, startAt, endAt, true);
+                         decimal filteredEndingBalance = data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, true, null, endAt, true);
 
                          VisibleStartingBalance.Text = String.Format("{0,10:C}", filteredStartingBalance);
                          VisibleCredits.Text = String.Format("{0,10:C}", filteredCredits);
@@ -64,7 +64,7 @@ public partial class DynamicData_Projections_Accounting_LedgerItems : WeavverUse
                          VisibleBalance.Text = String.Format("{0,10:C}", filteredBalance);
                          VisibleEndingBalance.Text = String.Format("{0,10:C}", filteredEndingBalance);
 
-                         VisibleAvailableBalance.Text = String.Format("{0,10:C}", data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, true, startAt, endAt));
+                         VisibleAvailableBalance.Text = String.Format("{0,10:C}", data.Total_ForLedger(BasePage.SelectedOrganization.Id, accountId, ledgerType, true, true, true, startAt, endAt, true));
                     }
               }
          }
