@@ -33,9 +33,9 @@ namespace DynamicData
                               switch (Column.DataTypeAttribute.DataType)
                               {
                                    case DataType.Date:
-                                        return newDate.ToLocalTime().ToString("MM/dd/yy");
+                                        return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(newDate, "UTC", "Pacific Standard Time").ToString("MM/dd/yy");
                               }
-                              return newDate.ToLocalTime().ToString();
+                              return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(newDate, "UTC", "Pacific Standard Time").ToString();
                          }
                     }
                }

@@ -85,6 +85,8 @@ public partial class Company_Accounting_Import_Default : SkeletonPage
           string uploadedFilePath = Path.Combine(ConfigurationManager.AppSettings["temp_folder"], Guid.NewGuid().ToString() + ".acctimport." + Path.GetExtension(FileUpload1.FileName));
           FileUpload1.SaveAs(uploadedFilePath);
 
+          Session["Accounting_ImportFile"] = uploadedFilePath;
+
           LoadTransactions(uploadedFilePath);
      }
 //-------------------------------------------------------------------------------------------
@@ -182,9 +184,8 @@ public partial class Company_Accounting_Import_Default : SkeletonPage
      {
           if (file.EndsWith("qif"))
           {
-               TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-
                List<Accounting_OFXLedgerItem> LedgerItemsData = new List<Accounting_OFXLedgerItem>();
+
                NonInvestmentAccount account = QifParser.ParseNonInvestmentAccountFile(file);
                Accounting_Accounts financialAccount = (from y in Data.Accounting_Accounts
                                                        where
@@ -247,6 +248,33 @@ public partial class Company_Accounting_Import_Default : SkeletonPage
                //     row[4] = Accounting.MatchAndLog((DateTime)row[1], row[2].ToString(), (decimal)row[3]);
                //     Accounting.transactions.Rows.Add(row);
                //}
+          }
+          else if (file.EndsWith("csv"))
+          {
+               CSVOptions.Visible = true;
+
+               TextReader reader = new StreamReader(file);
+               LumenWorks.Framework.IO.Csv.CsvReader csvReader = new LumenWorks.Framework.IO.Csv.CsvReader(reader, true);
+
+               List<string> fieldNames = csvReader.GetFieldHeaders().ToList();
+               fieldNames.Insert(0, "");
+
+               CSVPostAtColumn.DataSource = fieldNames;
+               CSVPostAtColumn.DataBind();
+
+               CSVMemoColumn.DataSource = fieldNames;
+               CSVMemoColumn.DataBind();
+
+               CSVCheckNumberColumn.DataSource = fieldNames;
+               CSVCheckNumberColumn.DataBind();
+
+               CSVCheckDescriptionColumn.DataSource = fieldNames;
+               CSVCheckDescriptionColumn.DataBind();
+
+               CSVAmountColumn.DataSource = fieldNames;
+               CSVAmountColumn.DataBind();
+               
+               reader.Close();
           }
           else if (file.EndsWith("txt"))
           {
@@ -340,5 +368,63 @@ public partial class Company_Accounting_Import_Default : SkeletonPage
      //     OFXFinancialInstituationName.Text = bank.FinancialInstitutionName;
      //     OFXBankId.Text = bank.BankId;
      //}
+//-------------------------------------------------------------------------------------------
+     protected void CSVFilePreview_Click(object sender, EventArgs e)
+     {
+          string filePath = (string) Session["Accounting_ImportFile"];
+
+          TextReader reader = new StreamReader(filePath);
+          LumenWorks.Framework.IO.Csv.CsvReader csvReader = new LumenWorks.Framework.IO.Csv.CsvReader(reader, true);
+
+          int postAtIndex = csvReader.GetFieldIndex(CSVPostAtColumn.SelectedItem.Text);
+
+          Accounting_Accounts financialAccount = (from y in Data.Accounting_Accounts
+                                                  where
+                                                       y.Id == new Guid(AccountsList.SelectedValue) &&
+                                                       y.OrganizationId == SelectedOrganization.Id
+                                                  select y).FirstOrDefault();
+
+          List<Accounting_OFXLedgerItem> LedgerItemsData = new List<Accounting_OFXLedgerItem>();
+          while (csvReader.ReadNextRecord())
+          {
+               decimal transactionAmount = 0m;
+               string amountText = csvReader[CSVAmountColumn.Text].Replace("$", "");
+               if (Decimal.TryParse(amountText, out transactionAmount))
+               {
+                    Accounting_OFXLedgerItem newItem = new Accounting_OFXLedgerItem();
+                    newItem.LedgerItem = new Accounting_LedgerItems();
+                    newItem.LedgerItem.Id = Guid.NewGuid();
+                    newItem.LedgerItem.OrganizationId = SelectedOrganization.Id;
+                    newItem.LedgerItem.AccountId = financialAccount.Id;
+                    newItem.LedgerItem.LedgerType = financialAccount.LedgerType;
+                    newItem.LedgerItem.PostAt = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.Parse(csvReader[CSVPostAtColumn.Text]), "Pacific Standard Time", "UTC");;
+                    newItem.LedgerItem.Memo = csvReader[CSVMemoColumn.Text];
+                    if (CSVCheckNumberColumn.SelectedIndex > 0)
+                    {
+                         if (!String.IsNullOrEmpty(csvReader[CSVCheckNumberColumn.Text]) &&
+                             !String.IsNullOrEmpty(csvReader[CSVCheckDescriptionColumn.Text]))
+                         {
+                              newItem.CheckNumber = Int32.Parse(csvReader[CSVCheckNumberColumn.Text]);
+                              newItem.LedgerItem.Memo = "Check " + newItem.CheckNumber.ToString() + ": " + csvReader[CSVCheckDescriptionColumn.Text];
+                         }
+                    }
+                    newItem.LedgerItem.Amount = transactionAmount;
+                    newItem.LedgerItem.Code = (newItem.LedgerItem.Amount < 0) ? CodeType.Purchase.ToString() : CodeType.Payment.ToString();
+                    newItem.LedgerItem.Source = LoggedInUser.Id;
+                    newItem.LedgerItem.ExternalId = Weavver.Utilities.Common.MD5(newItem.LedgerItem.PostAt.Value.ToString("MM/dd/yy") + newItem.LedgerItem.Memo + amountText);
+                    LedgerItemsData.Add(newItem);
+               }
+          }
+
+          Session["Import_Transactions"] = LedgerItemsData;
+
+          var sortedItems = LedgerItemsData.OrderByDescending(x => x.LedgerItem.PostAt).Select(y => y.LedgerItem);
+          TransactionsDetected.DataSource = sortedItems;
+          TransactionsDetected.DataBind();
+
+          SetSummary(LedgerItemsData);
+
+          LedgerItems.Visible = true;
+     }
 //-------------------------------------------------------------------------------------------
 }
