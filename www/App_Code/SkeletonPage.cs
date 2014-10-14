@@ -224,7 +224,7 @@ public class SkeletonPage : Weavver.Web.SkeletonPage
                }
                else
                {
-                    Response.Redirect("/system/maintenance", true);
+                    Response.Redirect(WeavverMaster.FormatURLs("~/system/maintenance"), true);
                }
           }
 

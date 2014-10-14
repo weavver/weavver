@@ -156,7 +156,7 @@ public partial class Controls_MasterHeader : WeavverUserControl
                     Session["SelectedOrganizationId"] = selectedOrgId;
                     BasePage.SelectedOrganization = org;
 
-                    string url = Request.Url.Scheme + "://" + Request.Url.Authority + "/" + org.VanityURL + "/";
+                    string url = Request.Url.Scheme + "://" + Request.Url.Authority + BasePage.WeavverMaster.FormatURLs("~/");
                     Response.Redirect(url, true);
                }
           }
