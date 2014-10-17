@@ -68,7 +68,7 @@ namespace DynamicData
                Navigation.Nodes.Clear();
                using (WeavverEntityContainer data = new WeavverEntityContainer())
                {
-                    var rootItems = from article in data.KnowledgeBase
+                    var rootItems = from article in data.KnowledgeBases
                                     where article.ParentId.HasValue == false
                                              && article.OrganizationId == SelectedOrganization.Id
                                     select article;
@@ -139,7 +139,7 @@ namespace DynamicData
 
                     //if (article.KnowledgeBase2Reference.HasValue)
                     //{
-                         var childItems = from childArticles in data.KnowledgeBase
+                         var childItems = from childArticles in data.KnowledgeBases
                                           where childArticles.ParentId == article.Id
                                              && article.OrganizationId == SelectedOrganization.Id
                                           orderby childArticles.Position, childArticles.Title
