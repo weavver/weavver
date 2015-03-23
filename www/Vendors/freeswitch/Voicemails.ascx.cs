@@ -46,6 +46,4 @@ public partial class Vendors_freeswitch_Voicemails : WeavverUserControl
               //Voicemail.FindControlR<Literal>("NoVoicemails").Visible = true;
          }
     }
-
-    public static T FindControlR<T>(this Control root, string id) where T : Control;
 }

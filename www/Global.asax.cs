@@ -100,7 +100,6 @@ public partial class Global : System.Web.HttpApplication
      {
           DefaultModel.FieldTemplateFactory = new SecureFieldTemplateFactory();
           ContextConfiguration config = new ContextConfiguration() { ScaffoldAllTables = true };
-          //DefaultModel.RegisterContext(typeof(Weavver.Data.WeavverEntityContainer), config);
 
           DefaultModel.RegisterContext(
                                         new Microsoft.AspNet.DynamicData.ModelProviders.EFDataModelProvider(() => new WeavverEntityContainer()),

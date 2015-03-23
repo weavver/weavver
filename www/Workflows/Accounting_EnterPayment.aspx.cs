@@ -85,7 +85,7 @@ public partial class Workflows_Accounting_EnterPayment : SkeletonPage
                creditFinancialAccount.Code = CodeType.Deposit.ToString();
                creditFinancialAccount.Memo = String.Format("Check {0} to {1}", CheckNum.Text, accountTo.Name);
                creditFinancialAccount.Amount = Decimal.Parse(Amount.Text);
-               data.Accounting_LedgerItems.AddObject(creditFinancialAccount);
+               data.Accounting_LedgerItems.Add(creditFinancialAccount);
 
                Accounting_LedgerItems creditReceivableAccount = new Accounting_LedgerItems();
                creditReceivableAccount.OrganizationId = SelectedOrganization.Id;
@@ -96,7 +96,7 @@ public partial class Workflows_Accounting_EnterPayment : SkeletonPage
                creditReceivableAccount.Code = CodeType.Payment.ToString();
                creditReceivableAccount.Memo = String.Format("Check {0} from {1}", CheckNum.Text, accountFrom.Name);
                creditReceivableAccount.Amount = Decimal.Parse(Amount.Text);
-               data.Accounting_LedgerItems.AddObject(creditReceivableAccount);
+               data.Accounting_LedgerItems.Add(creditReceivableAccount);
 
                data.SaveChanges();
 

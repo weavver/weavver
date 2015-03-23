@@ -51,7 +51,7 @@ public partial class Exports_Sales_LicenseKeys : SkeletonPage
                                             select b);
 
                          var rows = activations.ToList();
-                         rows.ForEach(x => data.Sales_LicenseKeyActivations.DeleteObject(x));
+                         rows.ForEach(x =>  data.Sales_LicenseKeyActivations.Remove(x));
                          data.SaveChanges();
 
                          writer.WriteStartElement("OK");
@@ -148,7 +148,7 @@ public partial class Exports_Sales_LicenseKeys : SkeletonPage
                }
                else
                {
-                    data.Detach(key);
+                    data.Entry(key).State = System.Data.Entity.EntityState.Detached;
 
                     int activations = key.Activations.Value;
 
@@ -168,7 +168,7 @@ public partial class Exports_Sales_LicenseKeys : SkeletonPage
                               activation.LicenseKeyId = key.Id;
                               activation.MachineCode = RemoteMachineCode;
                               activation.LastHeardFrom = DateTime.UtcNow;
-                              data.Sales_LicenseKeyActivations.AddObject(activation);
+                              data.Sales_LicenseKeyActivations.Add(activation);
 
                               activations++;
                          }

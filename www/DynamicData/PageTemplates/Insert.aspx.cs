@@ -23,10 +23,10 @@ namespace DynamicData
 
                Master.FormTitle = "Add new entry to " + table.DisplayName;
 
-               DetailsDataSource.Inserted += new EventHandler<EntityDataSourceChangedEventArgs>(DetailsDataSource_Inserted);
+               DetailsDataSource.Inserted += DetailsDataSource_Inserted;
           }
 
-          void DetailsDataSource_Inserted(object sender, EntityDataSourceChangedEventArgs e)
+          void DetailsDataSource_Inserted(object sender, Microsoft.AspNet.EntityDataSource.EntityDataSourceChangedEventArgs e)
           {
                if (e.Entity != null)
                {

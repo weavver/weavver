@@ -131,7 +131,7 @@ public partial class Install_Default : SkeletonPage
                org.CreatedBy = Guid.Empty;
                org.UpdatedAt = DateTime.UtcNow;
                org.UpdatedBy = Guid.Empty;
-               data.Logistics_Organizations.AddObject(org);
+               data.Logistics_Organizations.Add(org);
                data.SaveChanges();
 
                Weavver.Data.System_Users user = new Weavver.Data.System_Users();
@@ -147,7 +147,7 @@ public partial class Install_Default : SkeletonPage
                user.CreatedBy = Guid.Empty;
                user.UpdatedAt = DateTime.UtcNow;
                user.UpdatedBy = Guid.Empty;
-               data.System_Users.AddObject(user);
+               data.System_Users.Add(user);
                data.SaveChanges();
 
                Roles.ApplicationName = orgId.ToString();

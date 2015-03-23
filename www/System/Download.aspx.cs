@@ -32,7 +32,7 @@ public partial class System_Download : SkeletonPage
                     downloadLog.DownloadedByIP = Request.UserHostAddress;
                     downloadLog.DownloadedBy = LoggedInUser.Id;
 
-                    dataContext.AddToIT_DownloadLogs(downloadLog);
+                    dataContext.IT_DownloadLogs.Add(downloadLog);
                     dataContext.SaveChanges();
 
                     Response.Redirect(Request["redir"]);

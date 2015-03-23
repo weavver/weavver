@@ -40,7 +40,7 @@ public partial class Vendors_AuthorizeNet_SilentPost : SkeletonPage
                     {
                          item.TransactionId = orderId;
                     }
-                    data.Accounting_LedgerItems.AddObject(item);
+                    data.Accounting_LedgerItems.Add(item);
                     data.SaveChanges();
                }
           }

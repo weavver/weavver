@@ -83,8 +83,10 @@ namespace DynamicData
                {
                     EntityObject owner = (EntityObject) descriptor.GetPropertyOwner(null);
                     var rowStyle = owner as IRowStyle;
-                    var page = owner as CMS_Pages;
-                    WeavverMaster.FormTitle = page.Title;
+
+                    // TODO RE-ENABLE PAGE TITLE
+                    //var page = (CMS_Pages)owner;
+                    //WeavverMaster.FormTitle = page.Title;
                }
           }
 //-------------------------------------------------------------------------------------------

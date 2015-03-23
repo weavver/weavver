@@ -39,30 +39,31 @@ public partial class Search : SkeletonPage
                return;
           }
 
-          using (WeavverEntityContainer data = new WeavverEntityContainer())
-          {
-               var results = data.SearchAllTables(SearchBox.Text);
+          throw new Exception("Not implemented");
+          //using (WeavverEntityContainer data = new WeavverEntityContainer())
+          //{
+          //     var results = data.SearchAllTables(SearchBox.Text);
 
-               var foundTypes = (results.GroupBy(l => l.TableName)
-                                       .Select(g => new
-                                       {
-                                            Type = CleanUp(g.Key),
-                                            Count = g.Distinct().Count()
-                                       })).OrderByDescending(g => g.Count);
+          //     var foundTypes = (results.GroupBy(l => l.TableName)
+          //                             .Select(g => new
+          //                             {
+          //                                  Type = CleanUp(g.Key),
+          //                                  Count = g.Distinct().Count()
+          //                             })).OrderByDescending(g => g.Count);
 
-               FoundTypes.DataSource = foundTypes;
-               FoundTypes.DataBind();
+          //     FoundTypes.DataSource = foundTypes;
+          //     FoundTypes.DataBind();
 
-               var results2 = data.SearchAllTables(SearchBox.Text);
-               var searchResults = (results2
-                                   .Select(g => new {TableName = CleanUp(g.TableName),
-                                        ColumnName = CleanUp(g.ColumnName),
-                                        ColumnValue = Trim(g.ColumnValue) }));
+          //     var results2 = data.SearchAllTables(SearchBox.Text);
+          //     var searchResults = (results2
+          //                         .Select(g => new {TableName = CleanUp(g.TableName),
+          //                              ColumnName = CleanUp(g.ColumnName),
+          //                              ColumnValue = Trim(g.ColumnValue) }));
 
 
-               List.DataSource = searchResults;
-               List.DataBind();
-          }
+          //     List.DataSource = searchResults;
+          //     List.DataBind();
+          //}
      }
 
      private string CleanUp(string column)

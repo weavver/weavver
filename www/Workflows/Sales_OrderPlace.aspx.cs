@@ -130,7 +130,7 @@ public partial class Sales_Order_Place : SkeletonPage
                     primaryAddress.City = "";
                     primaryAddress.State = "";
                     primaryAddress.ZipCode = PrimaryContact.ZipCode.Text;
-                    data.Logistics_Addresses.AddObject(primaryAddress);
+                    data.Logistics_Addresses.Add(primaryAddress);
 
                     //   DatabaseHelper.Link(newOrder, primaryAddress);
                     // newOrder.PrimaryAddress = primaryAddress;
@@ -144,7 +144,7 @@ public partial class Sales_Order_Place : SkeletonPage
                     billingAddress.City = "";
                     billingAddress.State = "";
                     billingAddress.ZipCode = BillingContact.ZipCode.Text;
-                    data.Logistics_Addresses.AddObject(billingAddress);
+                    data.Logistics_Addresses.Add(billingAddress);
 
                     //   DatabaseHelper.Link(newOrder, billingAddress);
                     //   newOrder.BillingAddress = billingAddress;
@@ -172,7 +172,7 @@ public partial class Sales_Order_Place : SkeletonPage
                     newOrder.BillingContactPhoneExt = BillingContact.PhoneExtension.Text;
                     newOrder.BillingContactAddress = billingAddress.Id;
                     newOrder.Notes = SpecialInstructions.Text;
-                    data.Sales_Orders.AddObject(newOrder);
+                    data.Sales_Orders.Add(newOrder);
 
                     Accounting_CreditCards card = new Accounting_CreditCards();
                     card.Id = Guid.NewGuid();
@@ -181,7 +181,7 @@ public partial class Sales_Order_Place : SkeletonPage
                     card.SecurityCode = PaymentMethod1.SecCode.Text;
                     card.ExpirationMonth = Int32.Parse(PaymentMethod1.ExpMonth.SelectedValue);
                     card.ExpirationYear = Int32.Parse(PaymentMethod1.ExpYear.SelectedValue);
-                    data.Accounting_CreditCards.AddObject(card);
+                    data.Accounting_CreditCards.Add(card);
                  //   DatabaseHelper.Link(newOrder, card);
 
                     foreach (Sales_ShoppingCartItems item in ShoppingCart.Items)
@@ -206,7 +206,7 @@ public partial class Sales_Order_Place : SkeletonPage
                               rBillable.AccountFrom = LoggedInUser.OrganizationId;
                               rBillable.AccountTo = SelectedOrganization.Id;
                               rBillable.Amount = item.Monthly;
-                              data.Accounting_RecurringBillables.AddObject(rBillable);
+                              data.Accounting_RecurringBillables.Add(rBillable);
                               //DatabaseHelper.Link(newOrder, rBillable);
                          }
                          for (int i = 0; i < item.Quantity; i++)
@@ -222,7 +222,7 @@ public partial class Sales_Order_Place : SkeletonPage
                               ledgerItemDebit.Code = CodeType.Sale.ToString();
                               ledgerItemDebit.Memo = item.Name + "\r\n" + item.Notes;
                               ledgerItemDebit.Amount = Math.Abs(item.UnitCost) * -1.0m;
-                              data.Accounting_LedgerItems.AddObject(ledgerItemDebit);
+                              data.Accounting_LedgerItems.Add(ledgerItemDebit);
 
                               // It is unnecessary to link these since we provide a link to the Receivable ledger.
                               //// DatabaseHelper.Link(newOrder, ledgerItemDebit);
