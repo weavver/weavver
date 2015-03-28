@@ -33,6 +33,8 @@ namespace WeavverConsole
                     {
                          object o = Activator.CreateInstance(interfacedClassType);
                          var cronInterface = o as ICRON;
+
+                         Console.WriteLine("Entering " + interfacedClassType.FullName + "..");
                          cronInterface.RunCronTasks(parsedArgs);
                     }
 
