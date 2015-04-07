@@ -33,6 +33,12 @@ namespace DynamicData
           {
                base.OnDataBinding(e);
 
+               string dataType = Column.EntityTypeProperty.PropertyType.Name;
+               //Response.Write(dataType);
+               WeavverMasterPageInterface masterPage = (WeavverMasterPageInterface) ((SkeletonPage) Page).WeavverMaster;
+               string url = masterPage.FormatURLs("~/" + dataType + "/Details.aspx");
+               newObjectLink.Attributes["href"] = "javascript:createPopup('" + url + "', 0, 0);";
+
                string selectedValueString = GetSelectedValueString();
                ListItem item = DropDownList1.Items.FindByValue(selectedValueString);
                if (item != null)
