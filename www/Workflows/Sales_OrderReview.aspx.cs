@@ -88,7 +88,6 @@ public partial class Company_Sales_Order : SkeletonPage
                               int quantity = item.Quantity;
                               TextBox tbQuantity = (TextBox) dataitem.Cells[1].Controls[0];
                               Int32.TryParse(tbQuantity.Text, out quantity);
-                              bool changed = false;
                               
                               if (quantity == 0)
                               {

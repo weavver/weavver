@@ -39,7 +39,7 @@ public partial class Company_Accounting_Payment : SkeletonPage
      {
           using (WeavverEntityContainer data = new WeavverEntityContainer())
           {
-               decimal balance = data.Total_ForLedger(SelectedOrganization.Id, LoggedInUser.OrganizationId, LedgerType.Receivable.ToString(), true, true, false, null, null);
+               decimal balance = data.Total_ForLedger(SelectedOrganization.Id, LoggedInUser.OrganizationId, LedgerType.Receivable.ToString(), true, true, false, null, null, true);
 
                // data.Total_ForLedger(LoggedInUser.OrganizationId);
 

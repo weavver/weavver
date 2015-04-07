@@ -18,7 +18,7 @@ using Weavver.Web;
 using System.Linq;
 using Weavver.Utilities;
 using System.Reflection;
-using System.Data.Objects.DataClasses;
+using System.Data.Entity.Core.Objects.DataClasses;
 using AjaxControlToolkit;
 
 using System.Web.DynamicData;

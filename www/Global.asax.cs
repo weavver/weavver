@@ -16,11 +16,12 @@ using System.Workflow.Runtime;
 using Weavver.Workflows;
 using Weavver.Data;
 using System.Data.Entity.Infrastructure;
+using System.Workflow.Runtime.Hosting;
 
 public partial class Global : System.Web.HttpApplication
 {
 //-------------------------------------------------------------------------------------------
-     //private static WorkflowRuntime _wfRuntime = null;
+     private static WorkflowRuntime _wfRuntime = null;
      private static MetaModel s_defaultModel = null;
 //-------------------------------------------------------------------------------------------
      //public static WorkflowRuntime WorkflowRuntime
@@ -41,6 +42,12 @@ public partial class Global : System.Web.HttpApplication
 //-------------------------------------------------------------------------------------------
      void Application_Start(object sender, EventArgs e)
      {
+          WorkflowRuntime workflowRuntime = new System.Workflow.Runtime.WorkflowRuntime();
+          ManualWorkflowSchedulerService manualService = new ManualWorkflowSchedulerService();
+          workflowRuntime.AddService(manualService);
+          workflowRuntime.StartRuntime();
+          Application["WorkflowRuntime"] = workflowRuntime;           
+ 
           // Initialize the Dynamic Data Framework
           if (s_defaultModel == null)
           {
@@ -171,24 +178,25 @@ public partial class Global : System.Web.HttpApplication
 //-------------------------------------------------------------------------------------------
      void Application_Error(object sender, EventArgs e)
      {
-          //// Code that runs when an unhandled error occurs
-          // System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage("system@weavver.com", "mitchel@weavver.com");
-          // msg.Subject = "Weavver System - Website Error";
+          // Code that runs when an unhandled error occurs
+           System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage("system@weavver.com", ConfigurationManager.AppSettings["admin_address"]);
+           msg.Subject = "Weavver System - Website Error";
 
-          // Exception objErr = Server.GetLastError().GetBaseException();
-          // string err = "Error Caught in Application_Error event\r\n\r\n" +
-          //           "Error in: " + Request.Url.ToString() + "\r\n\r\n" +
-          //           "Error Message:" + objErr.Message.ToString() + "\r\n\r\n" +
-          //           "Stack Trace:" + objErr.StackTrace.ToString();
+           Exception objErr = Server.GetLastError().GetBaseException();
+           string err = "Error Caught in Application_Error event\r\n\r\n" +
+                     "Error in: " + Request.Url.ToString() + "\r\n\r\n" +
+                     "Error Message:" + objErr.Message.ToString() + "\r\n\r\n" +
+                     "Stack Trace:" + objErr.StackTrace.ToString();
 
-          // msg.Body = "Exception:\r\n" + err;
-          // System.Net.Mail.SmtpClient sClient = new System.Net.Mail.SmtpClient("192.168.10.11");
-          // sClient.Send(msg);
+           msg.Body = "Exception:\r\n" + err;
+           System.Net.Mail.SmtpClient sClient = new System.Net.Mail.SmtpClient(ConfigurationManager.AppSettings["smtp_server"]);
+           sClient.Send(msg);
      }
 //-------------------------------------------------------------------------------------------
      void Application_End(object sender, EventArgs e)
-     {
-          //Workflows.Unload();
+     {         
+          WorkflowRuntime workflowRuntime = Application["WorkflowRuntime"] as WorkflowRuntime;
+          workflowRuntime.StopRuntime();
      }
 //-------------------------------------------------------------------------------------------
 }

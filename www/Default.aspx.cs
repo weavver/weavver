@@ -68,19 +68,6 @@ public partial class WeavverDefault : SkeletonPage
           WeavverMaster.Width = "100%";
      }
 //-------------------------------------------------------------------------------------------
-     public string GetHomeLogoPath()
-     {
-          if (SelectedOrganization != null)
-          {
-               string orgId = SelectedOrganization.Id.ToString();
-               if (File.Exists(Server.MapPath("~/uploads/" + orgId + "/homepage.png")))
-               {
-                    return "~/uploads/" + orgId + "/homepage.png";
-               }
-          }
-          return "~/images/mycompany.png";
-     }
-//-------------------------------------------------------------------------------------------
      void regControl_AccountActivated(object sender, EventArgs e)
      {
           Response.Redirect("~/", true);
